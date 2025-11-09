@@ -1,0 +1,18 @@
+﻿<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+  <SolidColorBrush x:Key="specificColor" Color="#682213" />
+
+  <SolidColorBrush x:Key="secondaryTextColor" Color="#8C8C8C" />
+  <SolidColorBrush x:Key="tertiaryTextColor" Color="#DFDFDF" />
+
+  <SolidColorBrush x:Key="primaryBackgroudColor" Color="#E0EEF9" />
+
+  <SolidColorBrush x:Key="focusTextBoxColor" Color="#EB6601" />
+
+  <SolidColorBrush x:Key="defaultButtonColor" Color="#EB6601" />
+  <SolidColorBrush x:Key="hoverButtonColor" Color="#D15901" />
+  <SolidColorBrush x:Key="pressedButtonColor" Color="#B14D01" />
+
+</ResourceDictionary>
+    
