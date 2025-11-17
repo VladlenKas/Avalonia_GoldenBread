@@ -1,0 +1,56 @@
+﻿<Styles xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  
+    <Style Selector="TextBlock">
+		<Setter Property="FontFamily" Value="sf pro display"/>
+	</Style>
+
+	<Style Selector="TextBlock.H1">
+		<Setter Property="FontSize" Value="36"/>
+		<Setter Property="FontWeight" Value="Bold"/>
+	</Style>
+
+	<Style Selector="TextBlock.H2">
+		<Setter Property="FontSize" Value="28"/>
+		<Setter Property="FontWeight" Value="Bold"/>
+	</Style>
+
+	<Style Selector="TextBlock.H3">
+		<Setter Property="FontSize" Value="26"/>
+		<Setter Property="FontWeight" Value="SemiBold"/>
+	</Style>
+
+	<Style Selector="TextBlock.H4">
+		<Setter Property="FontSize" Value="24"/>
+		<Setter Property="FontWeight" Value="Medium"/>
+	</Style>
+
+	<Style Selector="TextBlock.H5">
+		<Setter Property="FontSize" Value="22"/>
+		<Setter Property="FontWeight" Value="Medium"/>
+	</Style>
+
+	<Style Selector="TextBlock.H6">
+		<Setter Property="FontSize" Value="20"/>
+		<Setter Property="FontWeight" Value="Regular"/>
+	</Style>
+
+	<Style Selector="TextBlock.Standart">
+		<Setter Property="FontSize" Value="14"/>
+		<Setter Property="FontWeight" Value="Regular"/>
+	</Style>
+
+	<Style Selector="TextBlock.Small">
+		<Setter Property="FontSize" Value="12"/>
+		<Setter Property="FontWeight" Value="Regular"/>
+	</Style>
+
+	<Style Selector="TextBlock.Sidebar">
+		<Setter Property="FontSize" Value="14"/>
+		<Setter Property="FontWeight" Value="Normal"/>
+		<Setter Property="Foreground" Value="#000000"/>
+		<Setter Property="Opacity" Value="0.4"/>
+		<Setter Property="Padding" Value="4"/>
+	</Style>
+
+</Styles>

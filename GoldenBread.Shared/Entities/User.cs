@@ -20,7 +20,7 @@ public enum UserRole
     [Description("Администратор")]
     Admin
 }
-
+    
 public enum VerificationStatus
 {
     [Description("Ожидает подтверждения")]
@@ -58,7 +58,7 @@ public partial class User
     public short Dismissed { get; set; }
 
     public string? CompanyName { get; set; }
-         
+
     public string? CompanyInn { get; set; }
 
     public string? CompanyOgrn { get; set; }
@@ -72,4 +72,7 @@ public partial class User
     public virtual ICollection<Favourite> Favourites { get; set; } = new List<Favourite>();
 
     public virtual ICollection<Order> Orders { get; set; } = new List<Order>();
+
+    // Custom proprties
+    public string Fullname => $"{Lastname} {Firstname} {Patronymic}";
 }

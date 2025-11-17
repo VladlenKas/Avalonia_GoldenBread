@@ -1,4 +1,4 @@
-﻿namespace GoldenBread.Shared.Enums.User
+﻿namespace GoldenBread.Shared.Enums
 {
     public class LoginUser
     {

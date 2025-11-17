@@ -1,0 +1,25 @@
+﻿<Styles xmlns="https://github.com/avaloniaui"
+		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+	<!-- Window -->
+	<Style Selector="Window">
+		<Setter Property="Icon" Value="/Assets/goldenbread-logo.ico"/>
+		<Setter Property="WindowStartupLocation" Value="CenterScreen"/>
+		<Setter Property="Background" Value="White"/>
+	</Style>
+
+	<!-- Header For TextBoxes -->
+	<Style Selector="HeaderedContentControl">
+		<Setter Property="Template">
+			<ControlTemplate>
+				<StackPanel>
+					<TextBlock Text="{TemplateBinding Header}" 
+							   FontSize="14"
+							   Margin="0 0 0 5"/>
+					<ContentPresenter Content="{TemplateBinding Content}"/>
+				</StackPanel>
+			</ControlTemplate>
+		</Setter>
+	</Style>
+
+</Styles>

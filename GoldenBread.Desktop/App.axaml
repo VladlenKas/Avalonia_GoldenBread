@@ -18,7 +18,11 @@
     </Application.Resources>
 
     <Application.Styles>
-        <StyleInclude Source="/Resources/Styles.axaml"/>
+        <StyleInclude Source="/Resources/IconStyles.axaml"/>
+        <StyleInclude Source="/Resources/ButtonStyles.axaml"/>
+        <StyleInclude Source="/Resources/TextBoxStyles.axaml"/>
+        <StyleInclude Source="/Resources/TextBlockStyles.axaml"/>
+        <StyleInclude Source="/Resources/OptionalStyles.axaml"/>
         <FluentTheme />
     </Application.Styles>
 </Application>

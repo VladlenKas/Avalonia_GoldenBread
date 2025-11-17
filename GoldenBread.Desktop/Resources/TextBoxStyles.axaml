@@ -1,0 +1,50 @@
+﻿<Styles xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+	<Design.PreviewWith>
+		<Border Padding="20">
+			<StackPanel Spacing="12">
+				<TextBox Width="200" Height="40" Watermark="Inter email"/>
+				<TextBox Width="200" Height="40" Watermark="Inter pass"/>
+				<Button Width="200" Height="40" Content="Войти" IsEnabled="True"/>
+			</StackPanel>
+		</Border>
+	</Design.PreviewWith>
+
+	<!-- Text Box Base -->
+    <Style Selector="TextBox">
+		<Setter Property="Background" Value="{DynamicResource Background.Primary}"/>
+		<Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Hidden"/>
+		<Setter Property="Foreground" Value="{DynamicResource Foreground.Secondary}"/>
+		<Setter Property="FontSize" Value="14"/>
+		<Setter Property="Padding" Value="12"/>
+		<Setter Property="FontWeight" Value="Medium"/>
+		<Setter Property="BorderThickness" Value="1.5"/>
+		<Setter Property="BorderBrush" Value="{DynamicResource Border.Default}"/>
+		<Setter Property="CornerRadius" Value="4"/>
+		<Setter Property="SelectionBrush" Value="LightBlue"/>
+		<Setter Property="VerticalContentAlignment" Value="Center"/>
+
+		<Setter Property="Transitions">
+			<Transitions>
+				<BrushTransition Property="Foreground" Duration="0:0:0.2"/>
+			</Transitions>
+		</Setter>
+
+		<Style Selector="^ /template/ Border#PART_BorderElement">
+			<Setter Property="Transitions">
+				<Transitions>
+					<BrushTransition Property="BorderBrush" Duration="0:0:0.2"/>
+				</Transitions>
+			</Setter>
+		</Style>
+
+		<Style Selector="^:focus /template/ Border#PART_BorderElement">
+			<Setter Property="BorderBrush" Value="{DynamicResource Border.Focus}"/>
+		</Style>
+
+		<Style Selector="^:focus">
+			<Setter Property="Foreground" Value="{DynamicResource Foreground.Primary}"/>
+		</Style>
+	</Style>
+
+</Styles>

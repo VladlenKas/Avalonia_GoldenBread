@@ -6,9 +6,9 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GoldenBread.Desktop.Services
+namespace GoldenBread.Desktop.Helpers
 {
-    internal class HttpClientSingleton
+    internal class HttpClientHelper
     {
         public static readonly HttpClient Client = new()
         {
@@ -16,11 +16,10 @@ namespace GoldenBread.Desktop.Services
             Timeout = TimeSpan.FromSeconds(30)
         };
 
-        static HttpClientSingleton()
+        static HttpClientHelper()
         {
             Client.DefaultRequestHeaders.Accept.Add(
                 new MediaTypeWithQualityHeaderValue("application/json"));
         }
-
     }
 }

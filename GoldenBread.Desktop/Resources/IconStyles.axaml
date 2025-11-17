@@ -1,0 +1,20 @@
+﻿<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+		xmlns:icon="https://github.com/projektanker/icons.avalonia">
+  
+	<!-- Icon for Button and ToggleButton Medium -->
+	<Style Selector="Button icon|Icon.Medium, ToggleButton icon|Icon.Medium">
+        <Setter Property="FontSize" Value="18"/>
+        <Setter Property="FontWeight" Value="Light"/>
+        <Setter Property="Background" Value="{Binding $parent[ContentControl].Foreground}"/>
+    </Style>
+  
+    <Style Selector="Button icon|Icon.Medium">
+        <Setter Property="Value" Value="{Binding $parent[Button].Tag}"/>
+    </Style>
+
+    <Style Selector="ToggleButton icon|Icon.Medium">
+        <Setter Property="Value" Value="{Binding $parent[ToggleButton].Tag}"/>
+    </Style>
+
+</Styles>

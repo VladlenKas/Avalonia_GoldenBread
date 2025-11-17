@@ -1,0 +1,67 @@
+﻿<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:reactiveui="http://reactiveui.net/"
+        x:Class="GoldenBread.Desktop.Views.AdminWindow"
+        xmlns:vm="using:GoldenBread.Desktop.ViewModels"
+        x:DataType="vm:AdminWindowViewModel"
+        Width="1280" Height="800"
+        Title="Окно Администратора"
+        Background="{DynamicResource Background.Secondary}">
+
+    <Window.DataContext>
+        <vm:AdminWindowViewModel/>
+    </Window.DataContext>
+
+    <Grid ColumnDefinitions="Auto *">
+
+        <!-- Sidebar -->
+        <Border Grid.Column="0" HorizontalAlignment="Left" Background="white" BorderBrush="{DynamicResource Border.Default}" BorderThickness="0 0 1 0">
+		    <Grid RowDefinitions="Auto * Auto" RowSpacing="8" Margin="16 8 16 16" Width="212">
+
+                <DockPanel Grid.Row="0" Height="68" VerticalAlignment="Top" HorizontalAlignment="Center" HorizontalSpacing="8">
+                    <Image Source="/Assets/goldenbread-logo.png" Width="36" DockPanel.Dock="Left"/>
+                    <TextBlock VerticalAlignment="Center" Text="Golden Bread" Classes="H6" Foreground="{DynamicResource Accent.Specific}"/>
+                </DockPanel>
+
+                <StackPanel Grid.Row="1" Spacing="4">
+                    <TextBlock Classes="Sidebar" Text="Разделы"/>
+                    <ToggleButton Classes="Sidebar" Tag="mdi-bookmark-box-outline" Content="Справочники"/>
+                    <ToggleButton Classes="Sidebar" Tag="mdi-account-group-outline" Content="Персонал"/>
+                    <ToggleButton Classes="Sidebar" Tag="mdi-clipboard-text-clock-outline" Content="Производство"/>
+                    <ToggleButton Classes="Sidebar" Tag="mdi-chart-line" Content="Аналитика"/>
+                    <TextBlock Classes="Sidebar" Text="Создать документ"/>
+                    <Button Classes="Sidebar" Tag="mdi-file-document-plus-outline" Content="Сводный отчет"/>
+                </StackPanel>
+
+                <StackPanel Grid.Row="2" Spacing="4" VerticalAlignment="Bottom">
+                    <Button Classes="Sidebar" Tag="mdi-logout" Content="Выйти" Foreground="red" Command="{Binding LogoutCommand}" CommandParameter="{Binding $parent[Window]}"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <Grid Grid.Column="1" RowDefinitions="Auto *">
+			
+            <!-- TopBar -->
+            <Border Grid.Row="0" Background="white" Height="80" 
+                    BorderBrush="{DynamicResource Border.Default}" BorderThickness="0 0 0 1" Padding="28 20">
+                <DockPanel HorizontalSpacing="4" LastChildFill="False">
+					<ToggleButton Classes="TopBar" Content="Склад"/>
+					<ToggleButton Classes="TopBar" Content="Продукция"/>
+					<ToggleButton Classes="TopBar" Content="Ингредиенты"/>
+
+                    <StackPanel DockPanel.Dock="Right">
+						<TextBlock Classes="Standart" Text="{Binding UserFullname}"/>
+						<TextBlock Classes="Small" Foreground="{DynamicResource Foreground.Secondary}" Text="{Binding UserRole}"/>
+                    </StackPanel>
+                </DockPanel>
+            </Border>
+
+            <!-- Page Section -->
+            <Grid Grid.Row="1">
+
+            </Grid>
+        </Grid>
+    </Grid>
+</Window>

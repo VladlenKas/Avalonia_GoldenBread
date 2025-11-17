@@ -1,0 +1,227 @@
+﻿<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+		xmlns:icon="https://github.com/projektanker/icons.avalonia">
+	<Design.PreviewWith>
+		<Border Padding="20">
+			<StackPanel Spacing="12">
+				<Button Width="200" Height="40" Content="Войти" IsEnabled="False"/>
+				<Button Width="200" Height="40" Content="Войти" IsEnabled="True" Classes="Sidebar" Tag="mdi-account-outline"/>
+				<ToggleButton Width="200" Height="40" Content="Войти" IsEnabled="True" Classes="Sidebar" Tag="mdi-account-outline"/>
+				<ToggleButton Width="200" Height="40" Content="Ингредиенты" Classes="TopBar"/>
+			</StackPanel>
+		</Border>
+	</Design.PreviewWith>
+
+	<!--  Button Primary Base -->
+	<Style Selector="Button">
+		<Setter Property="Background" Value="{DynamicResource Interactive.Primary.Default}"/>
+		<Setter Property="Foreground" Value="{DynamicResource Foreground.OnAccent}"/>
+		<Setter Property="MinHeight" Value="40"/>
+		<Setter Property="FontSize" Value="14"/>
+		<Setter Property="FontWeight" Value="Medium"/>
+		<Setter Property="Padding" Value="12"/>
+		<Setter Property="CornerRadius" Value="12"/>
+		<Setter Property="VerticalContentAlignment" Value="Center"/>
+		<Setter Property="HorizontalContentAlignment" Value="Center"/>
+		<Setter Property="HorizontalAlignment" Value="Stretch"/>
+
+		<Style Selector="^ /template/ ContentPresenter#PART_ContentPresenter">
+			<Setter Property="Transitions">
+				<Transitions>
+					<BrushTransition Property="Background" Duration="0:0:0.2"/>
+					<BrushTransition Property="Foreground" Duration="0:0:0.2"/>
+				</Transitions>
+			</Setter>
+		</Style>
+
+		<Style Selector="^:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+			<Setter Property="Background" Value="{DynamicResource Interactive.Primary.Hover}"/>
+			<Setter Property="Foreground" Value="#90ffffff"/>
+		</Style>
+
+		<Style Selector="^:disabled /template/ ContentPresenter#PART_ContentPresenter">
+			<Setter Property="Background" Value="{DynamicResource Interactive.Primary.Default}"/>
+			<Setter Property="Foreground" Value="#75ffffff"/>
+			<Setter Property="Opacity" Value="0.5"/>
+		</Style>
+		
+		<Style Selector="^:pressed /template/ ContentPresenter#PART_ContentPresenter">
+			<Setter Property="Background" Value="{DynamicResource Interactive.Primary.Pressed}"/>
+			<Setter Property="Foreground" Value="#80ffffff"/>
+		</Style>
+	</Style>
+
+	<!-- Button for Slidebar -->
+	<Style Selector="Button.Sidebar">
+		<Setter Property="Background" Value="{DynamicResource Interactive.Neutral.Default}"/>
+		<Setter Property="Foreground" Value="{DynamicResource Foreground.Secondary}"/>
+		<Setter Property="FontSize" Value="14"/>
+		<Setter Property="FontWeight" Value="Medium"/>
+		<Setter Property="Padding" Value="24 10"/>
+		<Setter Property="CornerRadius" Value="12"/>
+		<Setter Property="VerticalContentAlignment" Value="Center"/>
+		<Setter Property="HorizontalContentAlignment" Value="Left"/>
+		<Setter Property="HorizontalAlignment" Value="Stretch"/>
+		<Setter Property="ContentTemplate">
+			<DataTemplate>
+				<Grid ColumnDefinitions="Auto *">
+					<icon:Icon Classes="Medium"/>
+					<TextBlock Grid.Column="1" 
+				     		   Text="{Binding}" 
+							   Margin="8 0 0 0"
+							   VerticalAlignment="Center"/>
+				</Grid>
+			</DataTemplate>
+		</Setter>
+
+		<Style Selector="^ /template/ ContentPresenter#PART_ContentPresenter">
+			<Setter Property="Transitions">
+				<Transitions>
+					<BrushTransition Property="Background" Duration="0:0:0.2"/>
+					<BrushTransition Property="Foreground" Duration="0:0:0.2"/>
+				</Transitions>
+			</Setter>
+		</Style>
+
+		<Style Selector="^:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+			<Setter Property="Background" Value="{DynamicResource Interactive.Neutral.Hover}"/>
+			<Setter Property="Foreground" Value="{DynamicResource Foreground.Primary}"/>
+		</Style>
+		
+		<Style Selector="^:pressed /template/ ContentPresenter#PART_ContentPresenter">
+			<Setter Property="Background" Value="{DynamicResource Interactive.Neutral.Pressed}"/>
+		<Setter Property="Foreground" Value="{DynamicResource Foreground.Secondary}"/>
+		</Style>
+
+		<Style Selector="^:disabled /template/ ContentPresenter#PART_ContentPresenter">
+			<Setter Property="Background" Value="{DynamicResource Interactive.Neutral.Default}"/>
+		</Style>
+	</Style>
+
+	<!-- ToggleButton for Slidebar -->
+	<Style Selector="ToggleButton.Sidebar">
+		<Setter Property="Background" Value="{DynamicResource Interactive.Neutral.Default}"/>
+		<Setter Property="Foreground" Value="{DynamicResource Foreground.Secondary}"/>
+		<Setter Property="FontSize" Value="14"/>
+		<Setter Property="FontWeight" Value="Medium"/>
+		<Setter Property="Padding" Value="24 10"/>
+		<Setter Property="CornerRadius" Value="12"/>
+		<Setter Property="VerticalContentAlignment" Value="Center"/>
+		<Setter Property="HorizontalContentAlignment" Value="Left"/>
+		<Setter Property="HorizontalAlignment" Value="Stretch"/>
+		<Setter Property="ContentTemplate">
+			<DataTemplate>
+				<Grid ColumnDefinitions="Auto *">
+					<icon:Icon Classes="Medium"/>
+					<TextBlock Grid.Column="1" 
+				     		   Text="{Binding}" 
+							   Margin="8 0 0 0"
+							   VerticalAlignment="Center"/>
+				</Grid>
+			</DataTemplate>
+		</Setter>
+
+		<Style Selector="^ /template/ ContentPresenter#PART_ContentPresenter">
+			<Setter Property="Transitions">
+				<Transitions>
+					<BrushTransition Property="Background" Duration="0:0:0.2"/>
+					<BrushTransition Property="Foreground" Duration="0:0:0.2"/>
+				</Transitions>
+			</Setter>
+		</Style>
+
+		<Style Selector="^:checked /template/ ContentPresenter#PART_ContentPresenter">
+			<Setter Property="Background" Value="{DynamicResource Interactive.Neutral.Pressed}"/>
+			<Setter Property="Foreground" Value="{DynamicResource Foreground.Primary}"/>
+		</Style>
+
+		<Style Selector="^:pointerover:not(:checked) /template/ ContentPresenter#PART_ContentPresenter">
+			<Setter Property="Background" Value="{DynamicResource Interactive.Neutral.Hover}"/>
+			<Setter Property="Foreground" Value="{DynamicResource Foreground.Primary}"/>
+		</Style>
+		
+		<Style Selector="^:pressed:not(:checked) /template/ ContentPresenter#PART_ContentPresenter">
+			<Setter Property="Background" Value="{DynamicResource Interactive.Neutral.Pressed}"/>
+		<Setter Property="Foreground" Value="{DynamicResource Foreground.Secondary}"/>
+		</Style>
+
+		<Style Selector="^:disabled /template/ ContentPresenter#PART_ContentPresenter">
+			<Setter Property="Background" Value="{DynamicResource Interactive.Neutral.Default}"/>
+		</Style>
+	</Style>
+
+	<!-- ToggleButton TapTab -->
+	<Style Selector="ToggleButton.TopBar">
+		<Setter Property="Background" Value="{DynamicResource Interactive.Neutral.Default}"/>
+		<Setter Property="Foreground" Value="{DynamicResource Foreground.Secondary}"/>
+		<Setter Property="FontSize" Value="14"/>
+		<Setter Property="FontWeight" Value="Medium"/>
+		<Setter Property="CornerRadius" Value="12"/>
+		<Setter Property="HorizontalAlignment" Value="Stretch"/>
+		<Setter Property="VerticalContentAlignment" Value="Top"/>
+		<Setter Property="HorizontalContentAlignment" Value="Center"/>
+		<Setter Property="ContentTemplate">
+			<DataTemplate>
+				<Grid>
+					<Grid.Styles>
+						<Style Selector="Separator">
+							<Setter Property="Opacity" Value="0"/>
+							<Setter Property="Transitions">
+								<Transitions>
+									<DoubleTransition Property="Opacity" Duration="0:0:0.2"/>
+								</Transitions>
+							</Setter>
+						</Style>
+						<Style Selector="Separator.Visible">
+							<Setter Property="Opacity" Value="1"/>
+						</Style>
+					</Grid.Styles>
+		  
+					<TextBlock Text="{Binding}"/>
+					<Separator Margin="0 20 0 0" Height="2"
+							   Background="{DynamicResource Foreground.Primary}"
+							   Classes.Visible="{Binding $parent[ToggleButton].IsChecked}"/>
+				</Grid>
+			</DataTemplate>
+		</Setter>
+
+	<Style Selector="^ /template/ ContentPresenter#PART_ContentPresenter">
+		<Setter Property="Transitions">
+			<Transitions>
+				<BrushTransition Property="Background" Duration="0:0:0.2"/>
+				<BrushTransition Property="Foreground" Duration="0:0:0.2"/>
+			</Transitions>
+		</Setter>
+	</Style>
+
+		<Style Selector="^ /template/ ContentPresenter#PART_ContentPresenter">
+			<Setter Property="Transitions">
+				<Transitions>
+					<BrushTransition Property="Background" Duration="0:0:0.2"/>
+					<BrushTransition Property="Foreground" Duration="0:0:0.2"/>
+				</Transitions>
+			</Setter>
+		</Style>
+
+		<Style Selector="^:checked /template/ ContentPresenter#PART_ContentPresenter">
+			<Setter Property="Background" Value="{DynamicResource Interactive.Neutral.Default}"/>
+			<Setter Property="Foreground" Value="{DynamicResource Foreground.Primary}"/>
+		</Style>
+
+		<Style Selector="^:pointerover:not(:checked) /template/ ContentPresenter#PART_ContentPresenter">
+			<Setter Property="Background" Value="{DynamicResource Interactive.Neutral.Default}"/>
+		<Setter Property="Foreground" Value="{DynamicResource Foreground.Primary}"/>
+		</Style>
+		
+		<Style Selector="^:pressed:not(:checked) /template/ ContentPresenter#PART_ContentPresenter">
+			<Setter Property="Background" Value="{DynamicResource Interactive.Neutral.Default}"/>
+		<Setter Property="Foreground" Value="{DynamicResource Foreground.Secondary}"/>
+		</Style>
+
+		<Style Selector="^:disabled /template/ ContentPresenter#PART_ContentPresenter">
+			<Setter Property="Background" Value="{DynamicResource Interactive.Neutral.Default}"/>
+		<Setter Property="Foreground" Value="{DynamicResource Foreground.Secondary}"/>
+		</Style>
+	</Style>
+
+</Styles>

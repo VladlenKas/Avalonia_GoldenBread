@@ -1,18 +1,62 @@
-﻿<ResourceDictionary xmlns="https://github.com/avaloniaui"
+﻿<!--<ResourceDictionary xmlns="https://github.com/avaloniaui"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
-  <SolidColorBrush x:Key="specificColor" Color="#682213" />
-
+    --><!-- Text Blocks --><!--
   <SolidColorBrush x:Key="secondaryTextColor" Color="#8C8C8C" />
   <SolidColorBrush x:Key="tertiaryTextColor" Color="#DFDFDF" />
 
-  <SolidColorBrush x:Key="primaryBackgroudColor" Color="#E0EEF9" />
+    --><!-- Background --><!--
+  <SolidColorBrush x:Key="primaryBackgroudColor" Color="#ffffff" />
+  <SolidColorBrush x:Key="secondaryBackgroudColor" Color="#F4F4F6" />
 
+    --><!-- Text Boxes --><!--
   <SolidColorBrush x:Key="focusTextBoxColor" Color="#EB6601" />
 
+    --><!-- Buttons --><!--
   <SolidColorBrush x:Key="defaultButtonColor" Color="#EB6601" />
   <SolidColorBrush x:Key="hoverButtonColor" Color="#D15901" />
   <SolidColorBrush x:Key="pressedButtonColor" Color="#B14D01" />
 
+    --><!-- Elements --><!--
+  <SolidColorBrush x:Key="specificColor" Color="#682213" />
+
+  <SolidColorBrush x:Key="defaultColor" Color="#ffffff" />
+  <SolidColorBrush x:Key="hoverColor" Color="#F7F7F9" />
+  <SolidColorBrush x:Key="focusColor" Color="#D8D8D8" />
+
+
 </ResourceDictionary>
-    
+    -->
+
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+  <!-- Foreground (текст и иконки) -->
+  <SolidColorBrush x:Key="Foreground.Primary" Color="#000000"/>
+  <SolidColorBrush x:Key="Foreground.Secondary" Color="#8C8C8C"/>
+  <SolidColorBrush x:Key="Foreground.Tertiary" Color="#DFDFDF"/>
+  <SolidColorBrush x:Key="Foreground.OnAccent" Color="#FFFFFF"/>
+
+  <!-- Background (фон) -->
+  <SolidColorBrush x:Key="Background.Primary" Color="#FFFFFF"/>
+  <SolidColorBrush x:Key="Background.Secondary" Color="#F4F4F6"/>
+  <SolidColorBrush x:Key="Background.Tertiary" Color="#F7F7F9"/>
+
+  <!-- Interactive.Primary (кнопки, акценты) -->
+  <SolidColorBrush x:Key="Interactive.Primary.Default" Color="#EB6601"/>
+  <SolidColorBrush x:Key="Interactive.Primary.Hover" Color="#D15901"/>
+  <SolidColorBrush x:Key="Interactive.Primary.Pressed" Color="#B14D01"/>
+
+  <!-- Interactive.Neutral (нейтральные элементы) -->
+  <SolidColorBrush x:Key="Interactive.Neutral.Default" Color="#FFFFFF"/>
+  <SolidColorBrush x:Key="Interactive.Neutral.Hover" Color="#F7F7F9"/>
+  <SolidColorBrush x:Key="Interactive.Neutral.Pressed" Color="#D8D8D8"/>
+
+  <!-- Border (рамки и линии) -->
+  <SolidColorBrush x:Key="Border.Focus" Color="#EB6601"/>
+  <SolidColorBrush x:Key="Border.Default" Color="#D8D8D8"/>
+
+  <!-- Специальные -->
+  <SolidColorBrush x:Key="Accent.Specific" Color="#682213"/>
+
+</ResourceDictionary>

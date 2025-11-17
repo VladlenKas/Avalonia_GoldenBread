@@ -1,18 +1,18 @@
 ﻿<Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:vm="using:GoldenBread.Desktop.ViewModels"
+        xmlns:vm="using:GoldenBread.Desktop.ViewModels.Dialogs"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        x:Class="GoldenBread.Desktop.Views.MainWindow"
-        x:DataType="vm:MainWindowViewModel"
+        x:Class="GoldenBread.Desktop.Views.Dialogs.LoginDialog"
+        x:DataType="vm:LoginDialogViewModel"
         Width="1000" Height="600"
         MinWidth="1000" MinHeight="600"
         Title="Приветствие"
         CanMaximize="False">
 
-    <Design.DataContext>
-        <vm:MainWindowViewModel/>
-    </Design.DataContext>
+    <Window.DataContext>
+        <vm:LoginDialogViewModel/>
+    </Window.DataContext>
 
     <Grid Margin="48" ColumnDefinitions="*,*" ColumnSpacing="48">
 
@@ -21,17 +21,15 @@
             <Border Grid.Column="1" ClipToBounds="True" CornerRadius="20" >
 		        <Image Source="/Assets/goldenbread-preview.webp" Stretch="UniformToFill"/>
             </Border>
-            <DockPanel LastChildFill="False">
-			    <TextBlock Classes="h1"
+            <DockPanel LastChildFill="False" Margin="32">
+			    <TextBlock Classes="H1"
                            Foreground="#ffffff"
                            Text="От зерна до зерна - полный контроль"
-                           Padding="32"
                            TextWrapping="Wrap"
                            DockPanel.Dock="Top"/>
-                <TextBlock Classes="h6"
-                           Foreground="{DynamicResource secondaryTextColor}"
+                <TextBlock Classes="H6"
+                           Foreground="{DynamicResource Foreground.Secondary}"
                            Text="Современное решение для ведения учета данных собственного бизнеса"
-                           Padding="32"
                            TextWrapping="Wrap"
                            DockPanel.Dock="Bottom"/>
             </DockPanel>
@@ -44,19 +42,17 @@
                 <TextBlock VerticalAlignment="Center" 
                            Text="Golden Bread"
                            FontWeight="Bold"
-                           Classes="h4" 
-                           Foreground="{DynamicResource specificColor}"/>
+                           Classes="H4" 
+                           Foreground="{DynamicResource Accent.Specific}"/>
             </StackPanel>
 
-            <StackPanel>
-                <TextBlock Text="Давйте начнем" Classes="h2"/>
+            <StackPanel Spacing="8">
+                <TextBlock Text="Давайте начнем" Classes="H2"/>
                 <TextBlock Text="Для входа в систему пройдите авторизацию" 
-                           Classes="h6"
-                           Foreground="{DynamicResource secondaryTextColor}"
+                           Classes="H6"
+                           Foreground="{DynamicResource Foreground.Secondary}"
                            TextWrapping="Wrap"/>
             </StackPanel>
-
-            <Separator Background="{DynamicResource tertiaryTextColor}"/>
 
             <StackPanel Spacing="12">
                  <HeaderedContentControl Header="Электронная почта">
@@ -74,7 +70,9 @@
             </StackPanel>
 
             <StackPanel>
-                <Button Content="Отправить" Command="{Binding LoginUserCommand}"/>
+                <Button Content="Отправить" 
+                        Command="{Binding LoginUserCommand}" 
+                        CommandParameter="{Binding $parent[Window]}"/>
             </StackPanel>
         </StackPanel>
     </Grid>

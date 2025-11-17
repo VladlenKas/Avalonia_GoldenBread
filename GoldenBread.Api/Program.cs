@@ -19,6 +19,7 @@ internal class Program
 
         // Services for db requests
         builder.Services.AddScoped<UserService>();
+        builder.Services.AddScoped<EmployeeService>();
 
         builder.Services.AddDbContext<GoldenBreadContext>(options =>
         {

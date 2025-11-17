@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using Microsoft.EntityFrameworkCore;
 
 namespace GoldenBread.Shared.Entities;
@@ -45,22 +46,11 @@ public partial class GoldenBreadContext : DbContext
 
     public virtual DbSet<Supplier> Suppliers { get; set; }
 
-    public virtual DbSet<User> Users { get; set; }
+    public virtual DbSet<User> AllUsers { get; set; }
 
-    /*protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        => optionsBuilder.UseNpgsql
-        (
-            "Host=localhost;Database=golden_bread;Username=postgres;Password=root",
-            o =>
-            {
-                o.MapEnum<AccountType>("account_type");
-                o.MapEnum<IngredientBatchStatus>("ingredient_batch_status");
-                o.MapEnum<IngredientUnit>("ingredient_unit");
-                o.MapEnum<OrderStatus>("order_status");
-                o.MapEnum<UserRole>("user_role");
-                o.MapEnum<VerificationStatus>("verification_status");
-            }
-        ).UseSnakeCaseNamingConvention();*/
+    // Models with not deleted status
+    public IQueryable<User> Users => AllUsers.Where(x => x.Dismissed == 0 && x.AccountType == AccountType.User);
+    public IQueryable<User> Companies => AllUsers.Where(x => x.Dismissed == 0 && x.AccountType == AccountType.Company);
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
