@@ -50,7 +50,7 @@
   <!-- Interactive.Neutral (нейтральные элементы) -->
   <SolidColorBrush x:Key="Interactive.Neutral.Default" Color="#FFFFFF"/>
   <SolidColorBrush x:Key="Interactive.Neutral.Hover" Color="#F7F7F9"/>
-  <SolidColorBrush x:Key="Interactive.Neutral.Pressed" Color="#D8D8D8"/>
+  <SolidColorBrush x:Key="Interactive.Neutral.Pressed" Color="#EFEFEF"/>
 
   <!-- Border (рамки и линии) -->
   <SolidColorBrush x:Key="Border.Focus" Color="#EB6601"/>

@@ -1,8 +1,8 @@
-﻿namespace GoldenBread.Shared.Enums
+﻿namespace GoldenBread.Shared.Requests
 {
     public class LoginUser
     {
-        public string Login { get; set; }
+        public string Login { get; set; } 
         public string Password { get; set; }
     }
 }

@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 using GoldenBread.Desktop.ViewModels;
-using GoldenBread.Shared.Enums;
+using GoldenBread.Shared.Requests;
 using ReactiveUI;
 using ReactiveUI.Validation.Abstractions;
 using ReactiveUI.Validation.Extensions;

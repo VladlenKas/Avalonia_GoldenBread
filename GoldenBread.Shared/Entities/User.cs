@@ -35,13 +35,13 @@ public enum VerificationStatus
 
 public partial class User
 {
-    public UserRole? Role { get; set; }
+    public UserRole? Role { get; set; } 
 
     public AccountType? AccountType { get; set; }
 
     public VerificationStatus? VerificationStatus { get; set; }
 
-    public int UserId { get; set; }
+    public int UserId { get; set; } 
 
     public string? Firstname { get; set; }
 

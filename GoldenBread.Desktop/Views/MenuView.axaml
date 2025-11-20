@@ -1,0 +1,40 @@
+﻿<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:reactiveui="http://reactiveui.net/"
+        xmlns:controls="using:GoldenBread.Desktop.Views.Controls"
+        x:Class="GoldenBread.Desktop.Views.MenuView"
+        xmlns:vm="using:GoldenBread.Desktop.ViewModels"
+        x:DataType="vm:MenuViewModel"
+        Width="1280" Height="800"
+        Title="Главное меню"
+        Background="{DynamicResource Background.Secondary}">
+
+    <Design.DataContext>
+        <vm:MenuViewModel/>
+    </Design.DataContext>
+    
+    <Grid ColumnDefinitions="Auto * *" RowDefinitions="Auto *">
+
+        <!-- Sidebar -->
+        <controls:SidebarView Grid.Column="0" 
+                              Grid.RowSpan="2"
+                              DataContext="{Binding Sidebar}"/>
+
+        <!-- Topbar -->
+        <controls:TopbarView Grid.Column="1" 
+                             Grid.ColumnSpan="2"
+                             Grid.Row="0"
+                             DataContext="{Binding Topbar}"
+                             VerticalAlignment="Top"/>
+
+        <!-- Content area -->
+        <ContentControl Grid.Column="1" 
+                        Grid.ColumnSpan="2"
+                        Grid.Row="1"
+                        Margin="24"
+                        Content="{Binding Topbar.CurrentPage}"/>
+
+    </Grid>
+</Window>

@@ -3,7 +3,7 @@
 		xmlns:icon="https://github.com/projektanker/icons.avalonia">
   
 	<!-- Icon for Button and ToggleButton Medium -->
-	<Style Selector="Button icon|Icon.Medium, ToggleButton icon|Icon.Medium">
+	<Style Selector="Button icon|Icon.Medium, ToggleButton icon|Icon.Medium, RadioButton icon|Icon.Medium">
         <Setter Property="FontSize" Value="18"/>
         <Setter Property="FontWeight" Value="Light"/>
         <Setter Property="Background" Value="{Binding $parent[ContentControl].Foreground}"/>
@@ -15,6 +15,10 @@
 
     <Style Selector="ToggleButton icon|Icon.Medium">
         <Setter Property="Value" Value="{Binding $parent[ToggleButton].Tag}"/>
+    </Style>
+
+    <Style Selector="RadioButton icon|Icon.Medium">
+        <Setter Property="Value" Value="{Binding $parent[RadioButton].Tag}"/>
     </Style>
 
 </Styles>

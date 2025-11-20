@@ -6,8 +6,10 @@
 			<StackPanel Spacing="12">
 				<Button Width="200" Height="40" Content="Войти" IsEnabled="False"/>
 				<Button Width="200" Height="40" Content="Войти" IsEnabled="True" Classes="Sidebar" Tag="mdi-account-outline"/>
-				<ToggleButton Width="200" Height="40" Content="Войти" IsEnabled="True" Classes="Sidebar" Tag="mdi-account-outline"/>
-				<ToggleButton Width="200" Height="40" Content="Ингредиенты" Classes="TopBar"/>
+				<RadioButton Width="200" Height="40" Content="Войти" IsEnabled="True" Classes="Sidebar" Tag="mdi-account-outline"/>
+				<RadioButton Width="200" Height="40" Content="Войти" IsEnabled="True" Classes="Sidebar" Tag="mdi-account-outline"/>
+				<RadioButton Width="200" Height="40" Content="Войти" IsEnabled="True" Classes="Sidebar" Tag="mdi-account-outline"/>
+				<RadioButton Width="200" Height="40" Content="Ингредиенты" Classes="Topbar"/>
 			</StackPanel>
 		</Border>
 	</Design.PreviewWith>
@@ -99,7 +101,7 @@
 	</Style>
 
 	<!-- ToggleButton for Slidebar -->
-	<Style Selector="ToggleButton.Sidebar">
+	<Style Selector="RadioButton.Sidebar">
 		<Setter Property="Background" Value="{DynamicResource Interactive.Neutral.Default}"/>
 		<Setter Property="Foreground" Value="{DynamicResource Foreground.Secondary}"/>
 		<Setter Property="FontSize" Value="14"/>
@@ -109,6 +111,22 @@
 		<Setter Property="VerticalContentAlignment" Value="Center"/>
 		<Setter Property="HorizontalContentAlignment" Value="Left"/>
 		<Setter Property="HorizontalAlignment" Value="Stretch"/>
+		<Setter Property="Template">
+        <ControlTemplate>
+            <ContentPresenter Name="PART_ContentPresenter"
+							  Tag="{TemplateBinding Tag}"
+						      Background="{TemplateBinding Background}"
+							  Foreground="{TemplateBinding Foreground}"
+							  BorderBrush="{TemplateBinding BorderBrush}"
+							  BorderThickness="{TemplateBinding BorderThickness}"
+							  CornerRadius="{TemplateBinding CornerRadius}"
+							  Content="{TemplateBinding Content}"
+							  ContentTemplate="{TemplateBinding ContentTemplate}"
+							  Padding="{TemplateBinding Padding}"
+							  VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
+							  HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"/>
+        </ControlTemplate>
+    </Setter>
 		<Setter Property="ContentTemplate">
 			<DataTemplate>
 				<Grid ColumnDefinitions="Auto *">
@@ -151,7 +169,7 @@
 	</Style>
 
 	<!-- ToggleButton TapTab -->
-	<Style Selector="ToggleButton.TopBar">
+	<Style Selector="RadioButton.Topbar">
 		<Setter Property="Background" Value="{DynamicResource Interactive.Neutral.Default}"/>
 		<Setter Property="Foreground" Value="{DynamicResource Foreground.Secondary}"/>
 		<Setter Property="FontSize" Value="14"/>
@@ -160,6 +178,22 @@
 		<Setter Property="HorizontalAlignment" Value="Stretch"/>
 		<Setter Property="VerticalContentAlignment" Value="Top"/>
 		<Setter Property="HorizontalContentAlignment" Value="Center"/>
+		<Setter Property="Template">
+        <ControlTemplate>
+            <ContentPresenter Name="PART_ContentPresenter"
+							  Tag="{TemplateBinding Tag}"
+						      Background="{TemplateBinding Background}"
+							  Foreground="{TemplateBinding Foreground}"
+							  BorderBrush="{TemplateBinding BorderBrush}"
+							  BorderThickness="{TemplateBinding BorderThickness}"
+							  CornerRadius="{TemplateBinding CornerRadius}"
+							  Content="{TemplateBinding Content}"
+							  ContentTemplate="{TemplateBinding ContentTemplate}"
+							  Padding="{TemplateBinding Padding}"
+							  VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
+							  HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"/>
+        </ControlTemplate>
+    </Setter>
 		<Setter Property="ContentTemplate">
 			<DataTemplate>
 				<Grid>

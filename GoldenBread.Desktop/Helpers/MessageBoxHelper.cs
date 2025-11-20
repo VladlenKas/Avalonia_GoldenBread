@@ -13,23 +13,21 @@ namespace GoldenBread.Desktop.Helpers
 {
     public static class MessageBoxHelper
     {
-        // Ok ButtonEnum.Ok
-        public async static Task ShowOkMessageBox(string message) =>
-            await MessageBoxManager.GetMessageBoxStandard(
-                "Успех",
-                message,
-                ButtonEnum.Ok,
-                Icon.Success).ShowAsync();
+        // == Button Successes ==
+        public async static Task ShowOkMessageBox(string message)
+        {
+            await MessageBoxManager.GetMessageBoxStandard("Успех",
+                message, ButtonEnum.Ok, Icon.Success).ShowAsync();
+        }
 
-        // Error ButtonEnum.Ok
-        public async static Task ShowErrorMessageBox(string message) =>
-            await MessageBoxManager.GetMessageBoxStandard(
-                "Ошибка",
-                message,
-                ButtonEnum.Ok,
-                Icon.Error).ShowAsync();
+        public async static Task ShowErrorMessageBox(string message) 
+        {
+            await MessageBoxManager.GetMessageBoxStandard("Ошибка",
+                message, ButtonEnum.Ok, Icon.Error).ShowAsync();
+        }
 
-        // Question ButtonEnum.YesNo
+
+        // == Button Errors ==
         public async static Task<bool> ShowQuestionMessageBox(string message)
         {
             var box = MessageBoxManager.GetMessageBoxCustom(
