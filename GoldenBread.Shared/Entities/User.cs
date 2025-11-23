@@ -36,7 +36,7 @@ public enum VerificationStatus
 }
 
 
-public partial class User
+public partial class User 
 {
     // == Custom props ==
     [NotMapped]

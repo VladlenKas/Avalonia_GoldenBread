@@ -12,47 +12,92 @@
         <vm:DesignUsersViewModel/>
     </Design.DataContext>
 
-    <Grid Grid.RowDefinitions="Auto *" RowSpacing="24">
+    <SplitView IsPaneOpen="{Binding IsDetailPanelOpen, Mode=TwoWay}"
+               DisplayMode="Overlay"
+               PanePlacement="Right"
+               OpenPaneLength="500"
+               PaneClosing="SplitView_OnPaneClosing">
+    
+        <!-- ПАНЕЛЬ -->
+        <SplitView.Pane>
+            <Border Background="#2C2C2C" Padding="20">
+                <StackPanel Spacing="15">
+                
+                    <!-- Крестик закрытия -->
+                    <Button Classes="IconOnly" 
+                            Tag="mdi-close"
+                            HorizontalAlignment="Right"
+                            Command="{Binding CancelCommand}"/>
+                
+                    <!-- Заголовок -->
+                    <TextBlock Text="{Binding IsEditMode}" 
+                               FontSize="24"/>
+                
+                    <!-- Поля -->
+                    <TextBox Text="{Binding SelectedItem.Firstname}"
+                             IsReadOnly="{Binding IsViewMode}"/>
+                    <TextBox Text="{Binding SelectedItem.Email}"
+                             IsReadOnly="{Binding IsViewMode}"/>
+                
+                    <!-- Кнопки просмотра -->
+                    <StackPanel Orientation="Horizontal" 
+                                Spacing="10"
+                                IsVisible="{Binding IsViewMode}">
+                        <Button Content="Редактировать" 
+                                Command="{Binding EnterEditModeCommand}"
+                                IsVisible="{Binding CanEdit}"/>
+                        <Button Content="Удалить" 
+                                Command="{Binding DeleteFromPanelCommand}"
+                                IsVisible="{Binding CanDelete}"/>
+                    </StackPanel>
+                
+                    <!-- Кнопки редактирования -->
+                    <StackPanel Orientation="Horizontal" 
+                                Spacing="10"
+                                IsVisible="{Binding IsEditMode}">
+                        <Button Content="Сохранить" Command="{Binding SaveCommand}"/>
+                        <Button Content="Отмена" Command="{Binding CancelCommand}"/>
+                    </StackPanel>
+                
+                </StackPanel>
+            </Border>
+        </SplitView.Pane>
 
-        <controls:ToolbarView Grid.Row="0"/>
-        
-        <Grid Grid.Row="1">
+        <Grid Grid.RowDefinitions="Auto *" RowSpacing="24">
+            <controls:ToolbarView Grid.Row="0"/>
+            <Grid Grid.Row="1">
 
-            <!-- loading indicator -->
-            <ProgressBar IsIndeterminate="True" 
-                         IsVisible="{Binding IsLoading}"
-                         Height="4"
-                         VerticalAlignment="Top"
-                         ZIndex="1"/>
+                <!-- loading indicator -->
+                <ProgressBar IsIndeterminate="True" 
+                             IsVisible="{Binding IsLoading}"
+                             Height="4"
+                             VerticalAlignment="Top"
+                             ZIndex="1"/>
         
-            <DataGrid ItemsSource="{Binding Items}"
-                      SelectedItem="{Binding SelectedItem}"
-                      IsEnabled="{Binding !IsLoading}"
-                      SelectionMode="Single">
-            
-                <DataGrid.Columns>
+                <DataGrid ItemsSource="{Binding Items}"
+                          SelectedItem="{Binding SelectedItem}"
+                          IsEnabled="{Binding !IsLoading}"
+                          DoubleTapped="DataGrid_OnDoubleTapped"
+                          SelectionMode="Single">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="ID" 
+                                            Binding="{Binding UserId}"
+                                            Width="60"/>
                 
-                    <DataGridTextColumn Header="ID" 
-                                        Binding="{Binding UserId}"
-                                        Width="60"/>
+                        <DataGridTextColumn Header="Фамилия, имя, отчество" 
+                                            Binding="{Binding Fullname}"
+                                            Width="*"/>
                 
-                    <DataGridTextColumn Header="Фамилия, имя, отчество" 
-                                        Binding="{Binding Fullname}"
-                                        Width="*"/>
+                        <DataGridTextColumn Header="Должность" 
+                                            Binding="{Binding RoleValue}"
+                                            Width="200"/>
                 
-                    <DataGridTextColumn Header="Должность" 
-                                        Binding="{Binding RoleValue}"
-                                        Width="200"/>
-                
-                    <DataGridTextColumn Header="Эл. почта" 
-                                        Binding="{Binding Email}"
-                                        Width="200"/>
-                
-                </DataGrid.Columns>
-            
-            </DataGrid>
-        
+                        <DataGridTextColumn Header="Эл. почта" 
+                                            Binding="{Binding Email}"
+                                            Width="200"/>
+                    </DataGrid.Columns>
+                 </DataGrid>
+            </Grid>
         </Grid>
-    </Grid>
-
+    </SplitView>
 </UserControl>

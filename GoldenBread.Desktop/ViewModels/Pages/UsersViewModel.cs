@@ -18,7 +18,6 @@ namespace GoldenBread.Desktop.ViewModels.Pages
     {
         // == Fields ==
         private readonly UserService _userService;
-        private readonly AuthorizationService _authService;
 
 
         // == Designer ==
@@ -26,20 +25,12 @@ namespace GoldenBread.Desktop.ViewModels.Pages
             AuthorizationService service) : base(e => e.UserId, service)
         {
             _userService = userService;
-            _authService = service;
+
             RefreshCommand.Execute().Subscribe();
         }
 
 
         // == Override Methods ==
-        protected override bool GetPermission(Permission permission)
-        {
-            if (_authService.CurrentRole == UserRole.Admin)
-                return true;
-
-            return permission == Permission.View;
-        }
-
         protected override string GetSearchableText(User user)
         {
             return $"{user.Firstname} {user.Lastname} {user.Role}";
@@ -57,17 +48,16 @@ namespace GoldenBread.Desktop.ViewModels.Pages
 
         protected override bool CanDeleteOptions()
         {
-            return SelectedItem.UserId != _authService.CurrentUser.UserId;
+            return SelectedItem.UserId != _service.CurrentUser.UserId;
         }
-
 
         // == Commands Methods ==
         protected override async Task OnAddAsync()
         {
-            throw new NotImplementedException();
+            throw new NotImplementedException();    
         }
 
-        protected override async Task OnEditAsync()
+        protected override async Task OnSaveAsync()
         {
             throw new NotImplementedException();
         }
@@ -95,7 +85,7 @@ namespace GoldenBread.Desktop.ViewModels.Pages
     // == Designer For View ==
     public class DesignUsersViewModel : PageViewModelBase<User>
     {
-        public DesignUsersViewModel(AuthorizationService service = null) : base(e => e.UserId, service)
+        public DesignUsersViewModel() : base(e => e.UserId, service: null)
         {
             var users = new List<User>
             {
@@ -108,13 +98,11 @@ namespace GoldenBread.Desktop.ViewModels.Pages
             {
                 AddOrUpdateItem(user);
             }
-
-            RefreshCommand.Execute().Subscribe();
         }
 
         protected override Task LoadDataAsync() => Task.CompletedTask;
         protected override async Task OnAddAsync() { }
-        protected override async Task OnEditAsync() { }
+        protected override async Task OnSaveAsync() { }
         protected override async Task OnDeleteAsync() { }
     }
 }

@@ -20,9 +20,9 @@ namespace GoldenBread.Desktop.ViewModels.Base
     public abstract class PageViewModelBase<T> : ReactiveValidationObject where T : class
     {
         // == Fields ==
+        protected readonly AuthorizationService? _service;
         public readonly SourceCache<T, int> _sourceCache;
         private readonly ReadOnlyObservableCollection<T> _items;
-        private readonly AuthorizationService _service;
 
 
         // == Props ==
@@ -30,6 +30,10 @@ namespace GoldenBread.Desktop.ViewModels.Base
         [Reactive] public T SelectedItem { get; set; }
         [Reactive] public bool IsLoading { get; set; }
         [Reactive] public bool IsFilterMenuOpen { get; set; }
+
+        // Panel view/edit
+        [Reactive] public bool IsDetailPanelOpen { get; set; }
+        [Reactive] public bool IsEditMode { get; set; }  // Edit mode inside panel
 
         public ReadOnlyObservableCollection<T> Items => _items;
 
@@ -39,15 +43,22 @@ namespace GoldenBread.Desktop.ViewModels.Base
         public bool CanEdit { get; }
         public bool CanDelete { get; }
 
+        // For change view/edit mode
+        public bool IsViewMode => !IsEditMode;
+
 
         // == Commands ==
         public ReactiveCommand<Unit, Unit>? AddCommand { get; }
-        public ReactiveCommand<Unit, Unit>? EditCommand { get; }
-        public ReactiveCommand<Unit, Unit>? DeleteCommand { get; }
+        public ReactiveCommand<T, Unit> ViewCommand { get; }    // For Double tap
+        public ReactiveCommand<Unit, Unit>? EnterEditModeCommand { get; }   // Btn edit inside panel
+        public ReactiveCommand<Unit, Unit>? DeleteFromPanelCommand { get; } // Btn delete inside panel
+        public ReactiveCommand<Unit, Unit>? SaveCommand { get; }    // Btn save inside panel
+        public ReactiveCommand<Unit, Unit> CancelCommand { get; }   // Btn cansel inside panel
+        public ReactiveCommand<Unit, Unit>? DeleteCommand { get; }  
         public ReactiveCommand<Unit, Unit> RefreshCommand { get; }
         public ReactiveCommand<Unit, bool> ToggleFilterCommand { get; }
 
-
+        
         // == Designer ==
         protected PageViewModelBase(Func<T, int> keySelector, AuthorizationService service)
         {
@@ -67,9 +78,8 @@ namespace GoldenBread.Desktop.ViewModels.Base
 
             if (CanEdit)
             {
-                var canEdit = this.WhenAnyValue(x => x.SelectedItem)
-                    .Select(item => item != null);
-                EditCommand = ReactiveCommand.CreateFromTask(OnEditAsync, canEdit);
+                EnterEditModeCommand = ReactiveCommand.Create(EnterEditMode);
+                SaveCommand = ReactiveCommand.CreateFromTask(SaveChangesAsync);
             }
 
             if (CanDelete)  
@@ -77,10 +87,25 @@ namespace GoldenBread.Desktop.ViewModels.Base
                 var canDelete = this.WhenAnyValue(x => x.SelectedItem)
                     .Select(item => item != null && CanDeleteOptions());
                 DeleteCommand = ReactiveCommand.CreateFromTask(OnDeleteAsync, canDelete);
+                DeleteFromPanelCommand = ReactiveCommand.CreateFromTask(DeleteFromPanelAsync, canDelete);
             }
 
+            CancelCommand = ReactiveCommand.Create(CloseOrCancelEdit);
+            ViewCommand = ReactiveCommand.Create<T>(OpenViewPanel);
             ToggleFilterCommand = ReactiveCommand.Create(() =>
                 IsFilterMenuOpen = !IsFilterMenuOpen);
+            RefreshCommand = ReactiveCommand.CreateFromTask(async () =>
+            {
+                IsLoading = true;
+                try
+                {
+                    await LoadDataAsync();
+                }
+                finally
+                {
+                    IsLoading = false;
+                }
+            });
 
             // 3. Load Filters
             // Base Filter Search
@@ -112,6 +137,9 @@ namespace GoldenBread.Desktop.ViewModels.Base
         // == Virtual Methods with Default Realization ==
         protected virtual bool GetPermission(Permission permission)
         {
+            if (_service == null)
+                return true;
+
             return _service.HasPermission(permission);
         }
 
@@ -139,11 +167,17 @@ namespace GoldenBread.Desktop.ViewModels.Base
             return true;
         }
 
+        // To download additional data when opening the panel
+        protected virtual void OnViewPanelOpened(T item) { }
+
+        // To roll back changes
+        protected virtual void OnCancelEdit() { }
+
 
         // == Abstraction Methods ==
         protected abstract Task LoadDataAsync();
         protected abstract Task OnAddAsync();
-        protected abstract Task OnEditAsync();
+        protected abstract Task OnSaveAsync();
         protected abstract Task OnDeleteAsync();
 
 
@@ -151,5 +185,54 @@ namespace GoldenBread.Desktop.ViewModels.Base
         protected void AddOrUpdateItem(T item) => _sourceCache.AddOrUpdate(item);
         protected void RemoveItem(T item) => _sourceCache.Remove(item);
         protected void ClearItems() => _sourceCache.Clear();
+
+
+        // == Other Methods ==
+        // Open the view panel (double-top)
+        private void OpenViewPanel(T item)
+        {
+            if (item == null) return;
+
+            SelectedItem = item;
+            IsEditMode = false;
+
+            IsDetailPanelOpen = true;
+            OnViewPanelOpened(item);
+        }
+
+
+        // Changing the view mode to edit mode
+        private void EnterEditMode()
+        {
+            IsEditMode = true;
+        }
+
+        // Close panel
+        private void CloseOrCancelEdit()
+        {
+            if (IsEditMode)
+            {
+                OnCancelEdit();
+                IsEditMode = false;  
+            }
+            else
+            {
+                IsDetailPanelOpen = false; 
+            }
+        }
+
+        // Save Changes in the panel
+        private async Task SaveChangesAsync()
+        {
+            await OnSaveAsync();
+            IsEditMode = false;  
+        }
+
+        // Delete in the panel
+        private async Task DeleteFromPanelAsync()
+        {
+            await OnDeleteAsync();
+            IsDetailPanelOpen = false;
+        }
     }
 }

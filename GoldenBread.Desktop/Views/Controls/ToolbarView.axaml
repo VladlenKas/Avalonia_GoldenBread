@@ -22,9 +22,16 @@
             <!-- Action Button -->
             <StackPanel DockPanel.Dock="Right" Spacing="8" Orientation="Horizontal" VerticalAlignment="Center">
 
-                <Button Classes="WithIcon" Command="{Binding AddCommand}" Content="Добавить" Tag="mdi-plus"/>
-                <Button Classes="IconOnly Edit" Command="{Binding EditCommand}" Tag="mdi-pencil-outline"/>
-                <Button Classes="IconOnly Danger" Command="{Binding DeleteCommand}" Tag="mdi-trash-can-outline"/>
+                <Button Classes="WithIcon" 
+                        Command="{Binding AddCommand}" 
+                        IsVisible="{Binding CanAdd}"
+                        Content="Добавить" 
+                        Tag="mdi-plus"/>
+
+                <Button Classes="IconOnly Danger" 
+                        Command="{Binding DeleteCommand}" 
+                        IsVisible="{Binding CanDelete}"
+                        Tag="mdi-trash-can-outline"/>
 				
             </StackPanel>
 
