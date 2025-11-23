@@ -35,6 +35,7 @@ public enum VerificationStatus
     Suspended
 }
 
+
 public partial class User
 {
     // == Custom props ==

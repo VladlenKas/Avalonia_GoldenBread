@@ -1,5 +1,6 @@
 ﻿using Avalonia.Controls.Documents;
 using DynamicData;
+using GoldenBread.Desktop.Enums;
 using GoldenBread.Desktop.Services;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
@@ -10,6 +11,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
+using System.Security;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -32,9 +34,16 @@ namespace GoldenBread.Desktop.ViewModels.Base
         public ReadOnlyObservableCollection<T> Items => _items;
 
 
+        // == Access rights ==
+        public bool CanAdd { get; }
+        public bool CanEdit { get; }
+        public bool CanDelete { get; }
+
+
         // == Commands ==
-        public ReactiveCommand<Unit, Unit> AddCommand { get; }
-        public ReactiveCommand<Unit, Unit> DeleteCommand { get; }
+        public ReactiveCommand<Unit, Unit>? AddCommand { get; }
+        public ReactiveCommand<Unit, Unit>? EditCommand { get; }
+        public ReactiveCommand<Unit, Unit>? DeleteCommand { get; }
         public ReactiveCommand<Unit, Unit> RefreshCommand { get; }
         public ReactiveCommand<Unit, bool> ToggleFilterCommand { get; }
 
@@ -45,8 +54,35 @@ namespace GoldenBread.Desktop.ViewModels.Base
             _sourceCache = new SourceCache<T, int>(keySelector);
             _service = service;
 
-            // 1. Load Filters
+            // 1. Distribution of rights
+            CanAdd = GetPermission(Permission.Add);
+            CanEdit = GetPermission(Permission.Edit);
+            CanDelete = GetPermission(Permission.Delete);
 
+            // 2. Load Commands
+            if (CanAdd)
+            {
+                AddCommand = ReactiveCommand.CreateFromTask(OnAddAsync);
+            }
+
+            if (CanEdit)
+            {
+                var canEdit = this.WhenAnyValue(x => x.SelectedItem)
+                    .Select(item => item != null);
+                EditCommand = ReactiveCommand.CreateFromTask(OnEditAsync, canEdit);
+            }
+
+            if (CanDelete)  
+            {
+                var canDelete = this.WhenAnyValue(x => x.SelectedItem)
+                    .Select(item => item != null && CanDeleteOptions());
+                DeleteCommand = ReactiveCommand.CreateFromTask(OnDeleteAsync, canDelete);
+            }
+
+            ToggleFilterCommand = ReactiveCommand.Create(() =>
+                IsFilterMenuOpen = !IsFilterMenuOpen);
+
+            // 3. Load Filters
             // Base Filter Search
             var searchFilter = this.WhenAnyValue(x => x.SearchText)
                 .Throttle(TimeSpan.FromMilliseconds(300))
@@ -70,33 +106,15 @@ namespace GoldenBread.Desktop.ViewModels.Base
                 .ObserveOn(RxApp.MainThreadScheduler)  // Update UI in the main stream
                 .Bind(out _items)
                 .Subscribe();
-
-            // 2. Load Commands
-            var canDelete = this.WhenAnyValue(x => x.SelectedItem)
-                .Select(item => item != null && CanDelete());
-
-            AddCommand = ReactiveCommand.CreateFromTask(OnAddAsync);
-            DeleteCommand = ReactiveCommand.CreateFromTask(OnDeleteAsync, canDelete);
-            RefreshCommand = ReactiveCommand.CreateFromTask(
-                async () =>
-                {
-                    IsLoading = true;
-                    try
-                    {
-                        await LoadDataAsync();
-                    }
-                    finally
-                    {
-                        IsLoading = false;
-                    }
-                });
-
-            ToggleFilterCommand = ReactiveCommand.Create(() =>
-                IsFilterMenuOpen = !IsFilterMenuOpen);
         }
 
 
         // == Virtual Methods with Default Realization ==
+        protected virtual bool GetPermission(Permission permission)
+        {
+            return _service.HasPermission(permission);
+        }
+
         protected virtual string GetSearchableText(T item)
         {
             return item?.ToString() ?? string.Empty;
@@ -116,14 +134,16 @@ namespace GoldenBread.Desktop.ViewModels.Base
             return item => GetSearchableText(item).ToLower().Contains(lowerSearch);
         }
 
-        protected virtual bool CanDelete()
+        protected virtual bool CanDeleteOptions()
         {
             return true;
         }
 
+
         // == Abstraction Methods ==
         protected abstract Task LoadDataAsync();
         protected abstract Task OnAddAsync();
+        protected abstract Task OnEditAsync();
         protected abstract Task OnDeleteAsync();
 
 

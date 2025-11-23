@@ -1,5 +1,6 @@
 ﻿using Avalonia.Controls;
 using DynamicData.Binding;
+using GoldenBread.Desktop.Enums;
 using GoldenBread.Desktop.Helpers;
 using GoldenBread.Desktop.Services;
 using GoldenBread.Desktop.ViewModels.Base;
@@ -31,9 +32,17 @@ namespace GoldenBread.Desktop.ViewModels.Pages
 
 
         // == Override Methods ==
-        protected override string GetSearchableText(User item)
+        protected override bool GetPermission(Permission permission)
         {
-            return $"{item.Firstname} {item.Lastname} {item.Role}";
+            if (_authService.CurrentRole == UserRole.Admin)
+                return true;
+
+            return permission == Permission.View;
+        }
+
+        protected override string GetSearchableText(User user)
+        {
+            return $"{user.Firstname} {user.Lastname} {user.Role}";
         }
 
         protected override async Task LoadDataAsync()
@@ -46,7 +55,7 @@ namespace GoldenBread.Desktop.ViewModels.Pages
             }
         }
 
-        protected override bool CanDelete()
+        protected override bool CanDeleteOptions()
         {
             return SelectedItem.UserId != _authService.CurrentUser.UserId;
         }
@@ -54,6 +63,11 @@ namespace GoldenBread.Desktop.ViewModels.Pages
 
         // == Commands Methods ==
         protected override async Task OnAddAsync()
+        {
+            throw new NotImplementedException();
+        }
+
+        protected override async Task OnEditAsync()
         {
             throw new NotImplementedException();
         }
@@ -77,6 +91,8 @@ namespace GoldenBread.Desktop.ViewModels.Pages
         }
     }
 
+
+    // == Designer For View ==
     public class DesignUsersViewModel : PageViewModelBase<User>
     {
         public DesignUsersViewModel(AuthorizationService service = null) : base(e => e.UserId, service)
@@ -98,6 +114,7 @@ namespace GoldenBread.Desktop.ViewModels.Pages
 
         protected override Task LoadDataAsync() => Task.CompletedTask;
         protected override async Task OnAddAsync() { }
+        protected override async Task OnEditAsync() { }
         protected override async Task OnDeleteAsync() { }
     }
 }

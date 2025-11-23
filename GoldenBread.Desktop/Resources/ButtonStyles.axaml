@@ -164,7 +164,7 @@
 	<!-- == Color Variants == -->
 
 	<!-- Primary (default) -->
-	<Style Selector="Button.Primary, Button:not(.Secondary):not(.Danger):not(.Success):not(.Ghost):not(.Action)">
+	<Style Selector="Button.Primary, Button:not(.Secondary):not(.Danger):not(.Success):not(.Ghost):not(.Action):not(.Edit)">
 		<Setter Property="Background" Value="{DynamicResource Interactive.Primary.Default}"/>
 		<Setter Property="Foreground" Value="{DynamicResource Foreground.OnAccent}"/>
     
@@ -224,6 +224,28 @@
     
 		<Style Selector="^:disabled /template/ ContentPresenter#PART_ContentPresenter">
 			<Setter Property="Background" Value="#e74c3c"/>
+			<Setter Property="Foreground" Value="#75ffffff"/>
+			<Setter Property="Opacity" Value="0.5"/>
+		</Style>
+	</Style>
+
+	<!-- Edit  -->
+	<Style Selector="Button.Edit">
+		<Setter Property="Background" Value="#3498db"/>
+		<Setter Property="Foreground" Value="White"/>
+    
+		<Style Selector="^:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+			<Setter Property="Background" Value="#2980b9"/>
+			<Setter Property="Foreground" Value="#90ffffff"/>
+		</Style>
+    
+		<Style Selector="^:pressed /template/ ContentPresenter#PART_ContentPresenter">
+			<Setter Property="Background" Value="#21618c"/>
+			<Setter Property="Foreground" Value="#80ffffff"/>
+		</Style>
+    
+		<Style Selector="^:disabled /template/ ContentPresenter#PART_ContentPresenter">
+			<Setter Property="Background" Value="#3498db"/>
 			<Setter Property="Foreground" Value="#75ffffff"/>
 			<Setter Property="Opacity" Value="0.5"/>
 		</Style>

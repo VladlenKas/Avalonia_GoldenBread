@@ -90,23 +90,10 @@ namespace GoldenBread.Desktop.ViewModels.Controls
             var items = new ObservableCollection<SidebarItem>();
 
             // Pages for anyone
-            //items.Add(new SidebarItem("Главная", new HomeViewModel(), "mdi-bookmark-box-outline"));
-            //items.Add(new SidebarItem("Профиль", new ProfileViewModel()));
-
-            // Pages only for admin
-            if (currentUser.Role == UserRole.Admin)
-            {
-                items.Add(new SidebarItem(SectionType.References, "mdi-bookmark-box-outline"));
-                items.Add(new SidebarItem(SectionType.Staff, "mdi-account-group-outline"));
-                items.Add(new SidebarItem(SectionType.Production, "mdi-clipboard-text-clock-outline"));
-                items.Add(new SidebarItem(SectionType.Analytics, "mdi-chart-line"));
-            }
-
-            // Pages only for manager
-            //if (currentUser.Role == UserRole.ManagerProduction)
-            //{
-            //    items.Add(new SidebarItem("Производство", new ProductionViewModel()));
-            //}
+            items.Add(new SidebarItem(SectionType.References, "mdi-bookmark-box-outline"));
+            items.Add(new SidebarItem(SectionType.Staff, "mdi-account-group-outline"));
+            items.Add(new SidebarItem(SectionType.Production, "mdi-clipboard-text-clock-outline"));
+            items.Add(new SidebarItem(SectionType.Analytics, "mdi-chart-line"));
 
             return items;
         }

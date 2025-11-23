@@ -1,11 +1,12 @@
-﻿using GoldenBread.Shared.Entities;
-using GoldenBread.Shared.Responses;
+﻿using GoldenBread.Desktop.Enums;
+using GoldenBread.Desktop.Helpers;
+using GoldenBread.Shared.Entities;
 using GoldenBread.Shared.Requests;
+using GoldenBread.Shared.Responses;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Text;
 using System.Threading.Tasks;
-using GoldenBread.Desktop.Helpers;
 
 namespace GoldenBread.Desktop.Services
 {
@@ -13,13 +14,18 @@ namespace GoldenBread.Desktop.Services
     {
         // == Fields ==
         private User? _currentUser;
-
+        private UserRole? _currentRole;
 
         // == Props ==
         public User? CurrentUser
         {
             get => _currentUser;
             private set => _currentUser = value;
+        }
+
+        public UserRole? CurrentRole
+        {
+            get => _currentUser.Role;
         }
 
         public bool IsAuthenticated => _currentUser != null;
@@ -40,9 +46,25 @@ namespace GoldenBread.Desktop.Services
             return apiResponse;
         }
 
+        /// <summary>
+        /// A function for granting rights depending on the position
+        /// </summary>
+        /// <param name="permission"></param>
+        /// <returns></returns>
+        public bool HasPermission(Permission permission)
+        {
+            return CurrentRole switch
+            {
+                UserRole.Admin => true,
+                UserRole.ManagerProduction => permission != Permission.Delete,
+                _ => false
+            };
+        }
+
         public void Logout()
         {
             _currentUser = null;
+            _currentRole = null;
         }
     }
 }

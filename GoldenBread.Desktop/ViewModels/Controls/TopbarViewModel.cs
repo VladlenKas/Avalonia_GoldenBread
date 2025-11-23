@@ -1,4 +1,5 @@
 ﻿using Avalonia.Controls;
+using DynamicData;
 using GoldenBread.Desktop.Enums;
 using GoldenBread.Desktop.Helpers;
 using GoldenBread.Desktop.Services;
@@ -108,12 +109,7 @@ namespace GoldenBread.Desktop.ViewModels.Controls
                     new TopbarItem("Ингредиенты", _serviceProvider.GetRequiredService<IngredientsViewModel>())
                 },
 
-                SectionType.Staff => new[]
-                {
-                    new TopbarItem("Сотрудники", _serviceProvider.GetRequiredService<EmployeesViewModel>()),
-                    new TopbarItem("Пользователи", _serviceProvider.GetRequiredService<UsersViewModel>()),
-                    new TopbarItem("Компании", _serviceProvider.GetRequiredService<CompaniesViewModel>())
-                },
+                SectionType.Staff => GetStaffPages(),
 /*
                 SectionType.Production => new[]
                 {
@@ -142,6 +138,22 @@ namespace GoldenBread.Desktop.ViewModels.Controls
                 firstPage.IsSelected = true;
                 CurrentPage = firstPage.ViewModel;
             }
+        }
+
+        private TopbarItem[] GetStaffPages()
+        {
+            var allPages = new List<TopbarItem>
+            {
+                new TopbarItem("Сотрудники", _serviceProvider.GetRequiredService<EmployeesViewModel>()),
+                new TopbarItem("Компании", _serviceProvider.GetRequiredService<CompaniesViewModel>())
+            };
+            
+            if (_authService.CurrentRole is Shared.Entities.UserRole.Admin)
+            {
+                allPages.Add(new TopbarItem("Пользователи", _serviceProvider.GetRequiredService<UsersViewModel>()));
+            }
+
+            return allPages.ToArray();
         }
     }
 
