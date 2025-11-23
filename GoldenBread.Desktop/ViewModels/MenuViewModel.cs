@@ -40,13 +40,15 @@ namespace GoldenBread.Desktop.ViewModels
 
         // == For Builder ==
         public MenuViewModel(AuthorizationService authService, 
-            ViewService viewService)
+            ViewService viewService,
+            SidebarViewModel sidebar,
+            TopbarViewModel topbar)
         {
             _authService = authService;
             _viewService = viewService;
 
-            Sidebar = new SidebarViewModel(authService, viewService);
-            Topbar = new TopbarViewModel(authService, Sidebar);
+            Sidebar = sidebar;
+            Topbar = topbar;
         }
     }
 }

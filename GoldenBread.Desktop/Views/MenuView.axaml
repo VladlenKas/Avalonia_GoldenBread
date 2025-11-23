@@ -9,7 +9,7 @@
         x:DataType="vm:MenuViewModel"
         Width="1280" Height="800"
         Title="Главное меню"
-        Background="{DynamicResource Background.Secondary}">
+        Background="{DynamicResource Background.Specific}">
 
     <Design.DataContext>
         <vm:MenuViewModel/>

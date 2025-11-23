@@ -1,9 +1,9 @@
 ﻿using GoldenBread.Shared.Entities;
 using Microsoft.EntityFrameworkCore;
 
-namespace GoldenBread.Api.Services
+namespace GoldenBread.Api.ApiServices
 {
-    public class AuthorizationService(GoldenBreadContext context)
+    public class AuthorizationApiService(GoldenBreadContext context)
     {
         public async Task<User> LoginAsync(string email, string password)
         {

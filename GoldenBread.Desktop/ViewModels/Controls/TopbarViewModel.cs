@@ -5,6 +5,7 @@ using GoldenBread.Desktop.Services;
 using GoldenBread.Desktop.ViewModels.Pages;
 using GoldenBread.Desktop.Views;
 using Humanizer;
+using Microsoft.Extensions.DependencyInjection;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using ReactiveUI.Validation.Helpers;
@@ -24,6 +25,7 @@ namespace GoldenBread.Desktop.ViewModels.Controls
         // == Filds ==
         private readonly AuthorizationService _authService;
         private readonly SidebarViewModel _sidebar;
+        private readonly IServiceProvider _serviceProvider;
         private object? _currentPage;
 
 
@@ -59,10 +61,12 @@ namespace GoldenBread.Desktop.ViewModels.Controls
 
         // == For Builder ==
         public TopbarViewModel(AuthorizationService authService, 
-            SidebarViewModel sidebar)
+            SidebarViewModel sidebar,
+            IServiceProvider serviceProvider)
         {
             _authService = authService;
             _sidebar = sidebar;
+            _serviceProvider = serviceProvider;
 
             UserFullname = _authService.CurrentUser.Fullname;
             UserRole = _authService.CurrentUser.Role.Value.Humanize();
@@ -99,16 +103,16 @@ namespace GoldenBread.Desktop.ViewModels.Controls
             {
                 SectionType.References => new[]
                 {
-                    new TopbarItem("Склад", new WarehouseViewModel()),
-                    new TopbarItem("Продукты", new ProductsViewModel()),
-                    new TopbarItem("Ингредиенты", new IngredientsViewModel())
+                    new TopbarItem("Склад", _serviceProvider.GetRequiredService<WarehouseViewModel>()),
+                    new TopbarItem("Продукты", _serviceProvider.GetRequiredService<ProductsViewModel>()),
+                    new TopbarItem("Ингредиенты", _serviceProvider.GetRequiredService<IngredientsViewModel>())
                 },
 
                 SectionType.Staff => new[]
                 {
-                    new TopbarItem("Сотрудники", new EmployeesViewModel()),
-                    new TopbarItem("Пользователи", new UsersViewModel()),
-                    new TopbarItem("Компании", new CompaniesViewModel())
+                    new TopbarItem("Сотрудники", _serviceProvider.GetRequiredService<EmployeesViewModel>()),
+                    new TopbarItem("Пользователи", _serviceProvider.GetRequiredService<UsersViewModel>()),
+                    new TopbarItem("Компании", _serviceProvider.GetRequiredService<CompaniesViewModel>())
                 },
 /*
                 SectionType.Production => new[]

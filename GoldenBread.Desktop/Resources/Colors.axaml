@@ -58,5 +58,6 @@
 
   <!-- Специальные -->
   <SolidColorBrush x:Key="Accent.Specific" Color="#682213"/>
+  <SolidColorBrush x:Key="Background.Specific" Color="#F9F9FB"/>
 
 </ResourceDictionary>

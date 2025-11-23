@@ -35,22 +35,22 @@
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
                             <RadioButton Classes="Sidebar"
-                                            GroupName="SidebarSection"
-                                            Tag="{Binding IconTag}"
-                                            Content="{Binding Title}"
-                                            IsChecked="{Binding IsSelected}"
-                                            Command="{Binding $parent[ItemsControl].((vm:SidebarViewModel)DataContext).SelectSectionCommand}"
-                                            CommandParameter="{Binding}"/>
+                                         GroupName="SidebarSection"
+                                         Tag="{Binding IconTag}"
+                                         Content="{Binding Title}"
+                                         IsChecked="{Binding IsSelected}"
+                                         Command="{Binding $parent[ItemsControl].((vm:SidebarViewModel)DataContext).SelectSectionCommand}"
+                                         CommandParameter="{Binding}"/>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
 
                 <TextBlock Classes="Sidebar" Text="Создать документ"/>
-                <Button Classes="Sidebar" Tag="mdi-file-document-plus-outline" Content="Сводный отчет"/>
+                <Button Classes="Sidebar Ghost" Tag="mdi-file-document-plus-outline" Content="Сводный отчет"/>
             </StackPanel>
 
             <StackPanel Grid.Row="2" Spacing="4" VerticalAlignment="Bottom">
-                <Button Classes="Sidebar" 
+                <Button Classes="Sidebar Ghost" 
                         Tag="mdi-logout" 
                         Content="Выйти" 
                         Foreground="red" 

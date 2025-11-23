@@ -1,5 +1,5 @@
 ﻿using GoldenBread.Api.Helpers;
-using GoldenBread.Api.Services;
+using GoldenBread.Api.ApiServices;
 using GoldenBread.Shared.Entities;
 using GoldenBread.Shared.Requests;
 using Microsoft.AspNetCore.Mvc;
@@ -11,7 +11,7 @@ namespace GoldenBread.Api.Controllers
     public class AuthorizationController : ApiControllerBase
     {
         [HttpPost("login")]
-        public async Task<IActionResult> Login([FromServices] AuthorizationService service, [FromBody] LoginUser request)
+        public async Task<IActionResult> Login([FromServices] AuthorizationApiService service, [FromBody] LoginUser request)
         {
             try
             {

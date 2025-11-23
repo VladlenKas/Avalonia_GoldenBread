@@ -1,4 +1,7 @@
-﻿using ReactiveUI.Validation.Helpers;
+﻿using DynamicData.Binding;
+using GoldenBread.Desktop.ViewModels.Base;
+using GoldenBread.Shared.Entities;
+using ReactiveUI.Validation.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +10,8 @@ using System.Threading.Tasks;
 
 namespace GoldenBread.Desktop.ViewModels.Pages
 {
-    public class EmployeesViewModel : ReactiveValidationObject
+    public class EmployeesViewModel 
     {
+        
     }
 }

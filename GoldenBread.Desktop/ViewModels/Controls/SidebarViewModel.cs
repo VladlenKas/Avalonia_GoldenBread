@@ -18,6 +18,7 @@ using System.Linq;
 using System.Reactive;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Collections.Specialized.BitVector32;
 
 namespace GoldenBread.Desktop.ViewModels.Controls
 {
@@ -36,18 +37,17 @@ namespace GoldenBread.Desktop.ViewModels.Controls
             get => _selectedSection;
             set
             {
-                // Снимаем выделение со старого элемента
+                // Removing the selection from the old element
                 if (_selectedSection != null)
                     _selectedSection.IsSelected = false;
 
                 this.RaiseAndSetIfChanged(ref _selectedSection, value);
 
-                // Устанавливаем выделение на новый элемент
+                // Setting the selection to a new element
                 if (_selectedSection != null)
                     _selectedSection.IsSelected = true;
             }
         }
-
 
 
         // == Commands ==
@@ -74,7 +74,7 @@ namespace GoldenBread.Desktop.ViewModels.Controls
             _authService = authService;
             _viewService = viewService;
 
-            SidebarItems = BuildMenu(_authService.CurrentUser);
+            SidebarItems = InitializeSections(_authService.CurrentUser);
 
             SelectSectionCommand = ReactiveCommand.Create<SidebarItem>(section =>
             {
@@ -85,7 +85,7 @@ namespace GoldenBread.Desktop.ViewModels.Controls
 
 
         // == Methods ==
-        private ObservableCollection<SidebarItem> BuildMenu(User currentUser)
+        private ObservableCollection<SidebarItem> InitializeSections(User currentUser)
         {
             var items = new ObservableCollection<SidebarItem>();
 

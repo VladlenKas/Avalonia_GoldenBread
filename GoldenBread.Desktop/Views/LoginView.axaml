@@ -57,12 +57,14 @@
             <StackPanel Spacing="12">
                  <HeaderedContentControl Header="Электронная почта">
                     <TextBox Text="{Binding Email}"
+                             Padding="12"
                              Watermark="Введите email"
                              MaxLength="255"/>
                 </HeaderedContentControl>
     
                 <HeaderedContentControl Header="Пароль">
                     <TextBox Text="{Binding Password}"
+                             Padding="12"
                              Watermark="Введите пароль"
                              MaxLength="255"
                              PasswordChar="•"/>

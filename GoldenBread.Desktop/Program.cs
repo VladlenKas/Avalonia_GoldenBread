@@ -1,8 +1,10 @@
 ﻿using Avalonia;
 using GoldenBread.Desktop.Services;
 using GoldenBread.Desktop.ViewModels;
+using GoldenBread.Desktop.ViewModels.Base;
 using GoldenBread.Desktop.ViewModels.Controls;
 using GoldenBread.Desktop.ViewModels.Pages;
+using GoldenBread.Desktop.Views.Controls;
 using Microsoft.Extensions.DependencyInjection;
 using MsBox.Avalonia;
 using MsBox.Avalonia.Enums;
@@ -12,6 +14,7 @@ using ReactiveUI;
 using ReactiveUI.Avalonia;
 using System;
 using System.Reactive;
+using System.Threading.Tasks;
 
 namespace GoldenBread.Desktop
 {
@@ -26,16 +29,23 @@ namespace GoldenBread.Desktop
         public static void Main(string[] args)
         {
             // Global Validator ReactiveUI
+            AppDomain.CurrentDomain.UnhandledException += async (sender, e) =>
+            {
+                var ex = e.ExceptionObject as Exception;
+                await ShowErrorAsync("Критическая ошибка", ex?.Message ?? "Неизвестная ошибка", ex?.StackTrace);
+            };
+
+            // Validator for tasks
+            TaskScheduler.UnobservedTaskException += async (sender, e) =>
+            {
+                await ShowErrorAsync("Ошибка в задаче", e.Exception.Message, e.Exception.StackTrace);
+                e.SetObserved(); // Помечаем как обработанное
+            };
+
+            // Validator for reactiveUI
             RxApp.DefaultExceptionHandler = Observer.Create<Exception>(async ex =>
             {
-                await MessageBoxManager.GetMessageBoxStandard(
-                    "Ошибка", 
-                    $"ReactiveUI Error: {ex.Message}\n\nStackTrace: {ex.StackTrace}", 
-                    ButtonEnum.Ok, 
-                    MsBox.Avalonia.Enums.Icon.Error).ShowAsync();
-
-                Console.WriteLine($"ReactiveUI Error: {ex.Message}");
-                Console.WriteLine($"StackTrace: {ex.StackTrace}");
+                await ShowErrorAsync("Ошибка ReactiveUI", ex.Message, ex.StackTrace);
             });
 
             // DI 
@@ -50,19 +60,23 @@ namespace GoldenBread.Desktop
         private static void ConfigureServices(IServiceCollection services)
         {
             // Services
-            services.AddSingleton<AuthorizationService>();
-            services.AddSingleton<ViewService>();
+            services.AddScoped<AuthorizationService>();
+            services.AddScoped<ViewService>();
+            services.AddScoped<UserService>();
 
-            // ViewModels
-            services.AddTransient<LoginViewModel>();
-            services.AddTransient<MenuViewModel>();
-
-            services.AddTransient<SidebarViewModel>();
-            services.AddTransient<TopbarViewModel>();
-
+            // ViewModels Transient
             services.AddTransient<IngredientsViewModel>();
             services.AddTransient<ProductsViewModel>();
             services.AddTransient<WarehouseViewModel>();
+            services.AddTransient<EmployeesViewModel>();
+            services.AddTransient<UsersViewModel>();
+            services.AddTransient<CompaniesViewModel>();
+
+            // ViewModels Singleton
+            services.AddSingleton<TopbarViewModel>();
+            services.AddSingleton<SidebarViewModel>();
+            services.AddSingleton<MenuViewModel>();
+            services.AddSingleton<LoginViewModel>();
         }
 
         // Avalonia configuration, don't remove; also used by visual designer.
@@ -75,6 +89,29 @@ namespace GoldenBread.Desktop
                 .UseReactiveUI()
                 .WithInterFont()
                 .LogToTrace();
+        }
+
+        // Hepler for show errors
+        private static async Task ShowErrorAsync(string title, string message, string? stackTrace)
+        {
+            var fullMessage = $"{message}\n\nStackTrace:\n{stackTrace ?? "Нет информации"}";
+
+            Console.WriteLine($"[{title}] {fullMessage}");
+
+            try
+            {
+                await MessageBoxManager.GetMessageBoxStandard(
+                    title,
+                    fullMessage,
+                    ButtonEnum.Ok,
+                    MsBox.Avalonia.Enums.Icon.Error
+                ).ShowAsync();
+            }
+            catch
+            {
+                // Если MessageBox не может быть показан, просто логируем
+                Console.WriteLine($"Не удалось показать MessageBox: {fullMessage}");
+            }
         }
     }
 }

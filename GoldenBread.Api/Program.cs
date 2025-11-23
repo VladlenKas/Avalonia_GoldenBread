@@ -1,4 +1,4 @@
-﻿using GoldenBread.Api.Services;
+﻿using GoldenBread.Api.ApiServices;
 using GoldenBread.Shared.Entities;
 using Microsoft.EntityFrameworkCore;
 
@@ -18,8 +18,9 @@ internal class Program
         builder.Services.AddSwaggerGen();
 
         // Services for db requests
-        builder.Services.AddScoped<AuthorizationService>();
-        builder.Services.AddScoped<EmployeeService>();
+        builder.Services.AddScoped<AuthorizationApiService>();
+        builder.Services.AddScoped<EmployeeApiService>();
+        builder.Services.AddScoped<UserApiService>();
 
         builder.Services.AddDbContext<GoldenBreadContext>(options =>
         {

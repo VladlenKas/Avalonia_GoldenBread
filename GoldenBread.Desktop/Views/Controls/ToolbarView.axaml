@@ -1,0 +1,73 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             x:Class="GoldenBread.Desktop.Views.Controls.ToolbarView"
+             xmlns:vm="using:GoldenBread.Desktop.ViewModels.Pages"
+             MinWidth="300" MinHeight="100"
+             x:CompileBindings="False"
+             Background="{DynamicResource Background.Specific}"
+             x:DataType="vm:UsersViewModel">
+  
+    <StackPanel Spacing="12">
+        <DockPanel LastChildFill="False">
+
+            <!-- Search Section -->
+            <StackPanel DockPanel.Dock="Left" Spacing="12" Orientation="Horizontal" VerticalAlignment="Center">
+		        <TextBox Classes="Icon" Tag="mdi-magnify" Text="{Binding SearchText}" Height="32" Width="300" Watermark="Введите текст для поиска"/>
+			   <TextBlock Classes="Small" 
+                          Foreground="{DynamicResource Foreground.Primary}" 
+                          VerticalAlignment="Center">
+                    <Run Text="{Binding Items.Count}"/>
+                    <Run Text="данных"/>
+                </TextBlock>
+            </StackPanel>
+			
+            <!-- Action Button -->
+            <StackPanel DockPanel.Dock="Right" Spacing="12" Orientation="Horizontal" VerticalAlignment="Center">
+
+                <!-- Sorting --> 
+                <Button Classes="WithIcon Action Small" 
+                        Content="{Binding SelectedSortOption}" 
+                        Tag="mdi-sort">
+                    <Button.Flyout>
+                        <Flyout Placement="Bottom">
+                            <ListBox ItemsSource="{Binding SortOptions}"
+                                    SelectedItem="{Binding SelectedSortOption}"
+                                    MinWidth="200">
+                                <ListBox.Styles>
+                                    <Style Selector="ListBoxItem">
+                                        <Setter Property="Padding" Value="12 8"/>
+                                    </Style>
+                                </ListBox.Styles>
+                            </ListBox>
+                        </Flyout>
+                    </Button.Flyout>
+                </Button>
+
+                <Border Width="1" Height="24" Background="{DynamicResource Background.Secondary}"/>
+
+                <Button Classes="WithIcon" Command="{Binding AddCommand}" Content="Добавить" Tag="mdi-plus"/>
+                <Button Classes="IconOnly Danger" Command="{Binding DeleteCommand}" Content="Добавить" Tag="mdi-trash-can-outline"/>
+				
+            </StackPanel>
+
+        </DockPanel>
+
+        <DockPanel LastChildFill="False">
+			
+            <!-- Filters --> 
+                <Button Classes="WithIcon Action Small" 
+                        Content="Фильтры" 
+                        Tag="mdi-filter-outline"
+                        Command="{Binding ToggleFilterCommand}">
+                    <Button.Flyout>
+                        <Flyout IsOpen="{Binding IsFilterMenuOpen}" Placement="Bottom">
+                            <ContentControl Content="{Binding}" ContentTemplate="{StaticResource FilterTemplate}"/>
+                        </Flyout>
+                    </Button.Flyout>
+                </Button>
+        </DockPanel>
+    </StackPanel>
+
+</UserControl>

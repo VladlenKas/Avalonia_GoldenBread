@@ -1,5 +1,5 @@
 ﻿using GoldenBread.Api.Helpers;
-using GoldenBread.Api.Services;
+using GoldenBread.Api.ApiServices;
 using GoldenBread.Shared.Requests;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -8,11 +8,10 @@ namespace GoldenBread.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class EmployeeController : ApiControllerBase
+    public class EmployeesController : ApiControllerBase
     {
         [HttpGet("getList")]
-        public async Task<IActionResult> GetEmployees(
-            [FromServices] EmployeeService service)
+        public async Task<IActionResult> GetEmployees([FromServices] EmployeeApiService service)
         {
             try
             {

@@ -6,6 +6,8 @@
 			<StackPanel Spacing="12">
 				<Button Width="200" Height="40" Content="Войти" IsEnabled="False"/>
 				<Button Width="200" Height="40" Content="Войти" IsEnabled="True" Classes="Sidebar" Tag="mdi-account-outline"/>
+				<Button Width="200" Height="40" Content="Войти" IsEnabled="True" Classes="Sidebar Ghost" Tag="mdi-account-outline"/>
+				<Button Width="40" Height="40" Content="Войти" IsEnabled="True" Classes="IconOnly Danger" Tag="mdi-account-outline"/>
 				<RadioButton Width="200" Height="40" Content="Войти" IsEnabled="True" Classes="Sidebar" Tag="mdi-account-outline"/>
 				<RadioButton Width="200" Height="40" Content="Войти" IsEnabled="True" Classes="Sidebar" Tag="mdi-account-outline"/>
 				<RadioButton Width="200" Height="40" Content="Войти" IsEnabled="True" Classes="Sidebar" Tag="mdi-account-outline"/>
@@ -14,15 +16,8 @@
 		</Border>
 	</Design.PreviewWith>
 
-	<!--  Button Primary Base -->
+	<!-- == Base Button Styles == -->
 	<Style Selector="Button">
-		<Setter Property="Background" Value="{DynamicResource Interactive.Primary.Default}"/>
-		<Setter Property="Foreground" Value="{DynamicResource Foreground.OnAccent}"/>
-		<Setter Property="MinHeight" Value="40"/>
-		<Setter Property="FontSize" Value="14"/>
-		<Setter Property="FontWeight" Value="Medium"/>
-		<Setter Property="Padding" Value="12"/>
-		<Setter Property="CornerRadius" Value="12"/>
 		<Setter Property="VerticalContentAlignment" Value="Center"/>
 		<Setter Property="HorizontalContentAlignment" Value="Center"/>
 		<Setter Property="HorizontalAlignment" Value="Stretch"/>
@@ -35,70 +30,256 @@
 				</Transitions>
 			</Setter>
 		</Style>
-
-		<Style Selector="^:pointerover /template/ ContentPresenter#PART_ContentPresenter">
-			<Setter Property="Background" Value="{DynamicResource Interactive.Primary.Hover}"/>
-			<Setter Property="Foreground" Value="#90ffffff"/>
-		</Style>
-
-		<Style Selector="^:disabled /template/ ContentPresenter#PART_ContentPresenter">
-			<Setter Property="Background" Value="{DynamicResource Interactive.Primary.Default}"/>
-			<Setter Property="Foreground" Value="#75ffffff"/>
-			<Setter Property="Opacity" Value="0.5"/>
-		</Style>
-		
-		<Style Selector="^:pressed /template/ ContentPresenter#PART_ContentPresenter">
-			<Setter Property="Background" Value="{DynamicResource Interactive.Primary.Pressed}"/>
-			<Setter Property="Foreground" Value="#80ffffff"/>
-		</Style>
 	</Style>
 
-	<!-- Button for Slidebar -->
-	<Style Selector="Button.Sidebar">
-		<Setter Property="Background" Value="{DynamicResource Interactive.Neutral.Default}"/>
-		<Setter Property="Foreground" Value="{DynamicResource Foreground.Secondary}"/>
+	<!-- == Size Variants == -->
+
+	<!-- Small  -->
+	<Style Selector="Button.Small">
+		<Setter Property="MinHeight" Value="32"/>
+		<Setter Property="FontSize" Value="13"/>
+		<Setter Property="FontWeight" Value="Medium"/>
+		<Setter Property="Padding" Value="16 8"/>
+		<Setter Property="CornerRadius" Value="8"/>
+	</Style>
+
+	<!-- Medium (default) -->
+	<Style Selector="Button.Medium, Button:not(.Small):not(.Large)">
+		<Setter Property="MinHeight" Value="40"/>
 		<Setter Property="FontSize" Value="14"/>
 		<Setter Property="FontWeight" Value="Medium"/>
-		<Setter Property="Padding" Value="24 10"/>
+		<Setter Property="Padding" Value="24 12"/>
 		<Setter Property="CornerRadius" Value="12"/>
-		<Setter Property="VerticalContentAlignment" Value="Center"/>
-		<Setter Property="HorizontalContentAlignment" Value="Left"/>
-		<Setter Property="HorizontalAlignment" Value="Stretch"/>
+	</Style>
+
+	<!-- Large -->
+	<Style Selector="Button.Large">
+		<Setter Property="MinHeight" Value="48"/>
+		<Setter Property="FontSize" Value="16"/>
+		<Setter Property="FontWeight" Value="Medium"/>
+		<Setter Property="Padding" Value="32 16"/>
+		<Setter Property="CornerRadius" Value="14"/>
+	</Style>
+
+	<!-- == Structure Variants == -->
+
+	<!-- STRUCTURE: with Icon -->
+	<Style Selector="Button.WithIcon">
 		<Setter Property="ContentTemplate">
 			<DataTemplate>
 				<Grid ColumnDefinitions="Auto *">
-					<icon:Icon Classes="Medium"/>
+					<icon:Icon Classes="Medium" />
 					<TextBlock Grid.Column="1" 
-				     		   Text="{Binding}" 
+							   Text="{Binding}" 
 							   Margin="8 0 0 0"
 							   VerticalAlignment="Center"/>
 				</Grid>
 			</DataTemplate>
 		</Setter>
+	</Style>
 
-		<Style Selector="^ /template/ ContentPresenter#PART_ContentPresenter">
-			<Setter Property="Transitions">
-				<Transitions>
-					<BrushTransition Property="Background" Duration="0:0:0.2"/>
-					<BrushTransition Property="Foreground" Duration="0:0:0.2"/>
-				</Transitions>
-			</Setter>
+	<!-- STRUCTURE: Sidebar -->
+	<Style Selector="Button.Sidebar">
+		<Setter Property="HorizontalContentAlignment" Value="Left"/>
+		<Setter Property="ContentTemplate">
+			<DataTemplate>
+				<Grid ColumnDefinitions="Auto *">
+					<icon:Icon Classes="Medium" />
+					<TextBlock Grid.Column="1" 
+							   Text="{Binding}" 
+							   Margin="8 0 0 0"
+							   VerticalAlignment="Center"/>
+				</Grid>
+			</DataTemplate>
+		</Setter>
+	</Style>
+
+	<!-- STRUCTURE: IconOnly -->
+	<Style Selector="Button.IconOnly">
+		<Setter Property="Padding" Value="0"/>
+		<Setter Property="ContentTemplate">
+			<DataTemplate>
+				<icon:Icon Classes="Medium" VerticalAlignment="Center"/>
+			</DataTemplate>
+		</Setter>
+	</Style>
+
+	<!-- == Icon Sizes For Each Button Size == -->
+
+	<!-- for small -->
+	<Style Selector="Button.Small icon|Icon.Medium">
+        <Setter Property="Value" Value="{Binding $parent[Button].Tag}"/>
+		<Setter Property="FontSize" Value="14"/>
+	</Style>
+
+	<!-- for medium (default) -->
+	<Style Selector="Button icon|Icon.Medium, Button.Medium icon|Icon.Medium">
+        <Setter Property="Value" Value="{Binding $parent[Button].Tag}"/>
+		<Setter Property="FontSize" Value="16"/>
+	</Style>
+
+	<!-- for large -->
+	<Style Selector="Button.Large icon|Icon.Medium">
+        <Setter Property="Value" Value="{Binding $parent[Button].Tag}"/>
+		<Setter Property="FontSize" Value="20"/>
+	</Style>
+
+	<!-- == Icon Spacing for Each Size == -->
+
+	<!-- for Small -->
+	<Style Selector="Button.Small.WithIcon TextBlock, Button.Small.Sidebar TextBlock">
+		<Setter Property="Margin" Value="6 0 0 0"/>
+	</Style>
+
+	<!-- for Medium (default) -->
+	<Style Selector="Button.WithIcon TextBlock, Button.Sidebar TextBlock">
+		<Setter Property="Margin" Value="8 0 0 0"/>
+	</Style>
+
+	<!-- for Large -->
+	<Style Selector="Button.Large.WithIcon TextBlock, Button.Large.Sidebar TextBlock">
+		<Setter Property="Margin" Value="10 0 0 0"/>
+	</Style>
+
+	<!-- == Square Buttons (IconOnly) == -->
+
+	<!-- Small IconOnly -->
+	<Style Selector="Button.Small.IconOnly">
+		<Setter Property="Width" Value="32"/>
+		<Setter Property="Padding" Value="0"/>
+	</Style>
+
+	<!-- Medium IconOnly -->
+	<Style Selector="Button.IconOnly, Button.Medium.IconOnly">
+		<Setter Property="Width" Value="40"/>
+		<Setter Property="Padding" Value="0"/>
+	</Style>
+
+	<!-- Large IconOnly -->
+	<Style Selector="Button.Large.IconOnly">
+		<Setter Property="Width" Value="48"/>
+		<Setter Property="Padding" Value="0"/>
+	</Style>
+
+	<!-- == Color Variants == -->
+
+	<!-- Primary (default) -->
+	<Style Selector="Button.Primary, Button:not(.Secondary):not(.Danger):not(.Success):not(.Ghost):not(.Action)">
+		<Setter Property="Background" Value="{DynamicResource Interactive.Primary.Default}"/>
+		<Setter Property="Foreground" Value="{DynamicResource Foreground.OnAccent}"/>
+    
+		<Style Selector="^:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+			<Setter Property="Background" Value="{DynamicResource Interactive.Primary.Hover}"/>
+			<Setter Property="Foreground" Value="#90ffffff"/>
 		</Style>
+    
+		<Style Selector="^:pressed /template/ ContentPresenter#PART_ContentPresenter">
+			<Setter Property="Background" Value="{DynamicResource Interactive.Primary.Pressed}"/>
+			<Setter Property="Foreground" Value="#80ffffff"/>
+		</Style>
+    
+		<Style Selector="^:disabled /template/ ContentPresenter#PART_ContentPresenter">
+			<Setter Property="Background" Value="{DynamicResource Interactive.Primary.Default}"/>
+			<Setter Property="Foreground" Value="#75ffffff"/>
+			<Setter Property="Opacity" Value="0.5"/>
+		</Style>
+	</Style>
 
+	<!-- Secondary  -->
+	<Style Selector="Button.Secondary">
+		<Setter Property="Background" Value="{DynamicResource Interactive.Neutral.Default}"/>
+		<Setter Property="Foreground" Value="{DynamicResource Foreground.Primary}"/>
+    
+		<Style Selector="^:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+			<Setter Property="Background" Value="{DynamicResource Interactive.Neutral.Hover}"/>
+			<Setter Property="Foreground" Value="#90ffffff"/>
+		</Style>
+    
+		<Style Selector="^:pressed /template/ ContentPresenter#PART_ContentPresenter">
+			<Setter Property="Background" Value="{DynamicResource Interactive.Neutral.Pressed}"/>
+			<Setter Property="Foreground" Value="#80ffffff"/>
+		</Style>
+    
+		<Style Selector="^:disabled /template/ ContentPresenter#PART_ContentPresenter">
+			<Setter Property="Foreground" Value="#75ffffff"/>
+			<Setter Property="Opacity" Value="0.5"/>
+		</Style>
+	</Style>
+
+	<!-- Danger  -->
+	<Style Selector="Button.Danger">
+		<Setter Property="Background" Value="#e74c3c"/>
+		<Setter Property="Foreground" Value="White"/>
+    
+		<Style Selector="^:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+			<Setter Property="Foreground" Value="#90ffffff"/>
+			<Setter Property="Background" Value="#c0392b"/>
+		</Style>
+    
+		<Style Selector="^:pressed /template/ ContentPresenter#PART_ContentPresenter">
+			<Setter Property="Foreground" Value="#80ffffff"/>
+			<Setter Property="Background" Value="#a93226"/>
+		</Style>
+    
+		<Style Selector="^:disabled /template/ ContentPresenter#PART_ContentPresenter">
+			<Setter Property="Foreground" Value="#75ffffff"/>
+			<Setter Property="Opacity" Value="0.5"/>
+		</Style>
+	</Style>
+
+	<!-- Success -->
+	<Style Selector="Button.Success">
+		<Setter Property="Background" Value="#27ae60"/>
+		<Setter Property="Foreground" Value="White"/>
+    
+		<Style Selector="^:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+			<Setter Property="Foreground" Value="#90ffffff"/>
+			<Setter Property="Background" Value="#229954"/>
+		</Style>
+    
+		<Style Selector="^:pressed /template/ ContentPresenter#PART_ContentPresenter">
+			<Setter Property="Foreground" Value="#80ffffff"/>
+			<Setter Property="Background" Value="#1e8449"/>
+		</Style>
+    
+		<Style Selector="^:disabled /template/ ContentPresenter#PART_ContentPresenter">
+			<Setter Property="Foreground" Value="#75ffffff"/>
+			<Setter Property="Opacity" Value="0.5"/>
+		</Style>
+	</Style>
+
+	<!-- Ghost (transparent) -->
+	<Style Selector="Button.Ghost">
+		<Setter Property="Foreground" Value="{DynamicResource Foreground.Secondary}"/>
+		<Setter Property="Background" Value="Transparent"/>
+    
 		<Style Selector="^:pointerover /template/ ContentPresenter#PART_ContentPresenter">
 			<Setter Property="Background" Value="{DynamicResource Interactive.Neutral.Hover}"/>
 			<Setter Property="Foreground" Value="{DynamicResource Foreground.Primary}"/>
 		</Style>
-		
+    
 		<Style Selector="^:pressed /template/ ContentPresenter#PART_ContentPresenter">
+			<Setter Property="Foreground" Value="{DynamicResource Foreground.Secondary}"/>
 			<Setter Property="Background" Value="{DynamicResource Interactive.Neutral.Pressed}"/>
-		<Setter Property="Foreground" Value="{DynamicResource Foreground.Secondary}"/>
-		</Style>
-
-		<Style Selector="^:disabled /template/ ContentPresenter#PART_ContentPresenter">
-			<Setter Property="Background" Value="{DynamicResource Interactive.Neutral.Default}"/>
 		</Style>
 	</Style>
+
+	<!-- Action (transparent) -->
+	<Style Selector="Button.Action">
+		<Setter Property="Foreground" Value="{DynamicResource Foreground.Primary}"/>
+		<Setter Property="Background" Value="{DynamicResource Interactive.Neutral.Default}"/>
+    
+		<Style Selector="^:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+			<Setter Property="Foreground" Value="{DynamicResource Foreground.Secondary}"/>
+			<Setter Property="Background" Value="{DynamicResource Interactive.Neutral.Default}"/>
+		</Style>
+    
+		<Style Selector="^:pressed /template/ ContentPresenter#PART_ContentPresenter">
+			<Setter Property="Foreground" Value="{DynamicResource Foreground.Secondary}"/>
+			<Setter Property="Background" Value="{DynamicResource Interactive.Neutral.Pressed}"/>
+		</Style>
+	</Style>
+
 
 	<!-- ToggleButton for Slidebar -->
 	<Style Selector="RadioButton.Sidebar">
@@ -167,6 +348,7 @@
 			<Setter Property="Background" Value="{DynamicResource Interactive.Neutral.Default}"/>
 		</Style>
 	</Style>
+
 
 	<!-- ToggleButton TapTab -->
 	<Style Selector="RadioButton.Topbar">

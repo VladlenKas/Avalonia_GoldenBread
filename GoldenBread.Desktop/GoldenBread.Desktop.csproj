@@ -19,6 +19,7 @@
 
   <ItemGroup>
     <PackageReference Include="Avalonia" Version="11.3.8" />
+    <PackageReference Include="Avalonia.Controls.DataGrid" Version="11.3.8" />
     <PackageReference Include="Avalonia.Desktop" Version="11.3.8" />
     <PackageReference Include="Avalonia.Themes.Fluent" Version="11.3.8" />
     <PackageReference Include="Avalonia.Fonts.Inter" Version="11.3.8" />
@@ -48,6 +49,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="Views\Controls\ToolbarView.axaml.cs">
+      <DependentUpon>ToolbarView.axaml</DependentUpon>
+    </Compile>
     <Compile Update="Views\Pages\CompaniesView.axaml.cs">
       <DependentUpon>CompaniesView.axaml</DependentUpon>
     </Compile>
