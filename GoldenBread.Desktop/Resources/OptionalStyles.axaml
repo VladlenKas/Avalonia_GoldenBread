@@ -22,4 +22,29 @@
 		</Setter>
 	</Style>
 
+	<!-- Data Grid -->
+	<Style Selector="DataGrid">
+		<Setter Property="AutoGenerateColumns" Value="False"/>	
+		<Setter Property="IsReadOnly" Value="True"/>	
+		<Setter Property="GridLinesVisibility" Value="Horizontal"/>	
+		<Setter Property="CornerRadius" Value="8"/>	
+		<Setter Property="Background" Value="{DynamicResource Interactive.Neutral.Default}"/>	
+	</Style>
+
+	<Style Selector="DataGridRow:selected /template/ Rectangle#BackgroundRectangle">
+            <Setter Property="Fill" Value="#E3F2FD"/>
+        </Style>
+
+    <Style Selector="DataGridCell:focus /template/ Grid#FocusVisual">
+        <Setter Property="IsVisible" Value="False"/>
+    </Style>
+        
+    <Style Selector="DataGridRow:selected:pointerover /template/ Rectangle#BackgroundRectangle">
+        <Setter Property="Fill" Value="#BBDEFB"/>
+    </Style>
+        
+    <Style Selector="DataGridRow:selected">
+        <Setter Property="BorderThickness" Value="0"/>
+    </Style>
+
 </Styles>

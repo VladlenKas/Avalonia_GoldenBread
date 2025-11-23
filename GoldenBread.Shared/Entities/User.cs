@@ -1,7 +1,9 @@
-﻿using NpgsqlTypes;
+﻿using Humanizer;
+using NpgsqlTypes;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace GoldenBread.Shared.Entities;
 
@@ -35,6 +37,15 @@ public enum VerificationStatus
 
 public partial class User
 {
+    // == Custom props ==
+    [NotMapped]
+    public string Fullname => $"{Lastname} {Firstname} {Patronymic}";
+
+    [NotMapped]
+    public string RoleValue => Role.Value.Humanize();
+
+
+    // == Original props ==
     public UserRole? Role { get; set; } 
 
     public AccountType? AccountType { get; set; }
@@ -72,7 +83,4 @@ public partial class User
     public virtual ICollection<Favourite> Favourites { get; set; } = new List<Favourite>();
 
     public virtual ICollection<Order> Orders { get; set; } = new List<Order>();
-
-    // Custom proprties
-    public string Fullname => $"{Lastname} {Firstname} {Patronymic}";
 }

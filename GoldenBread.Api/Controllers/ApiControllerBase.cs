@@ -7,8 +7,18 @@ namespace GoldenBread.Api.Controllers
     [Route("api/[controller]")]
     public class ApiControllerBase : ControllerBase
     {
-        // Метод для успешного ответа
-        protected IActionResult Success<T>(T data, string message)
+        // == Method for Success Operation ==
+        protected IActionResult Success<T>(string message)
+        {
+            return Ok(new ApiResponse<T>
+            {
+                IsSuccess = true,
+                Data = default,
+                Message = message
+            });
+        }
+
+        protected IActionResult SuccessWithData<T>(T data, string message)
         {
             return Ok(new ApiResponse<T>
             {
@@ -18,7 +28,7 @@ namespace GoldenBread.Api.Controllers
             });
         }
 
-        // Метод для ошибки с указанием статус-кода
+        // == Method for Error Operation with status-code ==
         protected IActionResult Error<T>(string message, int statusCode = 400)
         {
             var response = new ApiResponse<T>
@@ -37,7 +47,7 @@ namespace GoldenBread.Api.Controllers
             };
         }  
 
-        // Короткие методы для частых случаев
+        // == Short Methods for quick access
         protected IActionResult BadRequestError(string message) => Error<object>(message, 400);
 
         protected IActionResult ForbidError(string message) => Error<object>(message, 403);

@@ -7,7 +7,7 @@
 				<Button Width="200" Height="40" Content="Войти" IsEnabled="False"/>
 				<Button Width="200" Height="40" Content="Войти" IsEnabled="True" Classes="Sidebar" Tag="mdi-account-outline"/>
 				<Button Width="200" Height="40" Content="Войти" IsEnabled="True" Classes="Sidebar Ghost" Tag="mdi-account-outline"/>
-				<Button Width="40" Height="40" Content="Войти" IsEnabled="True" Classes="IconOnly Danger" Tag="mdi-account-outline"/>
+				<Button Width="40" Height="40" Content="Войти" IsEnabled="True" Classes="IconOnly Danger" Tag="mdi-trash-can-outline"/>
 				<RadioButton Width="200" Height="40" Content="Войти" IsEnabled="True" Classes="Sidebar" Tag="mdi-account-outline"/>
 				<RadioButton Width="200" Height="40" Content="Войти" IsEnabled="True" Classes="Sidebar" Tag="mdi-account-outline"/>
 				<RadioButton Width="200" Height="40" Content="Войти" IsEnabled="True" Classes="Sidebar" Tag="mdi-account-outline"/>
@@ -201,6 +201,7 @@
 		</Style>
     
 		<Style Selector="^:disabled /template/ ContentPresenter#PART_ContentPresenter">
+			<Setter Property="Background" Value="{DynamicResource Interactive.Neutral.Default}"/>
 			<Setter Property="Foreground" Value="#75ffffff"/>
 			<Setter Property="Opacity" Value="0.5"/>
 		</Style>
@@ -222,6 +223,7 @@
 		</Style>
     
 		<Style Selector="^:disabled /template/ ContentPresenter#PART_ContentPresenter">
+			<Setter Property="Background" Value="#e74c3c"/>
 			<Setter Property="Foreground" Value="#75ffffff"/>
 			<Setter Property="Opacity" Value="0.5"/>
 		</Style>
@@ -243,6 +245,7 @@
 		</Style>
     
 		<Style Selector="^:disabled /template/ ContentPresenter#PART_ContentPresenter">
+			<Setter Property="Background" Value="#27ae60"/>
 			<Setter Property="Foreground" Value="#75ffffff"/>
 			<Setter Property="Opacity" Value="0.5"/>
 		</Style>

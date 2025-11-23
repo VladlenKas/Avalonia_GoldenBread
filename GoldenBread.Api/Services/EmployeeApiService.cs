@@ -1,11 +1,12 @@
 ﻿using GoldenBread.Shared.Entities;
 using Microsoft.EntityFrameworkCore;
 
-namespace GoldenBread.Api.ApiServices
+namespace GoldenBread.Api.Services
 {
     public class EmployeeApiService(GoldenBreadContext context)
     {
-        public async Task<List<Employee>> GetEmployeesAsync()
+        // Get List 
+        public async Task<List<Employee>> GetAllAsync()
         {
             return await context.Employees.ToListAsync();
         }

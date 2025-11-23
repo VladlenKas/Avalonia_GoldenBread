@@ -1,5 +1,5 @@
 ﻿using GoldenBread.Api.Helpers;
-using GoldenBread.Api.ApiServices;
+using GoldenBread.Api.Services;
 using GoldenBread.Shared.Entities;
 using GoldenBread.Shared.Requests;
 using Microsoft.AspNetCore.Mvc;
@@ -10,7 +10,7 @@ namespace GoldenBread.Api.Controllers
     [ApiController]
     public class AuthorizationController : ApiControllerBase
     {
-        [HttpPost("login")]
+        [HttpPost]
         public async Task<IActionResult> Login([FromServices] AuthorizationApiService service, [FromBody] LoginUser request)
         {
             try
@@ -24,7 +24,7 @@ namespace GoldenBread.Api.Controllers
                 return user.VerificationStatus switch
                 {
                     VerificationStatus.Pending => ForbidError(MessageHelper.PendingStatus),
-                    VerificationStatus.Approved => Success(user, MessageHelper.CorrectData(user)),
+                    VerificationStatus.Approved => SuccessWithData(user, MessageHelper.CorrectData(user)),
                     VerificationStatus.Rejected => ForbidError(MessageHelper.RejectedStatus),
                     VerificationStatus.Suspended => ForbidError(MessageHelper.SuspendedStatus),
                     _ => BadRequestError(MessageHelper.UnknownStatus),

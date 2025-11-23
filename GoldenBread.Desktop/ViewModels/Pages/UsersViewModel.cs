@@ -1,4 +1,6 @@
-﻿using DynamicData.Binding;
+﻿using Avalonia.Controls;
+using DynamicData.Binding;
+using GoldenBread.Desktop.Helpers;
 using GoldenBread.Desktop.Services;
 using GoldenBread.Desktop.ViewModels.Base;
 using GoldenBread.Shared.Entities;
@@ -13,61 +15,30 @@ namespace GoldenBread.Desktop.ViewModels.Pages
 {
     public class UsersViewModel : PageViewModelBase<User>
     {
-        private readonly UserService _service;
+        // == Fields ==
+        private readonly UserService _userService;
+        private readonly AuthorizationService _authService;
 
-        public UsersViewModel(UserService userService) : base(e => e.UserId)
+
+        // == Designer ==
+        public UsersViewModel(UserService userService, 
+            AuthorizationService service) : base(e => e.UserId, service)
         {
-            _service = userService;
+            _userService = userService;
+            _authService = service;
             RefreshCommand.Execute().Subscribe();
         }
 
-        protected override IEnumerable<string> GetSortOptions()
-        {
-            return new[]
-            {
-                "По умолчанию",
-                "По имени (А-Я)",
-                "По имени (Я-А)",
-                "По должности"
-            };
-        }
 
-        protected override IComparer<User> GetSortComparerForOption(string option)
-        {
-            return option switch
-            {
-                "По имени (А-Я)" => SortExpressionComparer<User>
-                    .Ascending(e => e.Firstname)
-                    .ThenByAscending(e => e.Lastname),
-
-                "По имени (Я-А)" => SortExpressionComparer<User>
-                    .Descending(e => e.Firstname)
-                    .ThenByDescending(e => e.Lastname),
-
-                "По должности" => SortExpressionComparer<User>
-                    .Ascending(e => e.Role)
-                    .ThenByAscending(e => e.Firstname),
-
-                _ => GetDefaultSortComparer()
-            };
-        }
-
-        protected override IComparer<User> GetDefaultSortComparer()
-        {
-            return SortExpressionComparer<User>
-                .Ascending(e => e.UserId);
-        }
-
+        // == Override Methods ==
         protected override string GetSearchableText(User item)
         {
             return $"{item.Firstname} {item.Lastname} {item.Role}";
         }
 
-
         protected override async Task LoadDataAsync()
         {
-            var users = await _service.GetAllAsync();
-
+            var users = await _userService.GetAllAsync();
             ClearItems();
             foreach (var employee in users)
             {
@@ -75,14 +46,58 @@ namespace GoldenBread.Desktop.ViewModels.Pages
             }
         }
 
-        protected override void OnAdd()
+        protected override bool CanDelete()
+        {
+            return SelectedItem.UserId != _authService.CurrentUser.UserId;
+        }
+
+
+        // == Commands Methods ==
+        protected override async Task OnAddAsync()
         {
             throw new NotImplementedException();
         }
 
-        protected override void OnDelete()
+        protected override async Task OnDeleteAsync()
         {
-            throw new NotImplementedException();
+            var result = await MessageBoxHelper.ShowQuestionMessageBox("Вы действительно хотите уволить " +
+                "выбранного пользователя?");
+
+            if (result)
+            {
+                var resultResponse = await _userService.DeleteAsync(SelectedItem.UserId);
+                if (resultResponse.IsSuccess)
+                {
+                    RemoveItem(SelectedItem);
+                    await MessageBoxHelper.ShowOkMessageBox(resultResponse.Message);
+                }
+                else
+                    await MessageBoxHelper.ShowErrorMessageBox(resultResponse.Message);
+            }
         }
+    }
+
+    public class DesignUsersViewModel : PageViewModelBase<User>
+    {
+        public DesignUsersViewModel(AuthorizationService service = null) : base(e => e.UserId, service)
+        {
+            var users = new List<User>
+            {
+                new User { UserId = 1, Firstname = "Иван", Lastname = "Иванов", Email = "ivan@gmail.com", Role = UserRole.Admin },
+                new User { UserId = 2, Firstname = "Никита", Lastname = "Никитов", Email = "nikita@gmail.com", Role = UserRole.Admin },
+                new User { UserId = 3, Firstname = "Мария", Lastname = "Петрова", Email = "maria@gmail.com", Role = UserRole.ManagerProduction },
+            };
+
+            foreach (var user in users)
+            {
+                AddOrUpdateItem(user);
+            }
+
+            RefreshCommand.Execute().Subscribe();
+        }
+
+        protected override Task LoadDataAsync() => Task.CompletedTask;
+        protected override async Task OnAddAsync() { }
+        protected override async Task OnDeleteAsync() { }
     }
 }

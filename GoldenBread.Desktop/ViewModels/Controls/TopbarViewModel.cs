@@ -44,7 +44,7 @@ namespace GoldenBread.Desktop.ViewModels.Controls
         public ReactiveCommand<TopbarItem, Unit> SelectPageCommand { get; }
 
 
-        // == For Disigner ==
+        // == For View ==
         public TopbarViewModel()
         {
             TopbarItems = new ObservableCollection<TopbarItem>()

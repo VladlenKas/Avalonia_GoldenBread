@@ -1,34 +1,4 @@
-﻿<!--<ResourceDictionary xmlns="https://github.com/avaloniaui"
-                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-
-    --><!-- Text Blocks --><!--
-  <SolidColorBrush x:Key="secondaryTextColor" Color="#8C8C8C" />
-  <SolidColorBrush x:Key="tertiaryTextColor" Color="#DFDFDF" />
-
-    --><!-- Background --><!--
-  <SolidColorBrush x:Key="primaryBackgroudColor" Color="#ffffff" />
-  <SolidColorBrush x:Key="secondaryBackgroudColor" Color="#F4F4F6" />
-
-    --><!-- Text Boxes --><!--
-  <SolidColorBrush x:Key="focusTextBoxColor" Color="#EB6601" />
-
-    --><!-- Buttons --><!--
-  <SolidColorBrush x:Key="defaultButtonColor" Color="#EB6601" />
-  <SolidColorBrush x:Key="hoverButtonColor" Color="#D15901" />
-  <SolidColorBrush x:Key="pressedButtonColor" Color="#B14D01" />
-
-    --><!-- Elements --><!--
-  <SolidColorBrush x:Key="specificColor" Color="#682213" />
-
-  <SolidColorBrush x:Key="defaultColor" Color="#ffffff" />
-  <SolidColorBrush x:Key="hoverColor" Color="#F7F7F9" />
-  <SolidColorBrush x:Key="focusColor" Color="#D8D8D8" />
-
-
-</ResourceDictionary>
-    -->
-
-<ResourceDictionary xmlns="https://github.com/avaloniaui"
+﻿<ResourceDictionary xmlns="https://github.com/avaloniaui"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
   <!-- Foreground (текст и иконки) -->

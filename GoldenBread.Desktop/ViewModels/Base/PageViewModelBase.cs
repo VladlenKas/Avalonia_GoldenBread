@@ -1,5 +1,6 @@
 ﻿using Avalonia.Controls.Documents;
 using DynamicData;
+using GoldenBread.Desktop.Services;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using ReactiveUI.Validation.Helpers;
@@ -18,21 +19,17 @@ namespace GoldenBread.Desktop.ViewModels.Base
     {
         // == Fields ==
         public readonly SourceCache<T, int> _sourceCache;
-        private readonly ReadOnlyObservableCollection<T> _sourceCacheSortered;
+        private readonly ReadOnlyObservableCollection<T> _items;
+        private readonly AuthorizationService _service;
 
 
         // == Props ==
         [Reactive] public string SearchText { get; set; }
         [Reactive] public T SelectedItem { get; set; }
-        [Reactive] public bool IsFilterMenuOpen { get; set; }
         [Reactive] public bool IsLoading { get; set; }
+        [Reactive] public bool IsFilterMenuOpen { get; set; }
 
-
-        // == Props for Sorting ==
-        [Reactive] public ObservableCollection<string> SortOptions { get; set; }
-        [Reactive] public string SelectedSortOption { get; set; }
-
-        public ReadOnlyObservableCollection<T> Items => _sourceCacheSortered;
+        public ReadOnlyObservableCollection<T> Items => _items;
 
 
         // == Commands ==
@@ -43,13 +40,10 @@ namespace GoldenBread.Desktop.ViewModels.Base
 
 
         // == Designer ==
-        protected PageViewModelBase(Func<T, int> keySelector)
+        protected PageViewModelBase(Func<T, int> keySelector, AuthorizationService service)
         {
             _sourceCache = new SourceCache<T, int>(keySelector);
-
-            // Initialization of sorting options
-            SortOptions = new ObservableCollection<string>(GetSortOptions());
-            SelectedSortOption = SortOptions.FirstOrDefault() ?? "По умолчанию";
+            _service = service;
 
             // 1. Load Filters
 
@@ -70,25 +64,19 @@ namespace GoldenBread.Desktop.ViewModels.Base
                         search(item) && additional(item)))
                 .DistinctUntilChanged();
 
-            // Sorting 
-            var sortComparer = GetSortComparer();
-
             // Reactive flow with auto async
             _sourceCache.Connect()
                 .Filter(combinedFilter)
-                .Sort(sortComparer)
-                .ObserveOn(RxApp.MainThreadScheduler)  // Обновления UI в главном потоке
-                .Bind(out _sourceCacheSortered)
+                .ObserveOn(RxApp.MainThreadScheduler)  // Update UI in the main stream
+                .Bind(out _items)
                 .Subscribe();
 
             // 2. Load Commands
-
-            AddCommand = ReactiveCommand.Create(OnAdd);
-
             var canDelete = this.WhenAnyValue(x => x.SelectedItem)
-                .Select(item => item != null);
-            DeleteCommand = ReactiveCommand.Create(OnDelete, canDelete);
+                .Select(item => item != null && CanDelete());
 
+            AddCommand = ReactiveCommand.CreateFromTask(OnAddAsync);
+            DeleteCommand = ReactiveCommand.CreateFromTask(OnDeleteAsync, canDelete);
             RefreshCommand = ReactiveCommand.CreateFromTask(
                 async () =>
                 {
@@ -105,62 +93,13 @@ namespace GoldenBread.Desktop.ViewModels.Base
 
             ToggleFilterCommand = ReactiveCommand.Create(() =>
                 IsFilterMenuOpen = !IsFilterMenuOpen);
-
-            /*Observable.StartAsync(async () =>
-            {
-                await RefreshCommand.Execute();
-            }).Subscribe();*/
         }
 
 
         // == Virtual Methods with Default Realization ==
-
-        // List of sorting options
-        protected virtual IEnumerable<string> GetSortOptions()
-        {
-            return new[]
-            {
-                "По умолчанию",
-                "По алфавиту (А-Я)",
-                "По алфавиту (Я-А)"
-            };
-        }
-
-        // Sorting logic for the selected option
-        protected virtual IComparer<T> GetSortComparerForOption(string option)
-        {
-            return option switch
-            {
-                "По алфавиту (А-Я)" => Comparer<T>.Create((x, y) =>
-                    string.Compare(GetSearchableText(x), GetSearchableText(y),
-                        StringComparison.OrdinalIgnoreCase)),
-
-                "По алфавиту (Я-А)" => Comparer<T>.Create((x, y) =>
-                    string.Compare(GetSearchableText(y), GetSearchableText(x),
-                        StringComparison.OrdinalIgnoreCase)),
-
-                _ => GetDefaultSortComparer()
-            };
-        }
-
-        // Default sorting
-        protected virtual IComparer<T> GetDefaultSortComparer()
-        {
-            return Comparer<T>.Create((x, y) =>
-                string.Compare(GetSearchableText(x), GetSearchableText(y),
-                    StringComparison.OrdinalIgnoreCase));
-        }
-
         protected virtual string GetSearchableText(T item)
         {
             return item?.ToString() ?? string.Empty;
-        }
-
-        protected virtual IComparer<T> GetSortComparer()
-        {
-            return Comparer<T>.Create((x, y) =>
-                string.Compare(GetSearchableText(x), GetSearchableText(y),
-                    StringComparison.OrdinalIgnoreCase));
         }
 
         protected virtual IObservable<Func<T, bool>> GetAdditionalFilters()
@@ -177,24 +116,20 @@ namespace GoldenBread.Desktop.ViewModels.Base
             return item => GetSearchableText(item).ToLower().Contains(lowerSearch);
         }
 
+        protected virtual bool CanDelete()
+        {
+            return true;
+        }
 
         // == Abstraction Methods ==
         protected abstract Task LoadDataAsync();
-        protected abstract void OnAdd();
-        protected abstract void OnDelete();
+        protected abstract Task OnAddAsync();
+        protected abstract Task OnDeleteAsync();
 
 
-        // == Helper Methods
+        // == Helper Methods ==
         protected void AddOrUpdateItem(T item) => _sourceCache.AddOrUpdate(item);
         protected void RemoveItem(T item) => _sourceCache.Remove(item);
         protected void ClearItems() => _sourceCache.Clear();
-        protected async Task AddOrUpdateItemsAsync(IEnumerable<T> items)
-        {
-            await Observable.Start(() =>
-            {
-                foreach (var item in items)
-                    _sourceCache.AddOrUpdate(item);
-            }, RxApp.TaskpoolScheduler);
-        }
     }
 }

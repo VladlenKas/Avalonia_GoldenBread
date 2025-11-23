@@ -29,7 +29,7 @@ namespace GoldenBread.Desktop.Services
         public async Task<ApiResponse<User>> LoginAsync(string email, string password)
         {
             var request = new LoginUser { Login = email, Password = password };
-            var response = await HttpClientHelper.Client.PostAsJsonAsync("api/Authorization/login", request);
+            var response = await HttpClientHelper.Client.PostAsJsonAsync("api/Authorization", request);
             var apiResponse = await response.Content.ReadFromJsonAsync<ApiResponse<User>>();
 
             if (apiResponse?.Data != null)

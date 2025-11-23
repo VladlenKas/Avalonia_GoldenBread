@@ -60,7 +60,8 @@ namespace GoldenBread.Desktop
         private static void ConfigureServices(IServiceCollection services)
         {
             // Services
-            services.AddScoped<AuthorizationService>();
+            services.AddSingleton<AuthorizationService>();
+
             services.AddScoped<ViewService>();
             services.AddScoped<UserService>();
 

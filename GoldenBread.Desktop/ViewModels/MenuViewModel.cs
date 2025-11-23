@@ -22,7 +22,6 @@ namespace GoldenBread.Desktop.ViewModels
     {
         // == Filds ==
         private readonly AuthorizationService _authService;
-        private readonly ViewService _viewService;
 
 
         // == Props ==
@@ -30,7 +29,7 @@ namespace GoldenBread.Desktop.ViewModels
         public TopbarViewModel Topbar { get; }
 
 
-        // == For Disigner ==
+        // == For View ==
         public MenuViewModel()
         {
             Sidebar = new SidebarViewModel();
@@ -40,12 +39,10 @@ namespace GoldenBread.Desktop.ViewModels
 
         // == For Builder ==
         public MenuViewModel(AuthorizationService authService, 
-            ViewService viewService,
             SidebarViewModel sidebar,
             TopbarViewModel topbar)
         {
             _authService = authService;
-            _viewService = viewService;
 
             Sidebar = sidebar;
             Topbar = topbar;

@@ -29,7 +29,7 @@ namespace GoldenBread.Desktop.ViewModels
         public ReactiveCommand<Window, Unit> LoginUserCommand { get; }
 
 
-        // == For Disigner ==
+        // == For View ==
         public LoginViewModel()
         {
             this.AddRequiredFieldValidation(x => x.Email, x => x.IsDirty);

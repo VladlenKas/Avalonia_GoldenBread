@@ -8,7 +8,11 @@
              xmlns:controls="using:GoldenBread.Desktop.Views.Controls"
              x:DataType="vm:UsersViewModel">
  
-    <Grid Grid.RowDefinitions="Auto *">
+    <Design.DataContext>
+        <vm:DesignUsersViewModel/>
+    </Design.DataContext>
+
+    <Grid Grid.RowDefinitions="Auto *" RowSpacing="24">
 
         <controls:ToolbarView Grid.Row="0"/>
         
@@ -24,32 +28,25 @@
             <DataGrid ItemsSource="{Binding Items}"
                       SelectedItem="{Binding SelectedItem}"
                       IsEnabled="{Binding !IsLoading}"
-                      AutoGenerateColumns="False"
-                      IsReadOnly="True"
-                      GridLinesVisibility="Horizontal"
-                      Margin="16">
+                      SelectionMode="Single">
             
                 <DataGrid.Columns>
                 
                     <DataGridTextColumn Header="ID" 
-                                       Binding="{Binding UserId}"
-                                       Width="60"/>
+                                        Binding="{Binding UserId}"
+                                        Width="60"/>
                 
-                    <DataGridTextColumn Header="Имя" 
-                                       Binding="{Binding Firstname}"
-                                       Width="*"/>
-                
-                    <DataGridTextColumn Header="Фамилия" 
-                                       Binding="{Binding Lastname}"
-                                       Width="*"/>
+                    <DataGridTextColumn Header="Фамилия, имя, отчество" 
+                                        Binding="{Binding Fullname}"
+                                        Width="*"/>
                 
                     <DataGridTextColumn Header="Должность" 
-                                       Binding="{Binding Role}"
-                                       Width="150"/>
+                                        Binding="{Binding RoleValue}"
+                                        Width="200"/>
                 
-                    <DataGridTextColumn Header="Email" 
-                                       Binding="{Binding Email}"
-                                       Width="200"/>
+                    <DataGridTextColumn Header="Эл. почта" 
+                                        Binding="{Binding Email}"
+                                        Width="200"/>
                 
                 </DataGrid.Columns>
             

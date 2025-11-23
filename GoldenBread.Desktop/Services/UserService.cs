@@ -14,9 +14,16 @@ namespace GoldenBread.Desktop.Services
     {
         public async Task<List<User>> GetAllAsync()
         {
-            var response = await HttpClientHelper.Client.GetAsync("api/Users/getList");
+            var response = await HttpClientHelper.Client.GetAsync("api/Users");
             var apiResponse = await response.Content.ReadFromJsonAsync<ApiResponse<List<User>>>();
             return apiResponse?.Data ?? new List<User>();
+        }
+
+        public async Task<ApiResponse<object>> DeleteAsync(int id)
+        {
+            var response = await HttpClientHelper.Client.DeleteAsync($"api/Users/{id}");
+            var apiResponse = await response.Content.ReadFromJsonAsync<ApiResponse<object>>();
+            return apiResponse;
         }
     }
 }

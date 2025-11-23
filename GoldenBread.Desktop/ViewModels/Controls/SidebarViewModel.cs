@@ -55,7 +55,7 @@ namespace GoldenBread.Desktop.ViewModels.Controls
         public ReactiveCommand<Window, Unit> LogoutCommand { get; }
 
 
-        // == For Disigner ==
+        // == For View ==
         public SidebarViewModel()
         {
             SidebarItems = new ObservableCollection<SidebarItem>()
@@ -74,7 +74,7 @@ namespace GoldenBread.Desktop.ViewModels.Controls
             _authService = authService;
             _viewService = viewService;
 
-            SidebarItems = InitializeSections(_authService.CurrentUser);
+            SidebarItems = Initialize(_authService.CurrentUser);
 
             SelectSectionCommand = ReactiveCommand.Create<SidebarItem>(section =>
             {
@@ -85,7 +85,7 @@ namespace GoldenBread.Desktop.ViewModels.Controls
 
 
         // == Methods ==
-        private ObservableCollection<SidebarItem> InitializeSections(User currentUser)
+        private ObservableCollection<SidebarItem> Initialize(User currentUser)
         {
             var items = new ObservableCollection<SidebarItem>();
 
@@ -119,6 +119,7 @@ namespace GoldenBread.Desktop.ViewModels.Controls
             {
                 _viewService.ShowWindow<LoginViewModel>();
                 window.Close();
+                _authService.Logout();
             }
         }
     }
