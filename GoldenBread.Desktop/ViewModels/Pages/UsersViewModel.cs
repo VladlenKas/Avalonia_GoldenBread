@@ -78,9 +78,9 @@ namespace GoldenBread.Desktop.ViewModels.Pages
 
 
     // == Designer For View ==
-    public class DesignUsersViewModel : PageViewModelBase<User>
+    public class DesignUsersViewModel : UsersViewModel
     {
-        public DesignUsersViewModel() : base(e => e.UserId, service: null)
+        public DesignUsersViewModel() : base(null!, null!)
         {
             var users = new List<User>
             {
@@ -93,11 +93,14 @@ namespace GoldenBread.Desktop.ViewModels.Pages
             {
                 AddOrUpdateItem(user);
             }
+
+            SelectedItem = users.First();
+            IsDetailPanelOpen = true;
+            CurrentMode = PanelMode.View;
         }
 
         protected override Task LoadDataAsync() => Task.CompletedTask;
-        protected override async Task OnAddAsync() { }
-        protected override async Task OnSaveAsync() { }
-        protected override async Task OnDeleteAsync() { }
+        protected override Task OnSaveAsync() => Task.CompletedTask;
+        protected override Task OnDeleteAsync() => Task.CompletedTask;
     }
 }

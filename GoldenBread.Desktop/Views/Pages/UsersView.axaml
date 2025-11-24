@@ -7,149 +7,83 @@
              xmlns:vm="using:GoldenBread.Desktop.ViewModels.Pages"
              xmlns:controls="using:GoldenBread.Desktop.Views.Controls"
              x:DataType="vm:UsersViewModel">
- 
+
     <Design.DataContext>
         <vm:DesignUsersViewModel/>
     </Design.DataContext>
 
-    <Grid>
-        
-        <SplitView IsPaneOpen="{Binding IsDetailPanelOpen, Mode=TwoWay}"
-                   DisplayMode="Overlay"
-                   PanePlacement="Right"
-                   OpenPaneLength="350"
-                   PaneClosing="SplitView_OnPaneClosing">
-    
-            <SplitView.Pane>
-                <Border Background="{DynamicResource Interactive.Neutral.Default}" 
-                        BorderThickness="1 0 0 0"
-                        BorderBrush="{DynamicResource Border.Default}"
-                        Padding="24">
-                    <StackPanel Spacing="16">
+    <!-- Определяем шаблоны в Resources -->
+    <UserControl.Resources>
+        <DataTemplate x:Key="MainContent" x:DataType="vm:UsersViewModel">
+            <Grid RowDefinitions="Auto *" RowSpacing="24" Margin="24">
+                <controls:ToolbarView Grid.Row="0"/>
+                <Grid Grid.Row="1">
+                    <ProgressBar IsIndeterminate="True" 
+                                 IsVisible="{Binding IsLoading}"
+                                 Height="4"
+                                 VerticalAlignment="Top"
+                                 ZIndex="1"/>
 
-                        <StackPanel Spacing="6">
-                            <Grid>
-                                <Button Classes="IconOnly Action Small" 
-                                        Tag="mdi-close"
-                                        Width="28"
-                                        HorizontalAlignment="Right"
-                                        Command="{Binding CancelCommand}"/>
-                
-                                <TextBlock Text="{Binding ModeTitle}" 
-                                           VerticalAlignment="Center"
-                                           Classes="H4"/>
-                            </Grid>
-
-                            <!-- View Mode -->
-                            <StackPanel Spacing="6" Orientation="Horizontal" IsVisible="{Binding ShowViewButtons}">
-							    <Button Content="Уволить" 
-                                        Tag="mdi-trash-can-outline"
-                                        Classes="Danger WithIcon Small"
-                                        Command="{Binding DeleteFromPanelCommand}"
-                                        IsVisible="{Binding CanDelete}"/>
-                                <Button Content="Редактировать" 
-                                        Width="28"
-                                        Tag="mdi-pencil-outline"
-                                        Classes="Action IconOnly Small"
-                                        Command="{Binding EnterEditModeCommand}"
-                                        IsVisible="{Binding CanEdit}"/>
-                            </StackPanel>
-
-                            
-                            <!-- Edit/Add Mode -->
-                            <StackPanel Spacing="6" Orientation="Horizontal"  IsVisible="{Binding ShowEditButtons}">
-                                <Button Content="Сохранить" 
-                                        Tag="mdi-content-save-outline"
-                                        Classes="Success WithIcon Small"
-                                        Command="{Binding SaveCommand}"
-                                        IsVisible="{Binding CanDelete}"/>
-                                <Button Content="Отмена" 
-                                        Width="28"
-                                        Tag="mdi-restore"
-                                        Classes="Action IconOnly Small"
-                                        Command="{Binding CancelCommand}"/>
-                            </StackPanel>
-                        </StackPanel>
-
-                        <!-- Content Fields -->
-                        <StackPanel Spacing="8" IsHitTestVisible="{Binding ShowEditButtons}">
-						    <TextBlock Text="Характеристики"
-                                       Classes="H6"/>
-							
-                            <Grid ColumnDefinitions="Auto *" ColumnSpacing="8">
-								<TextBlock Grid.Column="0" Text="Фамилия" Classes="Regular" Foreground="{DynamicResource Foreground.Secondary}" VerticalAlignment="Center"/>
-                                <TextBox Grid.Column="1" Text="{Binding SelectedItem.Lastname}" Classes="SplitView"/>
-                            </Grid>
-
-                            <Separator Background="{DynamicResource Border.Default}"/>
-							
-                            <Grid ColumnDefinitions="Auto *" ColumnSpacing="8">
-								<TextBlock Grid.Column="0" Text="Имя" Classes="Regular" Foreground="{DynamicResource Foreground.Secondary}" VerticalAlignment="Center"/>
-                                <TextBox Grid.Column="1" Text="{Binding SelectedItem.Firstname}" Classes="SplitView"/>
-                            </Grid>
-                            
-                            <Separator Background="{DynamicResource Border.Default}"/>
-							
-                            <Grid ColumnDefinitions="Auto *" ColumnSpacing="8">
-								<TextBlock Grid.Column="0" Text="Отчество" Classes="Regular" Foreground="{DynamicResource Foreground.Secondary}" VerticalAlignment="Center"/>
-                                <TextBox Grid.Column="1" Text="{Binding SelectedItem.Patronymic}" Classes="SplitView"/>
-                            </Grid>
-                            
-                            <Separator Background="{DynamicResource Border.Default}"/>
-							
-                            <Grid ColumnDefinitions="Auto *" ColumnSpacing="8">
-								<TextBlock Grid.Column="0" Text="Эл. почта" Classes="Regular" Foreground="{DynamicResource Foreground.Secondary}" VerticalAlignment="Center"/>
-                                <TextBox Grid.Column="1" Text="{Binding SelectedItem.Email}" Classes="SplitView"/>
-                            </Grid>
-
-                        </StackPanel>
-
-                    </StackPanel>
-                </Border>
-            </SplitView.Pane>
-
-            <Grid>
-                <Grid Grid.RowDefinitions="Auto *" RowSpacing="24" Margin="24">
-                    <controls:ToolbarView Grid.Row="0"/>
-                    <Grid Grid.Row="1">
-
-                        <!-- loading indicator -->
-                        <ProgressBar IsIndeterminate="True" 
-                                     IsVisible="{Binding IsLoading}"
-                                     Height="4"
-                                     VerticalAlignment="Top"
-                                     ZIndex="1"/>
-        
-                        <DataGrid ItemsSource="{Binding Items}"
-                                  SelectedItem="{Binding SelectedItem}"
-                                  IsEnabled="{Binding !IsLoading}"
-                                  DoubleTapped="DataGrid_OnDoubleTapped"
-                                  SelectionMode="Single">
-                            <DataGrid.Columns>
-                                <DataGridTextColumn Header="ID" 
-                                                    Binding="{Binding UserId}"
-                                                    Width="60"/>
-                
-                                <DataGridTextColumn Header="Фамилия, имя, отчество" 
-                                                    Binding="{Binding Fullname}"
-                                                    Width="*"/>
-                
-                                <DataGridTextColumn Header="Должность" 
-                                                    Binding="{Binding RoleValue}"
-                                                    Width="200"/>
-                
-                                <DataGridTextColumn Header="Эл. почта" 
-                                                    Binding="{Binding Email}"
-                                                    Width="200"/>
-                            </DataGrid.Columns>
-                         </DataGrid>
-                    </Grid>
+                    <DataGrid ItemsSource="{Binding Items}"
+                              SelectedItem="{Binding SelectedItem}"
+                              IsEnabled="{Binding !IsLoading}"
+                              DoubleTapped="DataGrid_OnDoubleTapped"
+                              SelectionMode="Single">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="ID" Binding="{Binding UserId}" Width="60"/>
+                            <DataGridTextColumn Header="Фамилия, имя, отчество" Binding="{Binding Fullname}" Width="*"/>
+                            <DataGridTextColumn Header="Должность" Binding="{Binding RoleValue}" Width="200"/>
+                            <DataGridTextColumn Header="Эл. почта" Binding="{Binding Email}" Width="200"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
                 </Grid>
-				<Border Background="#10000000"
-                        IsVisible="{Binding IsDetailPanelOpen}"
-                        ZIndex="2"
-                        IsHitTestVisible="False"/>
             </Grid>
-        </SplitView>
-    </Grid>
+        </DataTemplate>
+
+        <DataTemplate x:Key="DetailPanel" x:DataType="vm:UsersViewModel">
+            <StackPanel Spacing="8">
+                <TextBlock Text="Характеристики" Classes="H6"/>
+
+                <Grid ColumnDefinitions="Auto *" ColumnSpacing="8">
+                    <TextBlock Grid.Column="0" Text="Фамилия" Classes="Regular" 
+                               Foreground="{DynamicResource Foreground.Secondary}" 
+                               VerticalAlignment="Center"/>
+                    <TextBox Grid.Column="1" Text="{Binding SelectedItem.Lastname}" 
+                             Classes="SplitView"/>
+                </Grid>
+                <Separator Background="{DynamicResource Border.Default}"/>
+
+                <Grid ColumnDefinitions="Auto *" ColumnSpacing="8">
+                    <TextBlock Grid.Column="0" Text="Имя" Classes="Regular" 
+                               Foreground="{DynamicResource Foreground.Secondary}" 
+                               VerticalAlignment="Center"/>
+                    <TextBox Grid.Column="1" Text="{Binding SelectedItem.Firstname}" 
+                             Classes="SplitView"/>
+                </Grid>
+                <Separator Background="{DynamicResource Border.Default}"/>
+
+                <Grid ColumnDefinitions="Auto *" ColumnSpacing="8">
+                    <TextBlock Grid.Column="0" Text="Отчество" Classes="Regular" 
+                               Foreground="{DynamicResource Foreground.Secondary}" 
+                               VerticalAlignment="Center"/>
+                    <TextBox Grid.Column="1" Text="{Binding SelectedItem.Patronymic}" 
+                             Classes="SplitView"/>
+                </Grid>
+                <Separator Background="{DynamicResource Border.Default}"/>
+
+                <Grid ColumnDefinitions="Auto *" ColumnSpacing="8">
+                    <TextBlock Grid.Column="0" Text="Эл. почта" Classes="Regular" 
+                               Foreground="{DynamicResource Foreground.Secondary}" 
+                               VerticalAlignment="Center"/>
+                    <TextBox Grid.Column="1" Text="{Binding SelectedItem.Email}" 
+                             Classes="SplitView"/>
+                </Grid>
+            </StackPanel>
+        </DataTemplate>
+    </UserControl.Resources>
+
+    <!-- Передаем шаблоны через свойства -->
+    <controls:DetailSplitView MainContentTemplate="{StaticResource MainContent}"
+                              DetailPanelTemplate="{StaticResource DetailPanel}"/>
+
 </UserControl>

@@ -23,16 +23,4 @@ public partial class UsersView : UserControl
             vm.ViewCommand.Execute(vm.SelectedItem).Subscribe();
         }
     }
-
-    private void SplitView_OnPaneClosing(object? sender, CancelRoutedEventArgs e)
-    {
-        if (DataContext is UsersViewModel vm && vm.IsDetailPanelOpen)
-        {
-            e.Cancel = true;
-        }
-    }
-
-    private void Button_ActualThemeVariantChanged(object? sender, EventArgs e)
-    {
-    }
 }

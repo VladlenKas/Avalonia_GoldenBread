@@ -1,6 +1,8 @@
-﻿using Avalonia.Controls.Documents;
+﻿using Avalonia.Controls;
+using Avalonia.Controls.Documents;
 using DynamicData;
 using GoldenBread.Desktop.Enums;
+using GoldenBread.Desktop.Interfaces;
 using GoldenBread.Desktop.Services;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
@@ -17,7 +19,8 @@ using System.Threading.Tasks;
 
 namespace GoldenBread.Desktop.ViewModels.Base
 {
-    public abstract class PageViewModelBase<T> : ReactiveValidationObject where T : class
+    public abstract class PageViewModelBase<T> : ReactiveValidationObject, 
+        IDetailPanelViewModel where T : class
     {
         // == Fields ==
         protected readonly AuthorizationService? _service;
@@ -64,10 +67,31 @@ namespace GoldenBread.Desktop.ViewModels.Base
 
         
         // == Designer ==
-        protected PageViewModelBase(Func<T, int> keySelector, AuthorizationService service)
+        protected PageViewModelBase(Func<T, int> keySelector, 
+            AuthorizationService service)
         {
             _sourceCache = new SourceCache<T, int>(keySelector);
             _service = service;
+
+            // For Designer
+            if (Design.IsDesignMode)
+            {
+                CanAdd = true;
+                CanEdit = true;
+                CanDelete = true;
+
+                ViewCommand = ReactiveCommand.Create<T>(_ => { });
+                CancelCommand = ReactiveCommand.Create(() => { });
+                RefreshCommand = ReactiveCommand.CreateFromTask(async () => { });
+                ToggleFilterCommand = ReactiveCommand.Create(() => false);
+
+                _sourceCache.Connect()
+                    .ObserveOn(RxApp.MainThreadScheduler)
+                    .Bind(out _items)
+                    .Subscribe();
+
+                return; 
+            }
 
             // 1. Distribution of rights
             CanAdd = GetPermission(Permission.Add);
