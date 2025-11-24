@@ -33,28 +33,32 @@ namespace GoldenBread.Desktop.ViewModels.Base
 
         // Panel view/edit
         [Reactive] public bool IsDetailPanelOpen { get; set; }
-        [Reactive] public bool IsEditMode { get; set; }  // Edit mode inside panel
+        [Reactive] public PanelMode CurrentMode { get; set; }
+        public string ModeTitle => CurrentMode switch
+        {
+            PanelMode.Add => "Добавление",
+            PanelMode.Edit => "Редактирование",
+            _ => "Просмотр"
+        };
+
+        public bool ShowViewButtons => CurrentMode == PanelMode.View;
+        public bool ShowEditButtons => CurrentMode != PanelMode.View;
 
         public ReadOnlyObservableCollection<T> Items => _items;
 
-
-        // == Access rights ==
+        // Access rights 
         public bool CanAdd { get; }
         public bool CanEdit { get; }
         public bool CanDelete { get; }
 
-        // For change view/edit mode
-        public bool IsViewMode => !IsEditMode;
-
 
         // == Commands ==
         public ReactiveCommand<Unit, Unit>? AddCommand { get; }
+        public ReactiveCommand<Unit, Unit>? SaveCommand { get; }    // Btn save inside panel
         public ReactiveCommand<T, Unit> ViewCommand { get; }    // For Double tap
         public ReactiveCommand<Unit, Unit>? EnterEditModeCommand { get; }   // Btn edit inside panel
         public ReactiveCommand<Unit, Unit>? DeleteFromPanelCommand { get; } // Btn delete inside panel
-        public ReactiveCommand<Unit, Unit>? SaveCommand { get; }    // Btn save inside panel
         public ReactiveCommand<Unit, Unit> CancelCommand { get; }   // Btn cansel inside panel
-        public ReactiveCommand<Unit, Unit>? DeleteCommand { get; }  
         public ReactiveCommand<Unit, Unit> RefreshCommand { get; }
         public ReactiveCommand<Unit, bool> ToggleFilterCommand { get; }
 
@@ -69,6 +73,14 @@ namespace GoldenBread.Desktop.ViewModels.Base
             CanAdd = GetPermission(Permission.Add);
             CanEdit = GetPermission(Permission.Edit);
             CanDelete = GetPermission(Permission.Delete);
+
+            this.WhenAnyValue(x => x.CurrentMode)
+                .Subscribe(_ =>
+                {
+                    this.RaisePropertyChanged(nameof(ModeTitle));
+                    this.RaisePropertyChanged(nameof(ShowViewButtons));
+                    this.RaisePropertyChanged(nameof(ShowEditButtons));
+                });
 
             // 2. Load Commands
             if (CanAdd)
@@ -86,7 +98,6 @@ namespace GoldenBread.Desktop.ViewModels.Base
             {
                 var canDelete = this.WhenAnyValue(x => x.SelectedItem)
                     .Select(item => item != null && CanDeleteOptions());
-                DeleteCommand = ReactiveCommand.CreateFromTask(OnDeleteAsync, canDelete);
                 DeleteFromPanelCommand = ReactiveCommand.CreateFromTask(DeleteFromPanelAsync, canDelete);
             }
 
@@ -173,10 +184,19 @@ namespace GoldenBread.Desktop.ViewModels.Base
         // To roll back changes
         protected virtual void OnCancelEdit() { }
 
+        protected virtual Task OnAddAsync()
+        {
+            SelectedItem = default;
+
+            CurrentMode = PanelMode.Add;
+            IsDetailPanelOpen = true;
+
+            return Task.CompletedTask;
+        }
+
 
         // == Abstraction Methods ==
         protected abstract Task LoadDataAsync();
-        protected abstract Task OnAddAsync();
         protected abstract Task OnSaveAsync();
         protected abstract Task OnDeleteAsync();
 
@@ -192,32 +212,31 @@ namespace GoldenBread.Desktop.ViewModels.Base
         private void OpenViewPanel(T item)
         {
             if (item == null) return;
-
             SelectedItem = item;
-            IsEditMode = false;
 
+            CurrentMode = PanelMode.View;
             IsDetailPanelOpen = true;
+
             OnViewPanelOpened(item);
         }
-
 
         // Changing the view mode to edit mode
         private void EnterEditMode()
         {
-            IsEditMode = true;
+            CurrentMode = PanelMode.Edit;
         }
 
         // Close panel
         private void CloseOrCancelEdit()
         {
-            if (IsEditMode)
+            if (CurrentMode == PanelMode.Edit)
             {
                 OnCancelEdit();
-                IsEditMode = false;  
+                CurrentMode = PanelMode.View;
             }
             else
             {
-                IsDetailPanelOpen = false; 
+                IsDetailPanelOpen = false;
             }
         }
 
@@ -225,7 +244,7 @@ namespace GoldenBread.Desktop.ViewModels.Base
         private async Task SaveChangesAsync()
         {
             await OnSaveAsync();
-            IsEditMode = false;  
+            CurrentMode = PanelMode.View;
         }
 
         // Delete in the panel

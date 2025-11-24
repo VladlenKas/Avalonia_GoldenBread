@@ -17,7 +17,7 @@
 		<Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Hidden"/>
 		<Setter Property="Foreground" Value="{DynamicResource Foreground.Secondary}"/>
 		<Setter Property="FontSize" Value="14"/>
-		<Setter Property="Padding" Value="12"/>
+		<Setter Property="Padding" Value="12 0"/>
 		<Setter Property="FontWeight" Value="Medium"/>
 		<Setter Property="BorderThickness" Value="1.5"/>
 		<Setter Property="BorderBrush" Value="{DynamicResource Border.Default}"/>
@@ -50,46 +50,82 @@
 
 	<!-- with Icon -->
 	<Style Selector="TextBox.Icon">
-    <Setter Property="Background" Value="{DynamicResource Background.Primary}"/>
-    <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Hidden"/>
-    <Setter Property="Foreground" Value="{DynamicResource Foreground.Secondary}"/>
-	<Setter Property="Padding" Value="12 0"/>
-    <Setter Property="FontSize" Value="14"/>
-    <Setter Property="FontWeight" Value="Regular"/>
-    <Setter Property="BorderThickness" Value="1.5"/>
-    <Setter Property="BorderBrush" Value="{DynamicResource Interactive.Neutral.Default}"/>
-    <Setter Property="CornerRadius" Value="4"/>
-    <Setter Property="SelectionBrush" Value="LightBlue"/>
-    <Setter Property="VerticalContentAlignment" Value="Center"/>
+		<Setter Property="Background" Value="{DynamicResource Background.Primary}"/>
+		<Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Hidden"/>
+		<Setter Property="Foreground" Value="{DynamicResource Foreground.Secondary}"/>
+		<Setter Property="Padding" Value="12 0"/>
+		<Setter Property="FontSize" Value="12"/>
+		<Setter Property="FontWeight" Value="Regular"/>
+		<Setter Property="BorderThickness" Value="1.5"/>
+		<Setter Property="BorderBrush" Value="{DynamicResource Interactive.Neutral.Default}"/>
+		<Setter Property="CornerRadius" Value="4"/>
+		<Setter Property="SelectionBrush" Value="LightBlue"/>
+		<Setter Property="VerticalContentAlignment" Value="Center"/>
     
-    <!-- Добавляем иконку через InnerLeftContent -->
-    <Setter Property="InnerLeftContent">
-        <Template>
-            <icon:Icon Classes="Medium" Margin="12 0 -6 0" />
-        </Template>
-    </Setter>
+		<!-- Добавляем иконку через InnerLeftContent -->
+		<Setter Property="InnerLeftContent">
+			<Template>
+				<icon:Icon Classes="Medium" Margin="12 0 -6 0" />
+			</Template>
+		</Setter>
 
-    <Setter Property="Transitions">
-        <Transitions>
-            <BrushTransition Property="Foreground" Duration="0:0:0.2"/>
-        </Transitions>
-    </Setter>
+		<Setter Property="Transitions">
+			<Transitions>
+				<BrushTransition Property="Foreground" Duration="0:0:0.2"/>
+			</Transitions>
+		</Setter>
 
-    <Style Selector="^ /template/ Border#PART_BorderElement">
-        <Setter Property="Transitions">
-            <Transitions>
-                <BrushTransition Property="BorderBrush" Duration="0:0:0.2"/>
-            </Transitions>
-        </Setter>
-    </Style>
+		<Style Selector="^ /template/ Border#PART_BorderElement">
+			<Setter Property="Transitions">
+				<Transitions>
+					<BrushTransition Property="BorderBrush" Duration="0:0:0.2"/>
+				</Transitions>
+			</Setter>
+		</Style>
 
-    <Style Selector="^:focus /template/ Border#PART_BorderElement">
-        <Setter Property="BorderBrush" Value="{DynamicResource Border.Focus}"/>
-    </Style>
+		<Style Selector="^:focus /template/ Border#PART_BorderElement">
+			<Setter Property="BorderBrush" Value="{DynamicResource Border.Focus}"/>
+		</Style>
 
-    <Style Selector="^:focus">
-        <Setter Property="Foreground" Value="{DynamicResource Foreground.Primary}"/>
-    </Style>
-</Style>
+		<Style Selector="^:focus">
+			<Setter Property="Foreground" Value="{DynamicResource Foreground.Primary}"/>
+		</Style>
+	</Style>
 
+		<!-- with Icon -->
+	<Style Selector="TextBox.SplitView">
+		<Setter Property="Background" Value="{DynamicResource Background.Specific}"/>
+		<Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Hidden"/>
+		<Setter Property="Foreground" Value="{DynamicResource Foreground.Secondary}"/>
+		<Setter Property="Padding" Value="12 0"/>
+		<Setter Property="FontSize" Value="12"/>
+		<Setter Property="FontWeight" Value="Regular"/>
+		<Setter Property="BorderThickness" Value="1.5"/>
+		<Setter Property="BorderBrush" Value="{DynamicResource Background.Specific}"/>
+		<Setter Property="CornerRadius" Value="4"/>
+		<Setter Property="SelectionBrush" Value="LightBlue"/>
+		<Setter Property="VerticalContentAlignment" Value="Center"/>
+    
+		<Setter Property="Transitions">
+			<Transitions>
+				<BrushTransition Property="Foreground" Duration="0:0:0.2"/>
+			</Transitions>
+		</Setter>
+
+		<Style Selector="^ /template/ Border#PART_BorderElement">
+			<Setter Property="Transitions">
+				<Transitions>
+					<BrushTransition Property="BorderBrush" Duration="0:0:0.2"/>
+				</Transitions>
+			</Setter>
+		</Style>
+
+		<Style Selector="^:focus /template/ Border#PART_BorderElement">
+			<Setter Property="BorderBrush" Value="{DynamicResource Border.Focus}"/>
+		</Style>
+
+		<Style Selector="^:focus">
+			<Setter Property="Foreground" Value="{DynamicResource Foreground.Primary}"/>
+		</Style>
+	</Style>
 </Styles>

@@ -31,4 +31,8 @@ public partial class UsersView : UserControl
             e.Cancel = true;
         }
     }
+
+    private void Button_ActualThemeVariantChanged(object? sender, EventArgs e)
+    {
+    }
 }

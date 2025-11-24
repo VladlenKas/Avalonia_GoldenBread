@@ -52,11 +52,6 @@ namespace GoldenBread.Desktop.ViewModels.Pages
         }
 
         // == Commands Methods ==
-        protected override async Task OnAddAsync()
-        {
-            throw new NotImplementedException();    
-        }
-
         protected override async Task OnSaveAsync()
         {
             throw new NotImplementedException();

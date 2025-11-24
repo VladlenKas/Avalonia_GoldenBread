@@ -72,7 +72,7 @@
             </StackPanel>
 
             <StackPanel>
-                <Button Content="Отправить" 
+                <Button Content="Войти" 
                         Command="{Binding LoginUserCommand}" 
                         CommandParameter="{Binding $parent[Window]}"/>
             </StackPanel>

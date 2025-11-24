@@ -10,7 +10,7 @@
 
             <!-- Search Section -->
             <StackPanel DockPanel.Dock="Left" Spacing="12" Orientation="Horizontal" VerticalAlignment="Center">
-		        <TextBox Classes="Icon" Tag="mdi-magnify" Text="{Binding SearchText}" Height="32" Width="300" Watermark="Введите текст для поиска"/>
+		       <TextBox Classes="Icon" Tag="mdi-magnify" Text="{Binding SearchText}" Height="32" Width="300" Watermark="Введите текст для поиска"/>
 			   <TextBlock Classes="Small" 
                           Foreground="{DynamicResource Foreground.Primary}" 
                           VerticalAlignment="Center">
@@ -28,10 +28,10 @@
                         Content="Добавить" 
                         Tag="mdi-plus"/>
 
-                <Button Classes="IconOnly Danger" 
+                <!--<Button Classes="IconOnly Danger" 
                         Command="{Binding DeleteCommand}" 
                         IsVisible="{Binding CanDelete}"
-                        Tag="mdi-trash-can-outline"/>
+                        Tag="mdi-trash-can-outline"/>-->
 				
             </StackPanel>
 

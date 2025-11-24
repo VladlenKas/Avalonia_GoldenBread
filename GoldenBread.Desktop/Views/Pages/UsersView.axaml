@@ -12,92 +12,144 @@
         <vm:DesignUsersViewModel/>
     </Design.DataContext>
 
-    <SplitView IsPaneOpen="{Binding IsDetailPanelOpen, Mode=TwoWay}"
-               DisplayMode="Overlay"
-               PanePlacement="Right"
-               OpenPaneLength="500"
-               PaneClosing="SplitView_OnPaneClosing">
-    
-        <!-- ПАНЕЛЬ -->
-        <SplitView.Pane>
-            <Border Background="#2C2C2C" Padding="20">
-                <StackPanel Spacing="15">
-                
-                    <!-- Крестик закрытия -->
-                    <Button Classes="IconOnly" 
-                            Tag="mdi-close"
-                            HorizontalAlignment="Right"
-                            Command="{Binding CancelCommand}"/>
-                
-                    <!-- Заголовок -->
-                    <TextBlock Text="{Binding IsEditMode}" 
-                               FontSize="24"/>
-                
-                    <!-- Поля -->
-                    <TextBox Text="{Binding SelectedItem.Firstname}"
-                             IsReadOnly="{Binding IsViewMode}"/>
-                    <TextBox Text="{Binding SelectedItem.Email}"
-                             IsReadOnly="{Binding IsViewMode}"/>
-                
-                    <!-- Кнопки просмотра -->
-                    <StackPanel Orientation="Horizontal" 
-                                Spacing="10"
-                                IsVisible="{Binding IsViewMode}">
-                        <Button Content="Редактировать" 
-                                Command="{Binding EnterEditModeCommand}"
-                                IsVisible="{Binding CanEdit}"/>
-                        <Button Content="Удалить" 
-                                Command="{Binding DeleteFromPanelCommand}"
-                                IsVisible="{Binding CanDelete}"/>
-                    </StackPanel>
-                
-                    <!-- Кнопки редактирования -->
-                    <StackPanel Orientation="Horizontal" 
-                                Spacing="10"
-                                IsVisible="{Binding IsEditMode}">
-                        <Button Content="Сохранить" Command="{Binding SaveCommand}"/>
-                        <Button Content="Отмена" Command="{Binding CancelCommand}"/>
-                    </StackPanel>
-                
-                </StackPanel>
-            </Border>
-        </SplitView.Pane>
-
-        <Grid Grid.RowDefinitions="Auto *" RowSpacing="24">
-            <controls:ToolbarView Grid.Row="0"/>
-            <Grid Grid.Row="1">
-
-                <!-- loading indicator -->
-                <ProgressBar IsIndeterminate="True" 
-                             IsVisible="{Binding IsLoading}"
-                             Height="4"
-                             VerticalAlignment="Top"
-                             ZIndex="1"/>
+    <Grid>
         
-                <DataGrid ItemsSource="{Binding Items}"
-                          SelectedItem="{Binding SelectedItem}"
-                          IsEnabled="{Binding !IsLoading}"
-                          DoubleTapped="DataGrid_OnDoubleTapped"
-                          SelectionMode="Single">
-                    <DataGrid.Columns>
-                        <DataGridTextColumn Header="ID" 
-                                            Binding="{Binding UserId}"
-                                            Width="60"/>
+        <SplitView IsPaneOpen="{Binding IsDetailPanelOpen, Mode=TwoWay}"
+                   DisplayMode="Overlay"
+                   PanePlacement="Right"
+                   OpenPaneLength="350"
+                   PaneClosing="SplitView_OnPaneClosing">
+    
+            <SplitView.Pane>
+                <Border Background="{DynamicResource Interactive.Neutral.Default}" 
+                        BorderThickness="1 0 0 0"
+                        BorderBrush="{DynamicResource Border.Default}"
+                        Padding="24">
+                    <StackPanel Spacing="16">
+
+                        <StackPanel Spacing="6">
+                            <Grid>
+                                <Button Classes="IconOnly Action Small" 
+                                        Tag="mdi-close"
+                                        Width="28"
+                                        HorizontalAlignment="Right"
+                                        Command="{Binding CancelCommand}"/>
                 
-                        <DataGridTextColumn Header="Фамилия, имя, отчество" 
-                                            Binding="{Binding Fullname}"
-                                            Width="*"/>
+                                <TextBlock Text="{Binding ModeTitle}" 
+                                           VerticalAlignment="Center"
+                                           Classes="H4"/>
+                            </Grid>
+
+                            <!-- View Mode -->
+                            <StackPanel Spacing="6" Orientation="Horizontal" IsVisible="{Binding ShowViewButtons}">
+							    <Button Content="Уволить" 
+                                        Tag="mdi-trash-can-outline"
+                                        Classes="Danger WithIcon Small"
+                                        Command="{Binding DeleteFromPanelCommand}"
+                                        IsVisible="{Binding CanDelete}"/>
+                                <Button Content="Редактировать" 
+                                        Width="28"
+                                        Tag="mdi-pencil-outline"
+                                        Classes="Action IconOnly Small"
+                                        Command="{Binding EnterEditModeCommand}"
+                                        IsVisible="{Binding CanEdit}"/>
+                            </StackPanel>
+
+                            
+                            <!-- Edit/Add Mode -->
+                            <StackPanel Spacing="6" Orientation="Horizontal"  IsVisible="{Binding ShowEditButtons}">
+                                <Button Content="Сохранить" 
+                                        Tag="mdi-content-save-outline"
+                                        Classes="Success WithIcon Small"
+                                        Command="{Binding SaveCommand}"
+                                        IsVisible="{Binding CanDelete}"/>
+                                <Button Content="Отмена" 
+                                        Width="28"
+                                        Tag="mdi-restore"
+                                        Classes="Action IconOnly Small"
+                                        Command="{Binding CancelCommand}"/>
+                            </StackPanel>
+                        </StackPanel>
+
+                        <!-- Content Fields -->
+                        <StackPanel Spacing="8" IsHitTestVisible="{Binding ShowEditButtons}">
+						    <TextBlock Text="Характеристики"
+                                       Classes="H6"/>
+							
+                            <Grid ColumnDefinitions="Auto *" ColumnSpacing="8">
+								<TextBlock Grid.Column="0" Text="Фамилия" Classes="Regular" Foreground="{DynamicResource Foreground.Secondary}" VerticalAlignment="Center"/>
+                                <TextBox Grid.Column="1" Text="{Binding SelectedItem.Lastname}" Classes="SplitView"/>
+                            </Grid>
+
+                            <Separator Background="{DynamicResource Border.Default}"/>
+							
+                            <Grid ColumnDefinitions="Auto *" ColumnSpacing="8">
+								<TextBlock Grid.Column="0" Text="Имя" Classes="Regular" Foreground="{DynamicResource Foreground.Secondary}" VerticalAlignment="Center"/>
+                                <TextBox Grid.Column="1" Text="{Binding SelectedItem.Firstname}" Classes="SplitView"/>
+                            </Grid>
+                            
+                            <Separator Background="{DynamicResource Border.Default}"/>
+							
+                            <Grid ColumnDefinitions="Auto *" ColumnSpacing="8">
+								<TextBlock Grid.Column="0" Text="Отчество" Classes="Regular" Foreground="{DynamicResource Foreground.Secondary}" VerticalAlignment="Center"/>
+                                <TextBox Grid.Column="1" Text="{Binding SelectedItem.Patronymic}" Classes="SplitView"/>
+                            </Grid>
+                            
+                            <Separator Background="{DynamicResource Border.Default}"/>
+							
+                            <Grid ColumnDefinitions="Auto *" ColumnSpacing="8">
+								<TextBlock Grid.Column="0" Text="Эл. почта" Classes="Regular" Foreground="{DynamicResource Foreground.Secondary}" VerticalAlignment="Center"/>
+                                <TextBox Grid.Column="1" Text="{Binding SelectedItem.Email}" Classes="SplitView"/>
+                            </Grid>
+
+                        </StackPanel>
+
+                    </StackPanel>
+                </Border>
+            </SplitView.Pane>
+
+            <Grid>
+                <Grid Grid.RowDefinitions="Auto *" RowSpacing="24" Margin="24">
+                    <controls:ToolbarView Grid.Row="0"/>
+                    <Grid Grid.Row="1">
+
+                        <!-- loading indicator -->
+                        <ProgressBar IsIndeterminate="True" 
+                                     IsVisible="{Binding IsLoading}"
+                                     Height="4"
+                                     VerticalAlignment="Top"
+                                     ZIndex="1"/>
+        
+                        <DataGrid ItemsSource="{Binding Items}"
+                                  SelectedItem="{Binding SelectedItem}"
+                                  IsEnabled="{Binding !IsLoading}"
+                                  DoubleTapped="DataGrid_OnDoubleTapped"
+                                  SelectionMode="Single">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="ID" 
+                                                    Binding="{Binding UserId}"
+                                                    Width="60"/>
                 
-                        <DataGridTextColumn Header="Должность" 
-                                            Binding="{Binding RoleValue}"
-                                            Width="200"/>
+                                <DataGridTextColumn Header="Фамилия, имя, отчество" 
+                                                    Binding="{Binding Fullname}"
+                                                    Width="*"/>
                 
-                        <DataGridTextColumn Header="Эл. почта" 
-                                            Binding="{Binding Email}"
-                                            Width="200"/>
-                    </DataGrid.Columns>
-                 </DataGrid>
+                                <DataGridTextColumn Header="Должность" 
+                                                    Binding="{Binding RoleValue}"
+                                                    Width="200"/>
+                
+                                <DataGridTextColumn Header="Эл. почта" 
+                                                    Binding="{Binding Email}"
+                                                    Width="200"/>
+                            </DataGrid.Columns>
+                         </DataGrid>
+                    </Grid>
+                </Grid>
+				<Border Background="#10000000"
+                        IsVisible="{Binding IsDetailPanelOpen}"
+                        ZIndex="2"
+                        IsHitTestVisible="False"/>
             </Grid>
-        </Grid>
-    </SplitView>
+        </SplitView>
+    </Grid>
 </UserControl>
