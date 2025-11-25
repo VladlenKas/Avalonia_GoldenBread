@@ -30,7 +30,7 @@
                             <RadioButton Classes="Topbar"
                                          GroupName="TopbarSection"
                                          Content="{Binding Title}"
-                                         Command="{Binding $parent[UserControl].((vm:TopbarViewModel)DataContext).SelectPageCommand}"
+                                         Command="{Binding $parent[UserControl].DataContext.SelectPageCommand}"
                                          CommandParameter="{Binding}"
                                          IsChecked="{Binding IsSelected}"/>
                         </DataTemplate>

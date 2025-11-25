@@ -9,12 +9,6 @@ namespace GoldenBread.Desktop.Enums
 {
     public enum SectionType
     {
-        [Description("Пользователи")]
-        Users,
-
-        [Description("Компании")]
-        Company,
-
         [Description("Справочники")]
         References,
 

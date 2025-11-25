@@ -13,8 +13,7 @@ public partial class DetailSplitView : UserControl
 {
     // Prop for main pane
     public static readonly StyledProperty<IDataTemplate?> MainContentTemplateProperty =
-        AvaloniaProperty.Register<DetailSplitView, IDataTemplate?>(
-            nameof(MainContentTemplate));
+        AvaloniaProperty.Register<DetailSplitView, IDataTemplate?>(nameof(MainContentTemplate));
 
     public IDataTemplate? MainContentTemplate
     {
@@ -24,8 +23,7 @@ public partial class DetailSplitView : UserControl
 
     // Prop for details pane
     public static readonly StyledProperty<IDataTemplate?> DetailPanelTemplateProperty =
-        AvaloniaProperty.Register<DetailSplitView, IDataTemplate?>(
-            nameof(DetailPanelTemplate));
+        AvaloniaProperty.Register<DetailSplitView, IDataTemplate?>(nameof(DetailPanelTemplate));
 
     public IDataTemplate? DetailPanelTemplate
     {

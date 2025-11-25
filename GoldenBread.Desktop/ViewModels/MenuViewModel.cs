@@ -20,10 +20,6 @@ namespace GoldenBread.Desktop.ViewModels
 {
     public class MenuViewModel : ReactiveValidationObject
     {
-        // == Filds ==
-        private readonly AuthorizationService _authService;
-
-
         // == Props ==
         public SidebarViewModel Sidebar { get; }
         public TopbarViewModel Topbar { get; }
@@ -38,12 +34,8 @@ namespace GoldenBread.Desktop.ViewModels
 
 
         // == For Builder ==
-        public MenuViewModel(AuthorizationService authService, 
-            SidebarViewModel sidebar,
-            TopbarViewModel topbar)
+        public MenuViewModel(SidebarViewModel sidebar, TopbarViewModel topbar)
         {
-            _authService = authService;
-
             Sidebar = sidebar;
             Topbar = topbar;
         }

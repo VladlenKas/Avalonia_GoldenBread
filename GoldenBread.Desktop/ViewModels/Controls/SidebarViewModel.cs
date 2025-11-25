@@ -2,23 +2,13 @@
 using GoldenBread.Desktop.Enums;
 using GoldenBread.Desktop.Helpers;
 using GoldenBread.Desktop.Services;
-using GoldenBread.Desktop.ViewModels.Pages;
-using GoldenBread.Desktop.Views;
 using GoldenBread.Shared.Entities;
 using Humanizer;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using Projektanker.Icons.Avalonia;
 using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
 using ReactiveUI.Validation.Helpers;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
 using System.Reactive;
-using System.Text;
 using System.Threading.Tasks;
-using static System.Collections.Specialized.BitVector32;
 
 namespace GoldenBread.Desktop.ViewModels.Controls
 {
@@ -74,7 +64,7 @@ namespace GoldenBread.Desktop.ViewModels.Controls
             _authService = authService;
             _viewService = viewService;
 
-            SidebarItems = Initialize(_authService.CurrentUser);
+            SidebarItems = Initialize();
 
             SelectSectionCommand = ReactiveCommand.Create<SidebarItem>(section =>
             {
@@ -85,7 +75,7 @@ namespace GoldenBread.Desktop.ViewModels.Controls
 
 
         // == Methods ==
-        private ObservableCollection<SidebarItem> Initialize(User currentUser)
+        private ObservableCollection<SidebarItem> Initialize()
         {
             var items = new ObservableCollection<SidebarItem>();
 

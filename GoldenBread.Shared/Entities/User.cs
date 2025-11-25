@@ -45,6 +45,9 @@ public partial class User
     [NotMapped]
     public string RoleValue => Role.Value.Humanize();
 
+    [NotMapped]
+    public string VerificationStatusValue => VerificationStatus.Value.Humanize();
+
 
     // == Original props ==
     public UserRole? Role { get; set; } 

@@ -65,7 +65,7 @@ namespace GoldenBread.Desktop.ViewModels.Base
         public ReactiveCommand<Unit, Unit> RefreshCommand { get; }
         public ReactiveCommand<Unit, bool> ToggleFilterCommand { get; }
 
-        
+
         // == Designer ==
         protected PageViewModelBase(Func<T, int> keySelector, 
             AuthorizationService service)
@@ -121,7 +121,7 @@ namespace GoldenBread.Desktop.ViewModels.Base
             if (CanDelete)  
             {
                 var canDelete = this.WhenAnyValue(x => x.SelectedItem)
-                    .Select(item => item != null && CanDeleteOptions());
+                    .Select(item => item != null && GetDeleteOptions());
                 DeleteFromPanelCommand = ReactiveCommand.CreateFromTask(DeleteFromPanelAsync, canDelete);
             }
 
@@ -166,6 +166,8 @@ namespace GoldenBread.Desktop.ViewModels.Base
                 .ObserveOn(RxApp.MainThreadScheduler)  // Update UI in the main stream
                 .Bind(out _items)
                 .Subscribe();
+
+            RefreshCommand.Execute().Subscribe();
         }
 
 
@@ -188,16 +190,7 @@ namespace GoldenBread.Desktop.ViewModels.Base
             return Observable.Return<Func<T, bool>>(_ => true);
         }
 
-        protected virtual Func<T, bool> CreateSearchFilter(string searchText)
-        {
-            if (string.IsNullOrWhiteSpace(searchText))
-                return _ => true;
-
-            var lowerSearch = searchText.ToLower();
-            return item => GetSearchableText(item).ToLower().Contains(lowerSearch);
-        }
-
-        protected virtual bool CanDeleteOptions()
+        protected virtual bool GetDeleteOptions()
         {
             return true;
         }
@@ -232,6 +225,15 @@ namespace GoldenBread.Desktop.ViewModels.Base
 
 
         // == Other Methods ==
+        private Func<T, bool> CreateSearchFilter(string searchText)
+        {
+            if (string.IsNullOrWhiteSpace(searchText))
+                return _ => true;
+
+            var lowerSearch = searchText.ToLower();
+            return item => GetSearchableText(item).ToLower().Contains(lowerSearch);
+        }
+
         // Open the view panel (double-top)
         private void OpenViewPanel(T item)
         {
@@ -262,6 +264,7 @@ namespace GoldenBread.Desktop.ViewModels.Base
             {
                 IsDetailPanelOpen = false;
             }
+            RefreshCommand.Execute().Subscribe(); // Update data
         }
 
         // Save Changes in the panel
@@ -269,6 +272,7 @@ namespace GoldenBread.Desktop.ViewModels.Base
         {
             await OnSaveAsync();
             CurrentMode = PanelMode.View;
+            RefreshCommand.Execute().Subscribe(); // Update data
         }
 
         // Delete in the panel
@@ -276,6 +280,7 @@ namespace GoldenBread.Desktop.ViewModels.Base
         {
             await OnDeleteAsync();
             IsDetailPanelOpen = false;
+            RefreshCommand.Execute().Subscribe(); // Update data
         }
     }
 }

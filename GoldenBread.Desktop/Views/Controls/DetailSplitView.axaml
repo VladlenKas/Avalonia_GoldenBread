@@ -79,9 +79,9 @@
                                 ContentTemplate="{Binding #SplitViewControl.MainContentTemplate}"/>
 
                 <Border Background="#10000000"
-                    IsVisible="{Binding IsDetailPanelOpen}"
-                    ZIndex="2"
-                    IsHitTestVisible="False"/>
+                        IsVisible="{Binding IsDetailPanelOpen}"
+                        ZIndex="2"
+                        IsHitTestVisible="False"/>
             </Grid>
 
         </SplitView>

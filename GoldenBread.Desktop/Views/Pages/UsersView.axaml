@@ -12,7 +12,6 @@
         <vm:DesignUsersViewModel/>
     </Design.DataContext>
 
-    <!-- Определяем шаблоны в Resources -->
     <UserControl.Resources>
         <DataTemplate x:Key="MainContent" x:DataType="vm:UsersViewModel">
             <Grid RowDefinitions="Auto *" RowSpacing="24" Margin="24">
@@ -33,7 +32,10 @@
                             <DataGridTextColumn Header="ID" Binding="{Binding UserId}" Width="60"/>
                             <DataGridTextColumn Header="Фамилия, имя, отчество" Binding="{Binding Fullname}" Width="*"/>
                             <DataGridTextColumn Header="Должность" Binding="{Binding RoleValue}" Width="200"/>
+                            <DataGridTextColumn Header="Дата рождения" Binding="{Binding Birthday}" Width="150"/>
                             <DataGridTextColumn Header="Эл. почта" Binding="{Binding Email}" Width="200"/>
+                            <DataGridTextColumn Header="Статус" Binding="{Binding VerificationStatusValue}" Width="150"/>
+                            <DataGridTextColumn Header="Заказов" Binding="{Binding Orders.Count}" Width="100"/>
                         </DataGrid.Columns>
                     </DataGrid>
                 </Grid>
@@ -41,7 +43,7 @@
         </DataTemplate>
 
         <DataTemplate x:Key="DetailPanel" x:DataType="vm:UsersViewModel">
-            <StackPanel Spacing="8">
+            <StackPanel Spacing="12">
                 <TextBlock Text="Характеристики" Classes="H6"/>
 
                 <Grid ColumnDefinitions="Auto *" ColumnSpacing="8">
@@ -51,7 +53,6 @@
                     <TextBox Grid.Column="1" Text="{Binding SelectedItem.Lastname}" 
                              Classes="SplitView"/>
                 </Grid>
-                <Separator Background="{DynamicResource Border.Default}"/>
 
                 <Grid ColumnDefinitions="Auto *" ColumnSpacing="8">
                     <TextBlock Grid.Column="0" Text="Имя" Classes="Regular" 
@@ -60,7 +61,6 @@
                     <TextBox Grid.Column="1" Text="{Binding SelectedItem.Firstname}" 
                              Classes="SplitView"/>
                 </Grid>
-                <Separator Background="{DynamicResource Border.Default}"/>
 
                 <Grid ColumnDefinitions="Auto *" ColumnSpacing="8">
                     <TextBlock Grid.Column="0" Text="Отчество" Classes="Regular" 
@@ -69,7 +69,6 @@
                     <TextBox Grid.Column="1" Text="{Binding SelectedItem.Patronymic}" 
                              Classes="SplitView"/>
                 </Grid>
-                <Separator Background="{DynamicResource Border.Default}"/>
 
                 <Grid ColumnDefinitions="Auto *" ColumnSpacing="8">
                     <TextBlock Grid.Column="0" Text="Эл. почта" Classes="Regular" 
@@ -78,11 +77,26 @@
                     <TextBox Grid.Column="1" Text="{Binding SelectedItem.Email}" 
                              Classes="SplitView"/>
                 </Grid>
+
+                <Grid ColumnDefinitions="Auto *" ColumnSpacing="8">
+                    <TextBlock Grid.Column="0" Text="Дата рожд." Classes="Regular" 
+                               Foreground="{DynamicResource Foreground.Secondary}" 
+                               VerticalAlignment="Center"/>
+                    <TextBox Grid.Column="1" Text="{Binding SelectedItem.Birthday}" 
+                             Classes="SplitView"/>
+                </Grid>
+
+                <Grid ColumnDefinitions="Auto *" ColumnSpacing="8">
+                    <TextBlock Grid.Column="0" Text="Пароль" Classes="Regular" 
+                               Foreground="{DynamicResource Foreground.Secondary}" 
+                               VerticalAlignment="Center"/>
+                    <TextBox Grid.Column="1" Text="{Binding SelectedItem.Password}" 
+                             Classes="SplitView"/>
+                </Grid>
             </StackPanel>
         </DataTemplate>
     </UserControl.Resources>
 
-    <!-- Передаем шаблоны через свойства -->
     <controls:DetailSplitView MainContentTemplate="{StaticResource MainContent}"
                               DetailPanelTemplate="{StaticResource DetailPanel}"/>
 

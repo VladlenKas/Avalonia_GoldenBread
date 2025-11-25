@@ -70,7 +70,7 @@ namespace GoldenBread.Desktop.ViewModels.Controls
             _serviceProvider = serviceProvider;
 
             UserFullname = _authService.CurrentUser.Fullname;
-            UserRole = _authService.CurrentUser.Role.Value.Humanize();
+            UserRole = _authService.CurrentUser.RoleValue;
 
             TopbarItems = new ObservableCollection<TopbarItem>();
 
