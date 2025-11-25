@@ -1,14 +1,9 @@
-﻿using Avalonia.Controls;
-using DynamicData;
-using GoldenBread.Desktop.Enums;
-using GoldenBread.Desktop.Helpers;
+﻿using GoldenBread.Desktop.Enums;
+using GoldenBread.Desktop.Managers;
 using GoldenBread.Desktop.Services;
 using GoldenBread.Desktop.ViewModels.Pages;
-using GoldenBread.Desktop.Views;
-using Humanizer;
 using Microsoft.Extensions.DependencyInjection;
 using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
 using ReactiveUI.Validation.Helpers;
 using System;
 using System.Collections.Generic;
@@ -16,87 +11,57 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GoldenBread.Desktop.ViewModels.Controls
 {
-    public class TopbarViewModel : ReactiveValidationObject
+    public class TopbarViewModel : ReactiveObject
     {
-        // == Filds ==
-        private readonly AuthorizationService _authService;
-        private readonly SidebarViewModel _sidebar;
+        // ==== Fields ====
+        private readonly NavigationManager _navigation;
         private readonly IServiceProvider _serviceProvider;
-        private object? _currentPage;
+        private readonly AuthorizationService _authService;
 
 
-        // == Props ==
+        // ==== Props ====
         public ObservableCollection<TopbarItem> TopbarItems { get; }
-        public string UserFullname { get; set; }
-        public string UserRole { get; set; }
-        public object? CurrentPage
-        {
-            get => _currentPage;
-            private set => this.RaiseAndSetIfChanged(ref _currentPage, value);
-        }
-
-
-        // == Commands ==
         public ReactiveCommand<TopbarItem, Unit> SelectPageCommand { get; }
+        public string UserFullname { get; }
+        public string UserRole { get; }
 
 
-        // == For View ==
-        public TopbarViewModel()
+        // ==== Designer ====
+        public TopbarViewModel(
+            NavigationManager navigation,
+            IServiceProvider serviceProvider,
+            AuthorizationService authService,
+            SidebarViewModel sidebar)
         {
-            TopbarItems = new ObservableCollection<TopbarItem>()
-            {
-                new TopbarItem("Склад", new IngredientsViewModel()),
-                new TopbarItem("Продукты", new IngredientsViewModel()),
-                new TopbarItem("Ингредиенты", new IngredientsViewModel()),
-            };
-
-            UserFullname = "Касимов Владлен";
-            UserRole = "Администратор";
-        }
-
-
-        // == For Builder ==
-        public TopbarViewModel(AuthorizationService authService, 
-            SidebarViewModel sidebar,
-            IServiceProvider serviceProvider)
-        {
-            _authService = authService;
-            _sidebar = sidebar;
+            _navigation = navigation;
             _serviceProvider = serviceProvider;
-
-            UserFullname = _authService.CurrentUser.Fullname;
-            UserRole = _authService.CurrentUser.RoleValue;
+            _authService = authService;
 
             TopbarItems = new ObservableCollection<TopbarItem>();
 
-            SelectPageCommand = ReactiveCommand.Create<TopbarItem>(item =>
+            SelectPageCommand = ReactiveCommand.Create<TopbarItem>(page =>
             {
-                // Removing the selection from all elements
-                foreach (var topbarItem in TopbarItems)
-                {
-                    topbarItem.IsSelected = false;
-                }
+                foreach (var item in TopbarItems)
+                    item.IsSelected = false;
 
-                // Setting the selection to the selected element
-                item.IsSelected = true;
-                CurrentPage = item.ViewModel;
+                page.IsSelected = true;
+                _navigation.NavigateTo(page.ViewModel);
             });
 
+            UserFullname = authService.CurrentUser.Fullname;
+            UserRole = authService.CurrentUser.RoleValue;
 
-            // Subscribing to the section change
-            _sidebar.WhenAnyValue(x => x.SelectedSection)
+            sidebar.WhenAnyValue(x => x.SelectedSection)
                 .Where(section => section != null)
-                .Subscribe(section => LoadPagesForSection(section!.Section));
+                .Subscribe(section => LoadSection(section!.Section));
         }
 
 
-        // == Methods ==
-        private void LoadPagesForSection(SectionType section)
+        // ==== Methods ====
+        private void LoadSection(SectionType section)
         {
             TopbarItems.Clear();
 
@@ -110,52 +75,35 @@ namespace GoldenBread.Desktop.ViewModels.Controls
                 },
 
                 SectionType.Staff => GetStaffPages(),
-/*
-                SectionType.Production => new[]
-                {
-                    new TopbarItem("Заказы", new OrdersViewModel()),
-                    new TopbarItem("График", new ScheduleViewModel())
-                },
-
-                SectionType.Analytics => new[]
-                {
-                    new TopbarItem("Отчёты", new ReportsViewModel()),
-                    new TopbarItem("Графики", new ChartsViewModel())
-                },*/
 
                 _ => Array.Empty<TopbarItem>()
             };
 
             foreach (var page in pages)
-            {
                 TopbarItems.Add(page);
-            }
 
-            // Auto select first page
             var firstPage = TopbarItems.FirstOrDefault();
             if (firstPage != null)
-            {
-                firstPage.IsSelected = true;
-                CurrentPage = firstPage.ViewModel;
-            }
+                SelectPageCommand.Execute(firstPage).Subscribe();
         }
 
         private TopbarItem[] GetStaffPages()
         {
-            var allPages = new List<TopbarItem>
+            var pages = new List<TopbarItem>
             {
                 new TopbarItem("Сотрудники", _serviceProvider.GetRequiredService<EmployeesViewModel>()),
                 new TopbarItem("Компании", _serviceProvider.GetRequiredService<CompaniesViewModel>())
             };
-            
-            if (_authService.CurrentRole is Shared.Entities.UserRole.Admin)
+
+            if (_authService.CurrentRole == Domain.Models.UserRole.Admin)
             {
-                allPages.Add(new TopbarItem("Пользователи", _serviceProvider.GetRequiredService<UsersViewModel>()));
+                pages.Add(new TopbarItem("Пользователи", _serviceProvider.GetRequiredService<UsersViewModel>()));
             }
 
-            return allPages.ToArray();
+            return pages.ToArray();
         }
     }
+
 
     public class TopbarItem : ReactiveValidationObject
     {

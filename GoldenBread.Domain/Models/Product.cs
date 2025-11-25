@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace GoldenBread.Shared.Entities;
+namespace GoldenBread.Domain.Models;
 
 public partial class Product
 {

@@ -2,7 +2,7 @@
 using GoldenBread.Api.Helpers;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using GoldenBread.Shared.Entities;
+using GoldenBread.Domain.Models;
 
 namespace GoldenBread.Api.Controllers
 {

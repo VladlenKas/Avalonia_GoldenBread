@@ -1,10 +1,12 @@
 ﻿using Avalonia.Controls;
 using GoldenBread.Desktop.Enums;
 using GoldenBread.Desktop.Helpers;
+using GoldenBread.Desktop.Managers;
 using GoldenBread.Desktop.Services;
-using GoldenBread.Shared.Entities;
+using GoldenBread.Domain.Models;
 using Humanizer;
 using ReactiveUI;
+using ReactiveUI.Fody.Helpers;
 using ReactiveUI.Validation.Helpers;
 using System.Collections.ObjectModel;
 using System.Reactive;
@@ -12,82 +14,49 @@ using System.Threading.Tasks;
 
 namespace GoldenBread.Desktop.ViewModels.Controls
 {
-    public class SidebarViewModel : ReactiveValidationObject
+    public class SidebarViewModel : ReactiveObject
     {
-        // == Filds ==
+        // ==== Fields ====
+        private readonly NavigationManager _navigation;
         private readonly AuthorizationService _authService;
         private readonly ViewService _viewService;
-        private SidebarItem? _selectedSection;
 
 
-        // == Props ==
-        public ObservableCollection<SidebarItem> SidebarItems { get; }
-        public SidebarItem? SelectedSection
-        {
-            get => _selectedSection;
-            set
-            {
-                // Removing the selection from the old element
-                if (_selectedSection != null)
-                    _selectedSection.IsSelected = false;
-
-                this.RaiseAndSetIfChanged(ref _selectedSection, value);
-
-                // Setting the selection to a new element
-                if (_selectedSection != null)
-                    _selectedSection.IsSelected = true;
-            }
-        }
-
-
-        // == Commands ==
+        // ==== Props ====
+        [Reactive] public SidebarItem? SelectedSection { get; set; }
+        public ObservableCollection<SidebarItem> Sections { get; }
         public ReactiveCommand<SidebarItem, Unit> SelectSectionCommand { get; }
         public ReactiveCommand<Window, Unit> LogoutCommand { get; }
 
 
-        // == For View ==
-        public SidebarViewModel()
+        // ==== Designer ====
+        public SidebarViewModel(
+            NavigationManager navigation, 
+            AuthorizationService authService, 
+            ViewService viewService)
         {
-            SidebarItems = new ObservableCollection<SidebarItem>()
+            _navigation = navigation;
+            _authService = authService;
+            _viewService = viewService;
+
+            Sections = new ObservableCollection<SidebarItem>
             {
                 new SidebarItem(SectionType.References, "mdi-bookmark-box-outline"),
                 new SidebarItem(SectionType.Staff, "mdi-account-group-outline"),
                 new SidebarItem(SectionType.Production, "mdi-clipboard-text-clock-outline"),
                 new SidebarItem(SectionType.Analytics, "mdi-chart-line")
             };
-        }
-
-
-        // == For Builder ==
-        public SidebarViewModel(AuthorizationService authService, ViewService viewService)
-        {
-            _authService = authService;
-            _viewService = viewService;
-
-            SidebarItems = Initialize();
 
             SelectSectionCommand = ReactiveCommand.Create<SidebarItem>(section =>
             {
                 SelectedSection = section;
             });
+
             LogoutCommand = ReactiveCommand.CreateFromTask<Window>(ExecuteLogoutAsync);
         }
 
 
-        // == Methods ==
-        private ObservableCollection<SidebarItem> Initialize()
-        {
-            var items = new ObservableCollection<SidebarItem>();
-
-            // Pages for anyone
-            items.Add(new SidebarItem(SectionType.References, "mdi-bookmark-box-outline"));
-            items.Add(new SidebarItem(SectionType.Staff, "mdi-account-group-outline"));
-            items.Add(new SidebarItem(SectionType.Production, "mdi-clipboard-text-clock-outline"));
-            items.Add(new SidebarItem(SectionType.Analytics, "mdi-chart-line"));
-
-            return items;
-        }
-
+        // ==== Command ====
         private async Task ExecuteLogoutAsync(Window window)
         {
             var result = await MessageBoxHelper.ShowQuestionMessageBox("Вы действительно хотите выйти?");
@@ -103,16 +72,9 @@ namespace GoldenBread.Desktop.ViewModels.Controls
 
     public class SidebarItem : ReactiveValidationObject
     {
-        private bool _isSelected;
-
         public string Title { get; set; }
         public SectionType Section { get; set; }
         public object IconTag { get; set; }
-        public bool IsSelected
-        {
-            get => _isSelected;
-            set => this.RaiseAndSetIfChanged(ref _isSelected, value);
-        }
 
         public SidebarItem(SectionType section, object iconTag)
         {

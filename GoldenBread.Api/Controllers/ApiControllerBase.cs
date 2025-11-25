@@ -1,4 +1,4 @@
-﻿using GoldenBread.Shared.Responses;
+﻿using GoldenBread.Domain.Responses;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GoldenBread.Api.Controllers

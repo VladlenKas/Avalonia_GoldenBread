@@ -1,8 +1,8 @@
 ﻿using GoldenBread.Desktop.Enums;
 using GoldenBread.Desktop.Helpers;
-using GoldenBread.Shared.Entities;
-using GoldenBread.Shared.Requests;
-using GoldenBread.Shared.Responses;
+using GoldenBread.Domain.Models;
+using GoldenBread.Domain.Requests;
+using GoldenBread.Domain.Responses;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Text;
@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace GoldenBread.Desktop.Services
 {
-    public class AuthorizationService
+    public class AuthorizationService(ApiClient apiClient)
     {
         // == Fields ==
         private User? _currentUser;
@@ -35,8 +35,7 @@ namespace GoldenBread.Desktop.Services
         public async Task<ApiResponse<User>> LoginAsync(string email, string password)
         {
             var request = new LoginUser { Login = email, Password = password };
-            var response = await HttpClientHelper.Client.PostAsJsonAsync("api/Authorization", request);
-            var apiResponse = await response.Content.ReadFromJsonAsync<ApiResponse<User>>();
+            var apiResponse = await apiClient.PostAsync<LoginUser, ApiResponse<User>>("api/Authorization", request);
 
             if (apiResponse?.Data != null)
             {

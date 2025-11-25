@@ -5,7 +5,8 @@
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="GoldenBread.Desktop.Views.Controls.DetailSplitView"
              x:Name="SplitViewControl"
-             x:CompileBindings="False">
+             xmlns:interfaces="using:GoldenBread.Desktop.Interfaces"
+             x:DataType="interfaces:IDetailPanelViewModel">
     <Grid>
         <SplitView IsPaneOpen="{Binding IsDetailPanelOpen, Mode=TwoWay}"
                    DisplayMode="Overlay"

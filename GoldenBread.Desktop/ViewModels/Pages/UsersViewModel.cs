@@ -4,7 +4,7 @@ using GoldenBread.Desktop.Enums;
 using GoldenBread.Desktop.Helpers;
 using GoldenBread.Desktop.Services;
 using GoldenBread.Desktop.ViewModels.Base;
-using GoldenBread.Shared.Entities;
+using GoldenBread.Domain.Models;
 using ReactiveUI.Validation.Helpers;
 using System;
 using System.Collections.Generic;
@@ -16,28 +16,31 @@ namespace GoldenBread.Desktop.ViewModels.Pages
 {
     public class UsersViewModel : PageViewModelBase<User>
     {
-        // == Fields ==
+        // ==== Fields ====
         private readonly UserService _userService;
+        private readonly AuthorizationService _authService;
 
 
-        // == Designer ==
+        // ==== Designer ====
         public UsersViewModel(UserService userService, 
-            AuthorizationService service) : base(e => e.UserId, service)
+            AuthorizationService service,
+            AuthorizationService authorizationService) 
+            : base(e => e.UserId, service)
         {
             _userService = userService;
+            _authService = authorizationService;
+
+            Initialize();
         }
 
 
-        // == Override Methods ==
-        protected override string GetSearchableText(User user)
-        {
-            return $"{user.Firstname} {user.Lastname} {user.Role}";
-        }
+        // ==== Override Methods ====
+        protected override string GetSearchableText(User user) 
+            => $"{user.Firstname} {user.Lastname} {user.Role}";
 
         protected override async Task LoadDataAsync()
         {
             var users = await _userService.GetAllAsync();
-            ClearItems();
             foreach (var employee in users)
             {
                 AddOrUpdateItem(employee);
@@ -46,10 +49,11 @@ namespace GoldenBread.Desktop.ViewModels.Pages
 
         protected override bool GetDeleteOptions()
         {
-            return SelectedItem.UserId != _service.CurrentUser.UserId;
+            return SelectedItem.UserId != _authService.CurrentUser.UserId;
         }
 
-        // == Commands Methods ==
+
+        // ==== Commands Methods ====
         protected override async Task OnSaveAsync()
         {
             throw new NotImplementedException();
@@ -75,10 +79,10 @@ namespace GoldenBread.Desktop.ViewModels.Pages
     }
 
 
-    // == Designer For View ==
+    // ==== Designer For View ====
     public class DesignUsersViewModel : UsersViewModel
     {
-        public DesignUsersViewModel() : base(null!, null!)
+        public DesignUsersViewModel() : base(null!, null!, null!)
         {
             var users = new List<User>
             {

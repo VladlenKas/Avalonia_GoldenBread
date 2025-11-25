@@ -2,7 +2,7 @@
 using GoldenBread.Desktop.Helpers;
 using GoldenBread.Desktop.Services;
 using GoldenBread.Desktop.Views;
-using GoldenBread.Shared.Entities;
+using GoldenBread.Domain.Models;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using ReactiveUI.Validation.Extensions;
@@ -14,22 +14,22 @@ namespace GoldenBread.Desktop.ViewModels
 {
     public partial class LoginViewModel : ReactiveValidationObject
     {
-        // == Filds ==
+        // ==== Filds ====
         private readonly AuthorizationService _authService;
         private readonly ViewService _viewService;
 
 
-        // == Props ==
+        // ==== Props ====
         [Reactive] public string Email { get; set; } = string.Empty;
         [Reactive] public string Password { get; set; } = string.Empty;
         [Reactive] public bool IsDirty { get; set; } = false;
 
 
-        // == Commands ==
+        // ==== Commands ====
         public ReactiveCommand<Window, Unit> LoginUserCommand { get; }
 
 
-        // == For View ==
+        // ==== For View ====
         public LoginViewModel()
         {
             this.AddRequiredFieldValidation(x => x.Email, x => x.IsDirty);
@@ -41,7 +41,7 @@ namespace GoldenBread.Desktop.ViewModels
         }
 
 
-        // == For Builder ==
+        // ==== For Builder ====
         public LoginViewModel(AuthorizationService authService, ViewService viewService)
         {
             _authService = authService;
@@ -56,7 +56,7 @@ namespace GoldenBread.Desktop.ViewModels
         }
 
 
-        // == Methods ==
+        // ==== Methods ====
         private async Task ExecuteLoginAsync(Window window)
         {
             IsDirty = true;

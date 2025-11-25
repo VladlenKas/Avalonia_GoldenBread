@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Microsoft.EntityFrameworkCore;
 
-namespace GoldenBread.Shared.Entities;
+namespace GoldenBread.Domain.Models;
 
 public partial class GoldenBreadContext : DbContext
 {

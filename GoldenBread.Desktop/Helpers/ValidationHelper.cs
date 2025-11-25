@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 using GoldenBread.Desktop.ViewModels;
-using GoldenBread.Shared.Requests;
+using GoldenBread.Domain.Requests;
 using ReactiveUI;
 using ReactiveUI.Validation.Abstractions;
 using ReactiveUI.Validation.Extensions;
@@ -40,7 +40,7 @@ namespace GoldenBread.Desktop.Helpers
             RegexOptions.Compiled);
     }
 
-    public static class ValidationHelper
+    public static class ValidationRules
     {
         // Required Field
         public static void AddRequiredFieldValidation<TViewModel, TProp>(

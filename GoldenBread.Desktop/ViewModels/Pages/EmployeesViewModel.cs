@@ -1,6 +1,6 @@
 ﻿using DynamicData.Binding;
 using GoldenBread.Desktop.ViewModels.Base;
-using GoldenBread.Shared.Entities;
+using GoldenBread.Domain.Models;
 using ReactiveUI.Validation.Helpers;
 using System;
 using System.Collections.Generic;

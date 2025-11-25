@@ -1,6 +1,6 @@
 ﻿using GoldenBread.Desktop.Helpers;
-using GoldenBread.Shared.Entities;
-using GoldenBread.Shared.Responses;
+using GoldenBread.Domain.Models;
+using GoldenBread.Domain.Responses;
 using System;
 using System.Net.Http.Json;
 using System.Collections.Generic;
@@ -10,20 +10,28 @@ using System.Threading.Tasks;
 
 namespace GoldenBread.Desktop.Services
 {
-    public class UserService
+    public class UserService(ApiClient apiClient)
     {
         public async Task<List<User>> GetAllAsync()
         {
-            var response = await HttpClientHelper.Client.GetAsync("api/Users");
-            var apiResponse = await response.Content.ReadFromJsonAsync<ApiResponse<List<User>>>();
+            var apiResponse = await apiClient.GetAsync<ApiResponse<List<User>>>("api/Users");
             return apiResponse?.Data ?? new List<User>();
         }
 
         public async Task<ApiResponse<object>> DeleteAsync(int id)
         {
-            var response = await HttpClientHelper.Client.DeleteAsync($"api/Users/{id}");
-            var apiResponse = await response.Content.ReadFromJsonAsync<ApiResponse<object>>();
-            return apiResponse;
+            return await apiClient.DeleteAsync<ApiResponse<object>>($"api/Users/{id}");
         }
+
+        public async Task<ApiResponse<User>> UpdateAsync(User user)
+        {
+            return await apiClient.PutAsync<User, ApiResponse<User>>($"api/Users/{user.UserId}", user);
+        }
+
+        public async Task<ApiResponse<User>> CreateAsync(User user)
+        {
+            return await apiClient.PostAsync<User, ApiResponse<User>>("api/Users", user);
+        }
+
     }
 }

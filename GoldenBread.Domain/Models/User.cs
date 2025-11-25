@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace GoldenBread.Shared.Entities;
+namespace GoldenBread.Domain.Models;
 
 public enum AccountType
 {

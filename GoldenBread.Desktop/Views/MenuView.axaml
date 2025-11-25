@@ -9,6 +9,7 @@
         x:DataType="vm:MenuViewModel"
         Width="1280" Height="800"
         Title="Главное меню"
+        x:CompileBindings="False"
         Background="{DynamicResource Background.Specific}">
 
     <Design.DataContext>
@@ -33,7 +34,7 @@
         <ContentControl Grid.Column="1" 
                         Grid.ColumnSpan="2"
                         Grid.Row="1"
-                        Content="{Binding Topbar.CurrentPage}"/>
+                        Content="{Binding CurrentPage}"/>
 
     </Grid>
 </Window>

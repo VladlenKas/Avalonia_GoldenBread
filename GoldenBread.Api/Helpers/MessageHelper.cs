@@ -1,4 +1,4 @@
-﻿using GoldenBread.Shared.Entities;
+﻿using GoldenBread.Domain.Models;
 using Humanizer;
 
 namespace GoldenBread.Api.Helpers

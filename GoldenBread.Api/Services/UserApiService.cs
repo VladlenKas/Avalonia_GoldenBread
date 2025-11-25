@@ -1,4 +1,4 @@
-﻿using GoldenBread.Shared.Entities;
+﻿using GoldenBread.Domain.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace GoldenBread.Api.Services

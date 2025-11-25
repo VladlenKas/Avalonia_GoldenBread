@@ -1,4 +1,4 @@
-﻿namespace GoldenBread.Shared.Requests
+﻿namespace GoldenBread.Domain.Requests
 {
     public class LoginUser
     {

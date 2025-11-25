@@ -1,5 +1,8 @@
 ﻿using Avalonia;
+using GoldenBread.Desktop.Helpers;
+using GoldenBread.Desktop.Managers;
 using GoldenBread.Desktop.Services;
+using GoldenBread.Desktop.Settings;
 using GoldenBread.Desktop.ViewModels;
 using GoldenBread.Desktop.ViewModels.Base;
 using GoldenBread.Desktop.ViewModels.Controls;
@@ -13,6 +16,8 @@ using Projektanker.Icons.Avalonia.MaterialDesign;
 using ReactiveUI;
 using ReactiveUI.Avalonia;
 using System;
+using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Reactive;
 using System.Threading.Tasks;
 
@@ -59,25 +64,50 @@ namespace GoldenBread.Desktop
         // Registration of Services
         private static void ConfigureServices(IServiceCollection services)
         {
-            // Services
-            services.AddSingleton<AuthorizationService>();
+            // Settings
+            var apiSettings = new ApiSettings
+            {
+                BaseUrl = "https://localhost:7153/",
+                TimeoutSeconds = 30
+            };
+            services.AddSingleton(apiSettings);
 
+            // HttpClient 
+            services.AddSingleton<HttpClient>(sp =>
+            {
+                var settings = sp.GetRequiredService<ApiSettings>();
+                var client = new HttpClient
+                {
+                    BaseAddress = new Uri(settings.BaseUrl),
+                    Timeout = TimeSpan.FromSeconds(settings.TimeoutSeconds)
+                };
+                client.DefaultRequestHeaders.Accept.Add(
+                    new MediaTypeWithQualityHeaderValue("application/json"));
+                return client;
+            });
+
+            // Services
+            services.AddSingleton<ApiClient>();
+            services.AddSingleton<AuthorizationService>();
             services.AddScoped<ViewService>();
             services.AddScoped<UserService>();
 
-            // ViewModels Transient
-            services.AddTransient<IngredientsViewModel>();
-            services.AddTransient<ProductsViewModel>();
-            services.AddTransient<WarehouseViewModel>();
-            services.AddTransient<EmployeesViewModel>();
-            services.AddTransient<UsersViewModel>();
-            services.AddTransient<CompaniesViewModel>();
+            // Managers
+            services.AddSingleton<NavigationManager>();
 
-            // ViewModels Singleton
+            // ViewModels 
             services.AddSingleton<TopbarViewModel>();
             services.AddSingleton<SidebarViewModel>();
-            services.AddSingleton<MenuViewModel>();
+
             services.AddSingleton<LoginViewModel>();
+            services.AddSingleton<IngredientsViewModel>();
+            services.AddSingleton<ProductsViewModel>();
+            services.AddSingleton<WarehouseViewModel>();
+            services.AddSingleton<EmployeesViewModel>();
+            services.AddSingleton<UsersViewModel>();
+            services.AddSingleton<CompaniesViewModel>();
+
+            services.AddSingleton<MenuViewModel>();
         }
 
         // Avalonia configuration, don't remove; also used by visual designer.

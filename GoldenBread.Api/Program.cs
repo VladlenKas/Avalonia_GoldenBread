@@ -1,5 +1,5 @@
 ﻿using GoldenBread.Api.Services;
-using GoldenBread.Shared.Entities;
+using GoldenBread.Domain.Models;
 using Microsoft.EntityFrameworkCore;
 
 internal class Program

@@ -7,7 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GoldenBread.Api", "GoldenBr
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GoldenBread.Desktop", "GoldenBread.Desktop\GoldenBread.Desktop.csproj", "{BB1BFCDB-74F5-48BD-9765-DAB1456B6A91}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GoldenBread.Shared", "GoldenBread.Shared\GoldenBread.Shared.csproj", "{A8A5A3BE-DAE5-4398-A82A-C974200523CD}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GoldenBread.Domain", "GoldenBread.Domain\GoldenBread.Domain.csproj", "{536DC817-536D-04C9-371E-3F36C28B139A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,10 +23,10 @@ Global
 		{BB1BFCDB-74F5-48BD-9765-DAB1456B6A91}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BB1BFCDB-74F5-48BD-9765-DAB1456B6A91}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BB1BFCDB-74F5-48BD-9765-DAB1456B6A91}.Release|Any CPU.Build.0 = Release|Any CPU
-		{A8A5A3BE-DAE5-4398-A82A-C974200523CD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A8A5A3BE-DAE5-4398-A82A-C974200523CD}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A8A5A3BE-DAE5-4398-A82A-C974200523CD}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A8A5A3BE-DAE5-4398-A82A-C974200523CD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{536DC817-536D-04C9-371E-3F36C28B139A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{536DC817-536D-04C9-371E-3F36C28B139A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{536DC817-536D-04C9-371E-3F36C28B139A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{536DC817-536D-04C9-371E-3F36C28B139A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
