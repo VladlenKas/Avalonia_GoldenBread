@@ -20,7 +20,7 @@ using System.Threading.Tasks;
 
 namespace GoldenBread.Desktop.ViewModels.Base
 {
-    public abstract class PageViewModelBase<T> : ReactiveValidationObject, IDetailPanelViewModel
+    public abstract class PageViewModelBase<T> : ValidatableViewModelBase, IDetailPanelViewModel
     where T : class
     {
         // ==== Fields ====

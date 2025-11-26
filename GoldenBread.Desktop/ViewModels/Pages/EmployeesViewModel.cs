@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace GoldenBread.Desktop.ViewModels.Pages
 {
-    public class EmployeesViewModel 
+    public class EmployeesViewModel : ValidatableViewModelBase
     {
         
     }

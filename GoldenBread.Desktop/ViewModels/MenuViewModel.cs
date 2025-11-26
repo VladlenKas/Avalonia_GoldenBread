@@ -2,6 +2,7 @@
 using GoldenBread.Desktop.Helpers;
 using GoldenBread.Desktop.Managers;
 using GoldenBread.Desktop.Services;
+using GoldenBread.Desktop.ViewModels.Base;
 using GoldenBread.Desktop.ViewModels.Controls;
 using GoldenBread.Desktop.ViewModels.Pages;
 using GoldenBread.Desktop.Views;
@@ -14,7 +15,7 @@ using ReactiveUI.Validation.Helpers;
 
 namespace GoldenBread.Desktop.ViewModels
 {
-    public class MenuViewModel : ReactiveValidationObject
+    public class MenuViewModel : ValidatableViewModelBase
     {
         // == Props ==
         public SidebarViewModel Sidebar { get; }

@@ -1,6 +1,7 @@
 ﻿using Avalonia.Controls;
 using Avalonia.Controls.Templates;
 using GoldenBread.Desktop.ViewModels;
+using GoldenBread.Desktop.ViewModels.Base;
 using ReactiveUI;
 using ReactiveUI.Validation.Helpers;
 using System;
@@ -34,7 +35,7 @@ namespace GoldenBread.Desktop
 
         public bool Match(object? data)
         {
-            return data is ReactiveValidationObject;
+            return data is ValidatableViewModelBase;
         }
     }
 }

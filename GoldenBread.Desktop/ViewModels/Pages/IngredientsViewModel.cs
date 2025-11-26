@@ -1,4 +1,5 @@
 ﻿using GoldenBread.Desktop.Services;
+using GoldenBread.Desktop.ViewModels.Base;
 using Humanizer;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
@@ -11,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace GoldenBread.Desktop.ViewModels.Pages
 {
-    public class IngredientsViewModel : ReactiveValidationObject
+    public class IngredientsViewModel : ValidatableViewModelBase
     {
         // == Filds ==
 

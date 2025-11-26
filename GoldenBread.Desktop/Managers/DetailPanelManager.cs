@@ -41,5 +41,4 @@ namespace GoldenBread.Desktop.Managers
 
         public void EnterEdit() => CurrentMode = PanelMode.Edit;
     }
-
 }

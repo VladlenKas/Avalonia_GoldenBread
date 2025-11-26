@@ -1,8 +1,8 @@
 ﻿using Avalonia.Controls;
 using GoldenBread.Desktop.Helpers;
+using GoldenBread.Desktop.Interfaces;
 using GoldenBread.Desktop.Services;
-using GoldenBread.Desktop.Views;
-using GoldenBread.Domain.Models;
+using GoldenBread.Desktop.ViewModels.Base;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using ReactiveUI.Validation.Extensions;
@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace GoldenBread.Desktop.ViewModels
 {
-    public partial class LoginViewModel : ReactiveValidationObject
+    public partial class LoginViewModel : ValidatableViewModelBase
     {
         // ==== Filds ====
         private readonly AuthorizationService _authService;
@@ -22,7 +22,6 @@ namespace GoldenBread.Desktop.ViewModels
         // ==== Props ====
         [Reactive] public string Email { get; set; } = string.Empty;
         [Reactive] public string Password { get; set; } = string.Empty;
-        [Reactive] public bool IsDirty { get; set; } = false;
 
 
         // ==== Commands ====
@@ -32,12 +31,10 @@ namespace GoldenBread.Desktop.ViewModels
         // ==== For View ====
         public LoginViewModel()
         {
-            this.AddRequiredFieldValidation(x => x.Email, x => x.IsDirty);
-            this.AddRequiredFieldValidation(x => x.Password, x => x.IsDirty);
+            this.NotEmpty(this, x => x.Email);
+            this.NotEmpty(this, x => x.Email);
 
-            LoginUserCommand = ReactiveCommand.CreateFromTask<Window>(
-                ExecuteLoginAsync,
-                this.IsValid());
+            LoginUserCommand = this.CreateValidatedCommand(ExecuteLoginAsync);
         }
 
 
@@ -47,22 +44,16 @@ namespace GoldenBread.Desktop.ViewModels
             _authService = authService;
             _viewService = viewService;
 
-            this.AddRequiredFieldValidation(x => x.Email, x => x.IsDirty);
-            this.AddRequiredFieldValidation(x => x.Password, x => x.IsDirty);
+            NotEmpty(this, x => x.Email);
+            NotEmpty(this, x => x.Password);
 
-            LoginUserCommand = ReactiveCommand.CreateFromTask<Window>(
-                ExecuteLoginAsync,
-                this.IsValid());
+            LoginUserCommand = this.CreateValidatedCommand(ExecuteLoginAsync);
         }
 
 
         // ==== Methods ====
         private async Task ExecuteLoginAsync(Window window)
         {
-            IsDirty = true;
-            if (!ValidationContext.GetIsValid()) 
-                return;
-
             var result = await _authService.LoginAsync(Email, Password);
             if (_authService.IsAuthenticated)
             {

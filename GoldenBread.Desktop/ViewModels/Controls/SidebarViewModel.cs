@@ -3,11 +3,8 @@ using GoldenBread.Desktop.Enums;
 using GoldenBread.Desktop.Helpers;
 using GoldenBread.Desktop.Managers;
 using GoldenBread.Desktop.Services;
-using GoldenBread.Domain.Models;
-using Humanizer;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
-using ReactiveUI.Validation.Helpers;
 using System.Collections.ObjectModel;
 using System.Reactive;
 using System.Threading.Tasks;
@@ -59,7 +56,8 @@ namespace GoldenBread.Desktop.ViewModels.Controls
         // ==== Command ====
         private async Task ExecuteLogoutAsync(Window window)
         {
-            var result = await MessageBoxHelper.ShowQuestionMessageBox("Вы действительно хотите выйти?");
+            var result = await MessageBoxHelper
+                .ShowQuestionMessageBox("Вы действительно хотите выйти?");
 
             if (result)
             {
@@ -67,20 +65,6 @@ namespace GoldenBread.Desktop.ViewModels.Controls
                 window.Close();
                 _authService.Logout();
             }
-        }
-    }
-
-    public class SidebarItem : ReactiveValidationObject
-    {
-        public string Title { get; set; }
-        public SectionType Section { get; set; }
-        public object IconTag { get; set; }
-
-        public SidebarItem(SectionType section, object iconTag)
-        {
-            Section = section;
-            Title = section.Humanize();
-            IconTag = iconTag;
         }
     }
 }

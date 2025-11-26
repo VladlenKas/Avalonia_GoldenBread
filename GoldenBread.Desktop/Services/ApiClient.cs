@@ -25,13 +25,16 @@ namespace GoldenBread.Desktop.Services
                 new MediaTypeWithQualityHeaderValue("application/json"));
         }
 
-        // Wrapper methods
+
+        // ==== Methods ====
+        // Get
         public async Task<T?> GetAsync<T>(string endpoint)
         {
             var response = await _httpClient.GetAsync(endpoint);
             return await response.Content.ReadFromJsonAsync<T>();
         }
 
+        // Post
         public async Task<TResponse?> PostAsync<TRequest, TResponse>(
             string endpoint,
             TRequest data)
@@ -40,6 +43,7 @@ namespace GoldenBread.Desktop.Services
             return await response.Content.ReadFromJsonAsync<TResponse>();
         }
 
+        // Put
         public async Task<TResponse?> PutAsync<TRequest, TResponse>(
             string endpoint,
             TRequest data)
@@ -48,6 +52,7 @@ namespace GoldenBread.Desktop.Services
             return await response.Content.ReadFromJsonAsync<TResponse>();
         }
 
+        // Delete
         public async Task<T?> DeleteAsync<T>(string endpoint)
         {
             var response = await _httpClient.DeleteAsync(endpoint);

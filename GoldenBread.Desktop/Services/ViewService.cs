@@ -1,6 +1,7 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
 using GoldenBread.Desktop.ViewModels;
+using GoldenBread.Desktop.ViewModels.Base;
 using GoldenBread.Desktop.Views;
 using Microsoft.Extensions.DependencyInjection;
 using ReactiveUI.Validation.Helpers;
@@ -12,19 +13,12 @@ using System.Threading.Tasks;
 
 namespace GoldenBread.Desktop.Services
 {
-    public class ViewService 
+    public class ViewService(IServiceProvider serviceProvider)
     {
-        private readonly IServiceProvider _serviceProvider;
-
-        public ViewService(IServiceProvider serviceProvider)
-        {
-            _serviceProvider = serviceProvider;
-        }
-
-        public void ShowWindow<TViewModel>() where TViewModel : ReactiveValidationObject
+        public void ShowWindow<TViewModel>() where TViewModel : ValidatableViewModelBase
         {
             // Get ViewModel from DI
-            var viewModel = _serviceProvider.GetRequiredService<TViewModel>();
+            var viewModel = serviceProvider.GetRequiredService<TViewModel>();
 
             // Find view model type for window
             Window window = viewModel switch

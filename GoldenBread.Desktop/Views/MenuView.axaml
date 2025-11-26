@@ -11,10 +11,6 @@
         Title="Главное меню"
         x:CompileBindings="False"
         Background="{DynamicResource Background.Specific}">
-
-    <Design.DataContext>
-        <vm:MenuViewModel/>
-    </Design.DataContext>
     
     <Grid ColumnDefinitions="Auto * *" RowDefinitions="Auto *">
 

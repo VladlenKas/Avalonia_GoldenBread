@@ -16,7 +16,7 @@
 
     <Grid Margin="48" ColumnDefinitions="*,*" ColumnSpacing="48">
 
-        <!-- Изображение -->
+        <!-- Image -->
         <Grid Grid.Column="0">
             <Border Grid.Column="1" ClipToBounds="True" CornerRadius="20" >
 		        <Image Source="/Assets/goldenbread-preview.webp" Stretch="UniformToFill"/>
@@ -35,7 +35,7 @@
             </DockPanel>
         </Grid>
 
-        <!-- Элементы -->
+        <!-- Content -->
         <StackPanel Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center" Width="400" Spacing="32" >
             <StackPanel Orientation="Horizontal" Spacing="8">
 			    <Image Source="/Assets/goldenbread-logo.png" Width="40"/>
@@ -73,7 +73,7 @@
 
             <StackPanel>
                 <Button Content="Войти" 
-                        Command="{Binding LoginUserCommand}" 
+                        Command="{Binding LoginUserCommand}"
                         CommandParameter="{Binding $parent[Window]}"/>
             </StackPanel>
         </StackPanel>
