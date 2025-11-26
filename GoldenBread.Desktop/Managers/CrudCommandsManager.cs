@@ -1,5 +1,8 @@
 ﻿using GoldenBread.Desktop.Enums;
+using GoldenBread.Desktop.Helpers;
+using GoldenBread.Desktop.Interfaces;
 using GoldenBread.Desktop.Services;
+using GoldenBread.Desktop.ViewModels.Base;
 using ReactiveUI;
 using System;
 using System.Collections.Generic;
@@ -31,24 +34,34 @@ namespace GoldenBread.Desktop.Managers
             Func<Task> saveAction,
             Func<Task> deleteAction,
             Func<Task> refreshAction,
-            IObservable<bool> canDelete)
+            IObservable<bool> canDelete,
+            ValidatableViewModelBase viewModel,
+            IDetailPanelViewModel? detailVm = null)
         {
             CanAdd = authService.HasPermission(Permission.Add);
             CanEdit = authService.HasPermission(Permission.Edit);
             CanDelete = authService.HasPermission(Permission.Delete);
 
             if (CanAdd)
-                AddCommand = ReactiveCommand.CreateFromTask(async () => panelManager.OpenAdd());
+                AddCommand = ReactiveCommand.CreateFromTask(async () =>
+                {
+                    detailVm?.ClearEditFields();
+                    panelManager.OpenAdd();
+                }
+                );
 
             if (CanEdit)
             {
                 EnterEditModeCommand = ReactiveCommand.Create(() => panelManager.EnterEdit());
                 SaveCommand = ReactiveCommand.CreateFromTask(async () =>
                 {
+                    var success = viewModel.Validate();
+                    if (!success) return;
+
                     await saveAction();
                     panelManager.CurrentMode = PanelMode.View;
                     await refreshAction();
-                });
+                }); 
             }
 
             if (CanDelete)
@@ -61,15 +74,22 @@ namespace GoldenBread.Desktop.Managers
                 }, canDelete);
             }
 
-            CancelCommand = ReactiveCommand.Create(() =>
+            CancelCommand = ReactiveCommand.CreateFromTask(async () =>
             {
-                if (panelManager.CurrentMode == PanelMode.Edit)
-                {
-                    panelManager.CurrentMode = PanelMode.View;
-                }
-                else
+
+                if (panelManager.CurrentMode == PanelMode.View)
                 {
                     panelManager.IsDetailPanelOpen = false;
+                    return;
+                }
+
+                var result = await MessageBoxHelper
+                    .ShowQuestionMessageBox("Вы действительно хотите выйти?\n" +
+                    "Несохраненные изменения будут потеряны!");
+
+                if (result)
+                {
+                    detailVm?.ResetOnCancel();
                 }
             });
         }

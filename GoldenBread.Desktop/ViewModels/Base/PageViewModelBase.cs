@@ -26,7 +26,7 @@ namespace GoldenBread.Desktop.ViewModels.Base
         // ==== Fields ====
         protected readonly SourceCache<T, int> _sourceCache;
         private readonly ReadOnlyObservableCollection<T> _items;
-        private readonly DetailPanelManager _panelManager;  // Композиция ВНУТРИ
+        private readonly DetailPanelManager _panelManager; 
         private readonly CrudCommandsManager<T> _commandsManager;
 
 
@@ -68,6 +68,7 @@ namespace GoldenBread.Desktop.ViewModels.Base
 
         // ==== Designer ====
         protected PageViewModelBase(Func<T, int> keySelector, AuthorizationService service) 
+            : base()
         {
             _sourceCache = new SourceCache<T, int>(keySelector);
             _panelManager = new DetailPanelManager();
@@ -82,7 +83,9 @@ namespace GoldenBread.Desktop.ViewModels.Base
                 saveAction: async () => await OnSaveAsync(),
                 deleteAction: async () => await OnDeleteAsync(),
                 refreshAction: async () => await LoadDataAsync(),
-                canDelete: canDelete
+                canDelete: canDelete,
+                viewModel: this,
+                detailVm: this
             );
 
             // Filtering
@@ -129,6 +132,20 @@ namespace GoldenBread.Desktop.ViewModels.Base
                     this.RaisePropertyChanged(nameof(ShowViewButtons));
                     this.RaisePropertyChanged(nameof(ShowEditButtons));
                 });
+
+            // Subscribing to item changed
+            this.WhenAnyValue(x => x.SelectedItem)
+                .Where(item => item != null)
+                .Subscribe(item => CopyToEditFields(item));
+
+            this.WhenAnyValue(x => x.CurrentMode)
+                .Subscribe(mode =>
+                {
+                    if (mode == PanelMode.View && SelectedItem != null)
+                        CopyToEditFields(SelectedItem);
+                    else if (mode == PanelMode.Add)
+                        ClearEditFields();
+                });
         }
 
 
@@ -143,10 +160,12 @@ namespace GoldenBread.Desktop.ViewModels.Base
         protected abstract Task LoadDataAsync();
         protected abstract Task OnSaveAsync();
         protected abstract Task OnDeleteAsync();
+        protected abstract void CopyToEditFields(T item);
+        protected abstract void ClearEditFields();
 
 
         // ==== Helper methods ====
-        public void Initialize() => RefreshCommand.Execute().Subscribe();
+        protected void Initialize() => RefreshCommand.Execute().Subscribe();
         protected void AddOrUpdateItem(T item) => _sourceCache.AddOrUpdate(item);
         protected void RemoveItem(T item) => _sourceCache.Remove(item);
         private Func<T, bool> CreateSearchFilter(string text)
@@ -155,5 +174,21 @@ namespace GoldenBread.Desktop.ViewModels.Base
             var lower = text.ToLower();
             return item => GetSearchableText(item).ToLower().Contains(lower);
         }
+        public void ResetOnCancel()
+        {
+            if (CurrentMode == PanelMode.Edit && SelectedItem != null)
+            {
+                CopyToEditFields(SelectedItem);
+                CurrentMode = PanelMode.View;
+            }
+            else
+            {
+                ClearEditFields();
+                IsDetailPanelOpen = false;
+            }
+
+            this.DeactivateValidation();
+        }
+        void IDetailPanelViewModel.ClearEditFields() => ClearEditFields();
     }
 }

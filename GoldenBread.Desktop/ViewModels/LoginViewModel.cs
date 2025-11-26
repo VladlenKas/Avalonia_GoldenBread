@@ -32,9 +32,17 @@ namespace GoldenBread.Desktop.ViewModels
         public LoginViewModel()
         {
             this.NotEmpty(this, x => x.Email);
-            this.NotEmpty(this, x => x.Email);
+            this.NotEmpty(this, x => x.Password);
 
-            LoginUserCommand = this.CreateValidatedCommand(ExecuteLoginAsync);
+            LoginUserCommand = ReactiveCommand.CreateFromTask<Window>(async window =>
+            {
+                this.ActivateValidation();
+
+                if (!this.ValidationContext.GetIsValid())
+                    return;
+
+                await ExecuteLoginAsync(window);
+            });
         }
 
 
@@ -47,7 +55,13 @@ namespace GoldenBread.Desktop.ViewModels
             NotEmpty(this, x => x.Email);
             NotEmpty(this, x => x.Password);
 
-            LoginUserCommand = this.CreateValidatedCommand(ExecuteLoginAsync);
+            LoginUserCommand = ReactiveCommand.CreateFromTask<Window>(async window =>
+            {
+                var success = Validate();
+                if (!success) return;
+
+                await ExecuteLoginAsync(window);
+            });
         }
 
 

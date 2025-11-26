@@ -25,5 +25,8 @@ namespace GoldenBread.Desktop.Interfaces
         ReactiveCommand<Unit, Unit>? EnterEditModeCommand { get; }
         ReactiveCommand<Unit, Unit>? DeleteFromPanelCommand { get; }
         ReactiveCommand<Unit, Unit>? CancelCommand { get; }
+
+        void ClearEditFields();
+        void ResetOnCancel();
     }
 }

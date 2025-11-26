@@ -8,10 +8,6 @@
              xmlns:controls="using:GoldenBread.Desktop.Views.Controls"
              x:DataType="vm:UsersViewModel">
 
-    <Design.DataContext>
-        <vm:DesignUsersViewModel/>
-    </Design.DataContext>
-
     <UserControl.Resources>
         <DataTemplate x:Key="MainContent" x:DataType="vm:UsersViewModel">
             <Grid RowDefinitions="Auto *" RowSpacing="24" Margin="24">
@@ -50,7 +46,7 @@
                     <TextBlock Grid.Column="0" Text="Фамилия" Classes="Regular" 
                                Foreground="{DynamicResource Foreground.Secondary}" 
                                VerticalAlignment="Center"/>
-                    <TextBox Grid.Column="1" Text="{Binding SelectedItem.Lastname}" 
+                    <TextBox Grid.Column="1" Text="{Binding EditLastname}" 
                              Classes="SplitView"/>
                 </Grid>
 
@@ -58,15 +54,7 @@
                     <TextBlock Grid.Column="0" Text="Имя" Classes="Regular" 
                                Foreground="{DynamicResource Foreground.Secondary}" 
                                VerticalAlignment="Center"/>
-                    <TextBox Grid.Column="1" Text="{Binding SelectedItem.Firstname}" 
-                             Classes="SplitView"/>
-                </Grid>
-
-                <Grid ColumnDefinitions="Auto *" ColumnSpacing="8">
-                    <TextBlock Grid.Column="0" Text="Отчество" Classes="Regular" 
-                               Foreground="{DynamicResource Foreground.Secondary}" 
-                               VerticalAlignment="Center"/>
-                    <TextBox Grid.Column="1" Text="{Binding SelectedItem.Patronymic}" 
+                    <TextBox Grid.Column="1" Text="{Binding EditFirstname}" 
                              Classes="SplitView"/>
                 </Grid>
 
@@ -74,25 +62,10 @@
                     <TextBlock Grid.Column="0" Text="Эл. почта" Classes="Regular" 
                                Foreground="{DynamicResource Foreground.Secondary}" 
                                VerticalAlignment="Center"/>
-                    <TextBox Grid.Column="1" Text="{Binding SelectedItem.Email}" 
+                    <TextBox Grid.Column="1" Text="{Binding EditEmail}" 
                              Classes="SplitView"/>
                 </Grid>
 
-                <Grid ColumnDefinitions="Auto *" ColumnSpacing="8">
-                    <TextBlock Grid.Column="0" Text="Дата рожд." Classes="Regular" 
-                               Foreground="{DynamicResource Foreground.Secondary}" 
-                               VerticalAlignment="Center"/>
-                    <TextBox Grid.Column="1" Text="{Binding SelectedItem.Birthday}" 
-                             Classes="SplitView"/>
-                </Grid>
-
-                <Grid ColumnDefinitions="Auto *" ColumnSpacing="8">
-                    <TextBlock Grid.Column="0" Text="Пароль" Classes="Regular" 
-                               Foreground="{DynamicResource Foreground.Secondary}" 
-                               VerticalAlignment="Center"/>
-                    <TextBox Grid.Column="1" Text="{Binding SelectedItem.Password}" 
-                             Classes="SplitView"/>
-                </Grid>
             </StackPanel>
         </DataTemplate>
     </UserControl.Resources>

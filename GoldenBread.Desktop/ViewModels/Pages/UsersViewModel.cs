@@ -1,14 +1,18 @@
 ﻿using Avalonia.Controls;
+using DynamicData;
 using DynamicData.Binding;
 using GoldenBread.Desktop.Enums;
 using GoldenBread.Desktop.Helpers;
 using GoldenBread.Desktop.Services;
 using GoldenBread.Desktop.ViewModels.Base;
 using GoldenBread.Domain.Models;
+using ReactiveUI;
+using ReactiveUI.Fody.Helpers;
 using ReactiveUI.Validation.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reactive.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -21,6 +25,14 @@ namespace GoldenBread.Desktop.ViewModels.Pages
         private readonly AuthorizationService _authService;
 
 
+        // ==== Props ====
+        [Reactive] public string EditFirstname { get; set; }
+        [Reactive] public string EditLastname { get; set; }
+        [Reactive] public string EditEmail { get; set; }
+        [Reactive] public UserRole EditRole { get; set; }
+
+
+
         // ==== Designer ====
         public UsersViewModel(UserService userService, 
             AuthorizationService service,
@@ -30,33 +42,64 @@ namespace GoldenBread.Desktop.ViewModels.Pages
             _userService = userService;
             _authService = authorizationService;
 
+            NotEmpty(this, vm => vm.EditFirstname);
+            NotEmpty(this, vm => vm.EditLastname);
+            NotEmpty(this, vm => vm.EditEmail);
+
             Initialize();
         }
 
 
         // ==== Override Methods ====
-        protected override string GetSearchableText(User user) 
-            => $"{user.Firstname} {user.Lastname} {user.Role}";
-
-        protected override async Task LoadDataAsync()
+        protected override void CopyToEditFields(User user)
         {
-            var users = await _userService.GetAllAsync();
-            foreach (var employee in users)
-            {
-                AddOrUpdateItem(employee);
-            }
+            EditFirstname = user.Firstname;
+            EditLastname = user.Lastname;
+            EditEmail = user.Email;
         }
+
+        protected override void ClearEditFields()
+        {
+            EditFirstname = string.Empty;
+            EditLastname = string.Empty;
+            EditEmail = string.Empty;
+        }
+
+        protected override string GetSearchableText(User user) 
+            => $"{user.Firstname} {user.Lastname} {user.RoleValue}";
 
         protected override bool GetDeleteOptions()
         {
             return SelectedItem.UserId != _authService.CurrentUser.UserId;
         }
 
+        protected override async Task LoadDataAsync()
+        {
+            var users = await _userService.GetAllAsync();
+            _sourceCache.Clear();
+            _sourceCache.AddOrUpdate(users);
+        }
+
 
         // ==== Commands Methods ====
         protected override async Task OnSaveAsync()
         {
-            throw new NotImplementedException();
+            if (CurrentMode == PanelMode.Add)
+            {
+                var result = await _userService.CreateAsync(SelectedItem);
+                if (result.IsSuccess)
+                    AddOrUpdateItem(result.Data);
+                else
+                    await MessageBoxHelper.ShowErrorMessageBox(result.Message);
+            }
+            else if (CurrentMode == PanelMode.Edit)
+            {
+                var result = await _userService.UpdateAsync(SelectedItem);
+                if (result.IsSuccess)
+                    AddOrUpdateItem(result.Data);
+                else
+                    await MessageBoxHelper.ShowErrorMessageBox(result.Message);
+            }
         }
 
         protected override async Task OnDeleteAsync()

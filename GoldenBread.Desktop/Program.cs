@@ -86,20 +86,19 @@ namespace GoldenBread.Desktop
                 return client;
             });
 
-            // Services
+            // Services & Managers
             services.AddSingleton<ApiClient>();
             services.AddSingleton<AuthorizationService>();
-            services.AddScoped<ViewService>();
-            services.AddScoped<UserService>();
+            services.AddSingleton<ViewService>();
+            services.AddSingleton<UserService>();
 
-            // Managers
             services.AddSingleton<NavigationManager>();
 
-            // ViewModels 
-            services.AddSingleton<TopbarViewModel>();
+            // ViewModels Controls
+            services.AddTransient<TopbarViewModel>();
             services.AddSingleton<SidebarViewModel>();
 
-            services.AddSingleton<LoginViewModel>();
+            // ViewModels Pages
             services.AddSingleton<IngredientsViewModel>();
             services.AddSingleton<ProductsViewModel>();
             services.AddSingleton<WarehouseViewModel>();
@@ -107,7 +106,9 @@ namespace GoldenBread.Desktop
             services.AddSingleton<UsersViewModel>();
             services.AddSingleton<CompaniesViewModel>();
 
-            services.AddSingleton<MenuViewModel>();
+            // ViewModels Windows
+            services.AddTransient<LoginViewModel>();
+            services.AddTransient<MenuViewModel>();
         }
 
         // Avalonia configuration, don't remove; also used by visual designer.

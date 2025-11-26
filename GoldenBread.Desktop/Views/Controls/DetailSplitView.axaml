@@ -11,7 +11,7 @@
         <SplitView IsPaneOpen="{Binding IsDetailPanelOpen, Mode=TwoWay}"
                    DisplayMode="Overlay"
                    PanePlacement="Right"
-                   OpenPaneLength="350"
+                   OpenPaneLength="400" 
                    PaneClosing="SplitView_OnPaneClosing">
 
             <SplitView.Pane>
