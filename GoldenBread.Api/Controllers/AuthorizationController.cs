@@ -11,7 +11,9 @@ namespace GoldenBread.Api.Controllers
     public class AuthorizationController : ApiControllerBase
     {
         [HttpPost]
-        public async Task<IActionResult> Login([FromServices] AuthorizationApiService service, [FromBody] LoginUser request)
+        public async Task<IActionResult> Login(
+            [FromServices] AuthorizationApiService service, 
+            [FromBody] LoginRequest request)
         {
             try
             {

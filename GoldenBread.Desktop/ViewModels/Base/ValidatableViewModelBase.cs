@@ -23,14 +23,15 @@ namespace GoldenBread.Desktop.ViewModels.Base
         {
             ActivateValidation();
 
-            if (!ValidationContext.GetIsValid())
-                return false;
+            if (ValidationContext.GetIsValid())
+                return true;
 
-            return true;
+            return false;
         }
 
         // ==== Validation Rules ====
-        public ValidationHelper NotEmpty<TViewModel>(
+        // Not Empty
+        public ValidationHelper ValidateRequired<TViewModel>(
         TViewModel viewModel,
         Expression<Func<TViewModel, string>> property)
         where TViewModel : ValidatableViewModelBase
@@ -40,8 +41,57 @@ namespace GoldenBread.Desktop.ViewModels.Base
                 viewModel.WhenAnyValue(
                     property,
                     vm => vm.IsDirty,
-                    (value, isDirty) => !isDirty || !string.IsNullOrWhiteSpace(value?.ToString())),
+                    (value, isDirty) => !isDirty || !string.IsNullOrWhiteSpace(value)),
                 ValidationMessages.Required);
+        }
+
+        // Age
+        public ValidationHelper ValidateAge<TViewModel>(
+        TViewModel viewModel,
+        Expression<Func<TViewModel, string>> property)
+        where TViewModel : ValidatableViewModelBase
+        {
+            return viewModel.ValidationRule(
+                property,
+                viewModel.WhenAnyValue(
+                    property,
+                    vm => vm.IsDirty,
+                    (value, isDirty) =>
+                    {
+                        if (!isDirty || string.IsNullOrWhiteSpace(value))
+                            return true;
+
+                        if (DateTime.TryParseExact(value, "dd.MM.yyyy",
+                            System.Globalization.CultureInfo.InvariantCulture,
+                            System.Globalization.DateTimeStyles.None,
+                            out DateTime date))
+                        {
+                            var age = DateTime.Today.Year - date.Year;
+                            if (date > DateTime.Today.AddYears(-age)) age--;
+                            return age >= 18 || age <= 90;
+                        }
+                        return true; 
+                    }),
+                ValidationMessages.InvalidAge);
+        }
+
+        // Date format
+        public ValidationHelper ValidateDateFormat<TViewModel>(
+        TViewModel viewModel,
+        Expression<Func<TViewModel, string>> property)
+        where TViewModel : ValidatableViewModelBase
+        {
+            return viewModel.ValidationRule(
+                property,
+                viewModel.WhenAnyValue(
+                    property,
+                    vm => vm.IsDirty,
+                    (value, isDirty) => !isDirty ||
+                        DateTime.TryParseExact(value, "dd.MM.yyyy",
+                            System.Globalization.CultureInfo.InvariantCulture,
+                            System.Globalization.DateTimeStyles.None,
+                            out _)),
+                ValidationMessages.InvalidDateFormat);
         }
     }
 }

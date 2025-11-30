@@ -30,7 +30,7 @@
                             <DataGridTextColumn Header="Должность" Binding="{Binding RoleValue}" Width="200"/>
                             <DataGridTextColumn Header="Дата рождения" Binding="{Binding Birthday}" Width="150"/>
                             <DataGridTextColumn Header="Эл. почта" Binding="{Binding Email}" Width="200"/>
-                            <DataGridTextColumn Header="Статус" Binding="{Binding VerificationStatusValue}" Width="150"/>
+                            <DataGridTextColumn Header="Статус" Binding="{Binding VerificationStatusValue}" Width="180"/>
                             <DataGridTextColumn Header="Заказов" Binding="{Binding Orders.Count}" Width="100"/>
                         </DataGrid.Columns>
                     </DataGrid>
@@ -43,27 +43,109 @@
                 <TextBlock Text="Характеристики" Classes="H6"/>
 
                 <Grid ColumnDefinitions="Auto *" ColumnSpacing="8">
-                    <TextBlock Grid.Column="0" Text="Фамилия" Classes="Regular" 
+                    <TextBlock Grid.Column="0" 
+                               Text="Фамилия" 
+                               Classes="Regular" 
                                Foreground="{DynamicResource Foreground.Secondary}" 
                                VerticalAlignment="Center"/>
-                    <TextBox Grid.Column="1" Text="{Binding EditLastname}" 
+                    <TextBox Grid.Column="1" 
+                             MaxLength="50"
+                             Watermark="Введите фамилию *"
+                             Text="{Binding EditLastname}" 
                              Classes="SplitView"/>
                 </Grid>
 
                 <Grid ColumnDefinitions="Auto *" ColumnSpacing="8">
-                    <TextBlock Grid.Column="0" Text="Имя" Classes="Regular" 
+                    <TextBlock Grid.Column="0" 
+                               Text="Имя" 
+                               Classes="Regular" 
                                Foreground="{DynamicResource Foreground.Secondary}" 
                                VerticalAlignment="Center"/>
-                    <TextBox Grid.Column="1" Text="{Binding EditFirstname}" 
+                    <TextBox Grid.Column="1" 
+                             MaxLength="50"
+                             Watermark="Введите имя *"
+                             Text="{Binding EditFirstname}" 
                              Classes="SplitView"/>
                 </Grid>
 
                 <Grid ColumnDefinitions="Auto *" ColumnSpacing="8">
-                    <TextBlock Grid.Column="0" Text="Эл. почта" Classes="Regular" 
+                    <TextBlock Grid.Column="0" 
+                               Text="Отчество" 
+                               Classes="Regular" 
                                Foreground="{DynamicResource Foreground.Secondary}" 
                                VerticalAlignment="Center"/>
-                    <TextBox Grid.Column="1" Text="{Binding EditEmail}" 
+                    <TextBox Grid.Column="1" 
+                             MaxLength="50"
+                             Watermark="Введите отчество"
+                             Text="{Binding EditPatronymic}" 
                              Classes="SplitView"/>
+                </Grid>
+
+                <Grid ColumnDefinitions="Auto *" ColumnSpacing="8">
+                    <TextBlock Grid.Column="0" 
+                               Text="Дата рожд." 
+                               Classes="Regular" 
+                               Foreground="{DynamicResource Foreground.Secondary}" 
+                               VerticalAlignment="Center"/>
+                    <MaskedTextBox Grid.Column="1" 
+                                   MaxLength="8"
+                                   Watermark="Введите дату рождения *"
+                                   Text="{Binding EditBirthday}" 
+                                   Classes="SplitView" Mask="00/00/0000"/>
+                </Grid>
+
+                <Grid ColumnDefinitions="Auto *" ColumnSpacing="8">
+                    <TextBlock Grid.Column="0" 
+                               Text="Эл. почта" 
+                               Classes="Regular" 
+                               Foreground="{DynamicResource Foreground.Secondary}" 
+                               VerticalAlignment="Center"/>
+                    <TextBox Grid.Column="1" 
+                             MaxLength="255"
+                             Watermark="Введите электронную почту *"
+                             Text="{Binding EditEmail}" 
+                             Classes="SplitView"/>
+                </Grid>
+
+                <Grid ColumnDefinitions="Auto *" ColumnSpacing="8">
+                    <TextBlock Grid.Column="0" 
+                               Text="Пароль" 
+                               Classes="Regular" 
+                               Foreground="{DynamicResource Foreground.Secondary}" 
+                               VerticalAlignment="Center"/>
+                    <TextBox Grid.Column="1" 
+                             MaxLength="255"
+                             Watermark="Введите пароль *"
+                             Text="{Binding EditPassword}" 
+                             Classes="SplitView"/>
+                </Grid>
+                
+                <Grid ColumnDefinitions="Auto *" ColumnSpacing="8">
+                    <TextBlock Grid.Column="0" 
+                               Text="Должность" 
+                               Classes="Regular" 
+                               Foreground="{DynamicResource Foreground.Secondary}" 
+                               VerticalAlignment="Center"/>
+                    <ComboBox Grid.Column="1" 
+                              PlaceholderText="Укажите должность *"
+                              ItemsSource="{Binding AvailableRoles}" 
+                              SelectedItem="{Binding EditRole}"
+                              DisplayMemberBinding="{Binding DisplayName}"
+                              Classes="SplitView"/>
+                </Grid>
+                
+                <Grid ColumnDefinitions="Auto *" ColumnSpacing="8">
+                    <TextBlock Grid.Column="0" 
+                               Text="Статус" 
+                               Classes="Regular" 
+                               Foreground="{DynamicResource Foreground.Secondary}" 
+                               VerticalAlignment="Center"/>
+                    <ComboBox Grid.Column="1" 
+                              PlaceholderText="Укажите статус *"
+                              ItemsSource="{Binding AvailableStatuses}" 
+                              SelectedItem="{Binding EditStatus}"
+                              DisplayMemberBinding="{Binding DisplayName}"
+                              Classes="SplitView"/>
                 </Grid>
 
             </StackPanel>

@@ -34,8 +34,8 @@ namespace GoldenBread.Desktop.Services
         // == Methods ==
         public async Task<ApiResponse<User>> LoginAsync(string email, string password)
         {
-            var request = new LoginUser { Login = email, Password = password };
-            var apiResponse = await apiClient.PostAsync<LoginUser, ApiResponse<User>>("api/Authorization", request);
+            var request = new LoginRequest { Login = email, Password = password };
+            var apiResponse = await apiClient.PostAsync<LoginRequest, ApiResponse<User>>("api/Authorization", request);
 
             if (apiResponse?.Data != null)
             {

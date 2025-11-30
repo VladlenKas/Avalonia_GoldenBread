@@ -1,6 +1,5 @@
 ﻿using FluentValidation;
 using GoldenBread.Desktop.ViewModels;
-using GoldenBread.Domain.Requests;
 using ReactiveUI;
 using ReactiveUI.Validation.Abstractions;
 using ReactiveUI.Validation.Extensions;
@@ -20,9 +19,13 @@ namespace GoldenBread.Desktop.Helpers
     internal static class ValidationMessages
     {
         public const string Required = "Это обязательное поле!";
+
         public const string InvalidEmailFormat = "Неверный формат email!";
         public const string EmailTooLong = "Email не должен превышать 254 символа!";
         public const string PasswordTooShort = "Пароль должен быть не менее 6 символов!";
+
+        public const string InvalidAge = "Возраст должен быть в промежутке от 18 до 90 лет";
+        public const string InvalidDateFormat = "Неверный формат даты. Используйте дд.мм.гггг";
     }
 
     internal static class ValidationRegexes

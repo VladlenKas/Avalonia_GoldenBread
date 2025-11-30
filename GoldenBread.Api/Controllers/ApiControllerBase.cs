@@ -29,7 +29,7 @@ namespace GoldenBread.Api.Controllers
         }
 
         // == Method for Error Operation with status-code ==
-        protected IActionResult Error<T>(string message, int statusCode = 400)
+        protected IActionResult Error<T>(string message, int statusCode = 500)
         {
             var response = new ApiResponse<T>
             {

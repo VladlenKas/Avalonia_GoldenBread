@@ -20,37 +20,41 @@ using System.Threading.Tasks;
 
 namespace GoldenBread.Desktop.ViewModels.Base
 {
-    public abstract class PageViewModelBase<T> : ValidatableViewModelBase, IDetailPanelViewModel
+    public abstract class PageViewModelBase<T> : ValidatableViewModelBase
     where T : class
     {
         // ==== Fields ====
         protected readonly SourceCache<T, int> _sourceCache;
         private readonly ReadOnlyObservableCollection<T> _items;
-        private readonly DetailPanelManager _panelManager; 
-        private readonly CrudCommandsManager<T> _commandsManager;
+        private readonly Func<T, int> _keySelector;
 
 
         // ==== Props ====
+        // Публичные для доступа из CrudCommandsManager
+        public readonly DetailPanelManager PanelManager;
+        private readonly CrudCommandsManager<T> _commandsManager;
+
         // Data
         [Reactive] public string SearchText { get; set; }
         [Reactive] public T SelectedItem { get; set; }
         [Reactive] public bool IsLoading { get; set; }
+        [Reactive] private int? SelectedItemKey { get; set; }
         public ReadOnlyObservableCollection<T> Items => _items;
 
         // from Crud Commands Manager
         public bool IsDetailPanelOpen
         {
-            get => _panelManager.IsDetailPanelOpen;
-            set => _panelManager.IsDetailPanelOpen = value;
+            get => PanelManager.IsDetailPanelOpen;
+            set => PanelManager.IsDetailPanelOpen = value;
         }
         public PanelMode CurrentMode
         {
-            get => _panelManager.CurrentMode;
-            set => _panelManager.CurrentMode = value;
+            get => PanelManager.CurrentMode;
+            set => PanelManager.CurrentMode = value;
         }
-        public string ModeTitle => _panelManager.ModeTitle;
-        public bool ShowViewButtons => _panelManager.ShowViewButtons;
-        public bool ShowEditButtons => _panelManager.ShowEditButtons;
+        public string ModeTitle => PanelManager.ModeTitle;
+        public bool ShowViewButtons => PanelManager.ShowViewButtons;
+        public bool ShowEditButtons => PanelManager.ShowEditButtons;
 
         // Commands required for binding on pages !!!
         public bool CanAdd => _commandsManager.CanAdd;
@@ -70,23 +74,15 @@ namespace GoldenBread.Desktop.ViewModels.Base
         protected PageViewModelBase(Func<T, int> keySelector, AuthorizationService service) 
             : base()
         {
+            _keySelector = keySelector;
             _sourceCache = new SourceCache<T, int>(keySelector);
-            _panelManager = new DetailPanelManager();
+            PanelManager = new DetailPanelManager();
 
             // Initializing commands through the manager
             var canDelete = this.WhenAnyValue(x => x.SelectedItem)
                 .Select(item => item != null && GetDeleteOptions());
 
-            _commandsManager = new CrudCommandsManager<T>(
-                _panelManager,
-                service,
-                saveAction: async () => await OnSaveAsync(),
-                deleteAction: async () => await OnDeleteAsync(),
-                refreshAction: async () => await LoadDataAsync(),
-                canDelete: canDelete,
-                viewModel: this,
-                detailVm: this
-            );
+            _commandsManager = new CrudCommandsManager<T>(this, service, canDelete);
 
             // Filtering
             var searchFilter = this.WhenAnyValue(x => x.SearchText)
@@ -96,8 +92,7 @@ namespace GoldenBread.Desktop.ViewModels.Base
             var additionalFilters = GetAdditionalFilters();
 
             var combinedFilter = Observable.CombineLatest(
-                searchFilter,
-                additionalFilters,
+                searchFilter, additionalFilters,
                 (search, additional) => new Func<T, bool>(item =>
                     search(item) && additional(item)));
 
@@ -107,10 +102,9 @@ namespace GoldenBread.Desktop.ViewModels.Base
                 .Bind(out _items)
                 .Subscribe();
 
-            ViewCommand = ReactiveCommand.Create<T>(item =>
+            ViewCommand = ReactiveCommand.Create<T>(_ =>
             {
-                SelectedItem = item;
-                _panelManager.OpenView();
+                PanelManager.OpenView();
             });
 
             RefreshCommand = ReactiveCommand.CreateFromTask(async () =>
@@ -121,7 +115,7 @@ namespace GoldenBread.Desktop.ViewModels.Base
             });
 
             // Subscribing to panel changes
-            _panelManager.WhenAnyValue(
+            PanelManager.WhenAnyValue(
                 x => x.IsDetailPanelOpen,
                 x => x.CurrentMode)
                 .Subscribe(_ =>
@@ -133,18 +127,34 @@ namespace GoldenBread.Desktop.ViewModels.Base
                     this.RaisePropertyChanged(nameof(ShowEditButtons));
                 });
 
-            // Subscribing to item changed
+            _sourceCache.Connect()
+                .WhereReasonsAre(ChangeReason.Update, ChangeReason.Refresh)
+                .ObserveOn(RxApp.MainThreadScheduler)
+                .Subscribe(_ =>
+                {
+                    if (SelectedItemKey.HasValue && CurrentMode == PanelMode.View)
+                    {
+                        var restoredItem = Items.FirstOrDefault(item =>
+                            _keySelector(item) == SelectedItemKey.Value);
+
+                        if (restoredItem != null)
+                        {
+                            // Временно отключаем подписку, чтобы избежать цикла
+                            SelectedItem = restoredItem;
+                        }
+                    }
+                });
+
+            // Основная подписка на изменение SelectedItem
             this.WhenAnyValue(x => x.SelectedItem)
                 .Where(item => item != null)
-                .Subscribe(item => CopyToEditFields(item));
-
-            this.WhenAnyValue(x => x.CurrentMode)
-                .Subscribe(mode =>
+                .ObserveOn(RxApp.MainThreadScheduler)
+                .Subscribe(item =>
                 {
-                    if (mode == PanelMode.View && SelectedItem != null)
-                        CopyToEditFields(SelectedItem);
-                    else if (mode == PanelMode.Add)
-                        ClearEditFields();
+                    SelectedItemKey = _keySelector(item);
+
+                    if (CurrentMode == PanelMode.View)
+                        CopyToEditFields(item);
                 });
         }
 
@@ -157,30 +167,32 @@ namespace GoldenBread.Desktop.ViewModels.Base
 
 
         // ==== Abstract Methods ====
-        protected abstract Task LoadDataAsync();
-        protected abstract Task OnSaveAsync();
-        protected abstract Task OnDeleteAsync();
+        public abstract Task LoadDataAsync();
+        public abstract Task OnSaveAsync();
+        public abstract Task OnDeleteAsync();
         protected abstract void CopyToEditFields(T item);
-        protected abstract void ClearEditFields();
+        public abstract void ClearEditFields();
 
 
         // ==== Helper methods ====
         protected void Initialize() => RefreshCommand.Execute().Subscribe();
         protected void AddOrUpdateItem(T item) => _sourceCache.AddOrUpdate(item);
         protected void RemoveItem(T item) => _sourceCache.Remove(item);
+
         private Func<T, bool> CreateSearchFilter(string text)
         {
             if (string.IsNullOrWhiteSpace(text)) return _ => true;
             var lower = text.ToLower();
             return item => GetSearchableText(item).ToLower().Contains(lower);
         }
+
         public void ResetOnCancel()
         {
             if (CurrentMode == PanelMode.Edit && SelectedItem != null)
             {
                 CopyToEditFields(SelectedItem);
                 CurrentMode = PanelMode.View;
-            }
+            }   
             else
             {
                 ClearEditFields();
@@ -189,6 +201,5 @@ namespace GoldenBread.Desktop.ViewModels.Base
 
             this.DeactivateValidation();
         }
-        void IDetailPanelViewModel.ClearEditFields() => ClearEditFields();
     }
 }

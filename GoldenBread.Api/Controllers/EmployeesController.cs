@@ -1,6 +1,5 @@
 ﻿using GoldenBread.Api.Helpers;
 using GoldenBread.Api.Services;
-using GoldenBread.Domain.Requests;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 

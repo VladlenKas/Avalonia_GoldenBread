@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using GoldenBread.Domain.Requests;
 
 namespace GoldenBread.Desktop.Services
 {
@@ -23,15 +24,14 @@ namespace GoldenBread.Desktop.Services
             return await apiClient.DeleteAsync<ApiResponse<object>>($"api/Users/{id}");
         }
 
-        public async Task<ApiResponse<User>> UpdateAsync(User user)
+        public async Task<ApiResponse<User>> UpdateAsync(UserRequest user)
         {
-            return await apiClient.PutAsync<User, ApiResponse<User>>($"api/Users/{user.UserId}", user);
+            return await apiClient.PutAsync<UserRequest, ApiResponse<User>>($"api/Users/{user.UserId}", user);
         }
 
-        public async Task<ApiResponse<User>> CreateAsync(User user)
+        public async Task<ApiResponse<User>> CreateAsync(UserRequest user)
         {
-            return await apiClient.PostAsync<User, ApiResponse<User>>("api/Users", user);
+            return await apiClient.PostAsync<UserRequest, ApiResponse<User>>("api/Users", user);
         }
-
     }
 }

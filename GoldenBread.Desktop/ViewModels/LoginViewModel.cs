@@ -31,8 +31,8 @@ namespace GoldenBread.Desktop.ViewModels
         // ==== For View ====
         public LoginViewModel()
         {
-            this.NotEmpty(this, x => x.Email);
-            this.NotEmpty(this, x => x.Password);
+            this.ValidateRequired(this, x => x.Email);
+            this.ValidateRequired(this, x => x.Password);
 
             LoginUserCommand = ReactiveCommand.CreateFromTask<Window>(async window =>
             {
@@ -52,13 +52,13 @@ namespace GoldenBread.Desktop.ViewModels
             _authService = authService;
             _viewService = viewService;
 
-            NotEmpty(this, x => x.Email);
-            NotEmpty(this, x => x.Password);
+            ValidateRequired(this, x => x.Email);
+            ValidateRequired(this, x => x.Password);
 
             LoginUserCommand = ReactiveCommand.CreateFromTask<Window>(async window =>
             {
                 var success = Validate();
-                if (!success) return;
+                if (!success) return;   
 
                 await ExecuteLoginAsync(window);
             });

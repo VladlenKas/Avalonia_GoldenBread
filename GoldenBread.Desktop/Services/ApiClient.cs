@@ -59,5 +59,4 @@ namespace GoldenBread.Desktop.Services
             return await response.Content.ReadFromJsonAsync<T>();
         }
     }
-
 }

@@ -4,6 +4,7 @@
 	<Design.PreviewWith>
 		<Border Padding="20">
 			<StackPanel Spacing="12">
+				<MaskedTextBox Width="200" Watermark="Inter email" Mask="__/__/____"/>
 				<TextBox Width="200"  Watermark="Inter email"/>
 				<TextBox Classes="Icon" Tag="mdi-magnify" Height="32" Width="200" Watermark="Inter pass"/>
 				<Button Width="200" Height="40" Content="Войти" IsEnabled="True"/>
@@ -46,6 +47,10 @@
 		<Style Selector="^:focus">
 			<Setter Property="Foreground" Value="{DynamicResource Foreground.Primary}"/>
 		</Style>
+
+		<Style Selector="^:pointerover">
+			<Setter Property="Foreground" Value="{DynamicResource Foreground.Primary}"/>
+		</Style>
 	</Style>
 
 	<!-- with Icon -->
@@ -62,7 +67,6 @@
 		<Setter Property="SelectionBrush" Value="LightBlue"/>
 		<Setter Property="VerticalContentAlignment" Value="Center"/>
     
-		<!-- Добавляем иконку через InnerLeftContent -->
 		<Setter Property="InnerLeftContent">
 			<Template>
 				<icon:Icon Classes="Medium" Margin="12 0 -6 0" />
@@ -90,9 +94,14 @@
 		<Style Selector="^:focus">
 			<Setter Property="Foreground" Value="{DynamicResource Foreground.Primary}"/>
 		</Style>
+
+		<Style Selector="^:pointerover">
+			<Setter Property="Foreground" Value="{DynamicResource Foreground.Primary}"/>
+		</Style>
+
 	</Style>
 
-		<!-- with Icon -->
+	<!-- with Icon -->
 	<Style Selector="TextBox.SplitView">
 		<Setter Property="Background" Value="{DynamicResource Background.Specific}"/>
 		<Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Hidden"/>
@@ -125,6 +134,10 @@
 		</Style>
 
 		<Style Selector="^:focus">
+			<Setter Property="Foreground" Value="{DynamicResource Foreground.Primary}"/>
+		</Style>
+
+		<Style Selector="^:pointerover">
 			<Setter Property="Foreground" Value="{DynamicResource Foreground.Primary}"/>
 		</Style>
 	</Style>

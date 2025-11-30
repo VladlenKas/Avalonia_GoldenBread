@@ -1,0 +1,124 @@
+﻿<Styles xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+	<Design.PreviewWith>
+		<Border Padding="20">
+			<StackPanel Spacing="12">
+				<ComboBox HorizontalAlignment="Stretch" PlaceholderText="Select element">
+					<ComboBox.Items>
+						<ComboBoxItem Content="1 value"/>
+						<ComboBoxItem Content="2 value"/>
+					</ComboBox.Items>
+				</ComboBox>
+				<ComboBox Classes="SplitView" HorizontalAlignment="Stretch" PlaceholderText="Select element">
+					<ComboBox.Items>
+						<ComboBoxItem Content="1 value"/>
+						<ComboBoxItem Content="2 value"/>
+					</ComboBox.Items>
+				</ComboBox>
+				<MaskedTextBox Width="200" Watermark="Inter email" Mask="__/__/____"/>
+				<TextBox Width="200"  Watermark="Inter email"/>
+				<TextBox Classes="SplitView" Tag="mdi-magnify" Height="32" Width="200" Watermark="Inter pass"/>
+				<Button Width="200" Height="40" Content="Войти" IsEnabled="True"/>
+			</StackPanel>
+		</Border>
+	</Design.PreviewWith>
+
+    <!-- ComboBox -->
+	<Style Selector="ComboBox">
+		<Setter Property="HorizontalAlignment" Value="Stretch"/> 
+		<Setter Property="VerticalContentAlignment" Value="Center"/> 
+		<Setter Property="BorderThickness" Value="1.5"/> 
+		<Setter Property="Foreground" Value="{DynamicResource Foreground.Secondary}"/>
+		<Setter Property="BorderBrush" Value="{DynamicResource Border.Default}"/>
+		<Setter Property="FontSize" Value="12"/>
+		<Setter Property="Padding" Value="12 0"/>
+		<Setter Property="FontWeight" Value="Medium"/>
+
+		<Setter Property="Transitions">
+			<Transitions>
+				<BrushTransition Property="Foreground" Duration="0:0:0.2"/>
+				<BrushTransition Property="BorderBrush" Duration="0:0:0.2"/>
+			</Transitions>
+		</Setter>
+
+		<Style Selector="^ /template/ Border#Background">
+			<Setter Property="CornerRadius" Value="4"/>
+			<Setter Property="Transitions">
+				<Transitions>
+					<BrushTransition Property="Background" Duration="0:0:0.2"/>
+				</Transitions>
+			</Setter>
+		</Style>
+
+		<Style Selector="^:focus /template/ Border#Background">
+			<Setter Property="BorderBrush" Value="{DynamicResource Border.Focus}"/>
+		</Style>
+
+		<Style Selector="^:focus">
+			<Setter Property="Foreground" Value="{DynamicResource Foreground.Primary}"/>
+		</Style>
+
+		<Style Selector="^:pointerover /template/ Border#Background">
+			<Setter Property="BorderBrush" Value="#000000"/>
+		</Style>
+
+		<Style Selector="^:pointerover">
+			<Setter Property="Foreground" Value="{DynamicResource Foreground.Primary}"/>
+		</Style>
+
+		<Style Selector="^:disabled">
+			<Setter Property="Opacity" Value="0.5"/>
+		</Style>
+	</Style>
+
+    <!-- ComboBox Split View -->
+	<Style Selector="ComboBox.SplitView">
+		<Setter Property="Background" Value="{DynamicResource Background.Specific}"/>
+		<Setter Property="HorizontalAlignment" Value="Stretch"/> 
+		<Setter Property="VerticalContentAlignment" Value="Center"/> 
+		<Setter Property="BorderThickness" Value="1.5"/> 
+		<Setter Property="CornerRadius" Value="4"/>
+		<Setter Property="Foreground" Value="{DynamicResource Foreground.Secondary}"/>
+		<Setter Property="BorderBrush" Value="{DynamicResource Background.Specific}"/>
+		<Setter Property="FontSize" Value="12"/>
+		<Setter Property="Padding" Value="12 0"/>
+		<Setter Property="FontWeight" Value="Regular"/>
+
+		<Setter Property="Transitions">
+			<Transitions>
+				<BrushTransition Property="Foreground" Duration="0:0:0.2"/>
+				<BrushTransition Property="BorderBrush" Duration="0:0:0.2"/>
+			</Transitions>
+		</Setter>
+
+		<Style Selector="^ /template/ Border#Background">
+			<Setter Property="Transitions">
+				<Transitions>
+					<BrushTransition Property="Background" Duration="0:0:0.2"/>
+				</Transitions>
+			</Setter>
+		</Style>
+
+		<Style Selector="^:focus /template/ Border#Background">
+			<Setter Property="BorderBrush" Value="{DynamicResource Border.Focus}"/>
+		</Style>
+
+		<Style Selector="^:focus">
+			<Setter Property="Foreground" Value="{DynamicResource Foreground.Primary}"/>
+		</Style>
+
+		<Style Selector="^:pointerover /template/ Border#Background">
+			<Setter Property="BorderBrush" Value="#000000"/>
+		</Style>
+
+		<Style Selector="^:pointerover">
+			<Setter Property="Foreground" Value="{DynamicResource Foreground.Primary}"/>
+		</Style>
+
+		<Style Selector="^:disabled">
+			<Setter Property="Opacity" Value="0.5"/>
+		</Style>
+	</Style>
+
+</Styles>

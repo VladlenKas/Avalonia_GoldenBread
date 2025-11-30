@@ -26,8 +26,12 @@ namespace GoldenBread.Api.Services
 
             existingUser.Firstname = user.Firstname;
             existingUser.Lastname = user.Lastname;
+            existingUser.Patronymic = user.Patronymic;
+            existingUser.Birthday = user.Birthday;
+            existingUser.Email = user.Email;
+            existingUser.Password = user.Password;
             existingUser.Role = user.Role;
-            // Continue!!
+            existingUser.VerificationStatus = user.VerificationStatus;
 
             await context.SaveChangesAsync();
             return existingUser;

@@ -23,6 +23,7 @@
         <StyleInclude Source="/Resources/TextBoxStyles.axaml"/>
         <StyleInclude Source="/Resources/TextBlockStyles.axaml"/>
         <StyleInclude Source="/Resources/OptionalStyles.axaml"/>
+        <StyleInclude Source="/Resources/ComboBoxStyles.axaml"/>
         <StyleInclude Source="avares://Avalonia.Controls.DataGrid/Themes/Fluent.xaml"/>
         <FluentTheme />
     </Application.Styles>

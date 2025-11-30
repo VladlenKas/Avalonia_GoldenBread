@@ -44,7 +44,7 @@ namespace GoldenBread.Desktop
             TaskScheduler.UnobservedTaskException += async (sender, e) =>
             {
                 await ShowErrorAsync("Ошибка в задаче", e.Exception.Message, e.Exception.StackTrace);
-                e.SetObserved(); // Помечаем как обработанное
+                e.SetObserved(); 
             };
 
             // Validator for reactiveUI
@@ -141,7 +141,6 @@ namespace GoldenBread.Desktop
             }
             catch
             {
-                // Если MessageBox не может быть показан, просто логируем
                 Console.WriteLine($"Не удалось показать MessageBox: {fullMessage}");
             }
         }

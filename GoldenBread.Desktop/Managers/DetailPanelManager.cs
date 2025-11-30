@@ -9,6 +9,9 @@ using System.Threading.Tasks;
 
 namespace GoldenBread.Desktop.Managers
 {
+    /// <summary>
+    /// A class that manages the state of the UI panel for CRUD operations
+    /// </summary>
     public class DetailPanelManager : ReactiveObject
     {
         // ==== Props ====

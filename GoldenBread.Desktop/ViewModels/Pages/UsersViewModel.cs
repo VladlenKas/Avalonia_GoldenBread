@@ -3,9 +3,11 @@ using DynamicData;
 using DynamicData.Binding;
 using GoldenBread.Desktop.Enums;
 using GoldenBread.Desktop.Helpers;
+using GoldenBread.Desktop.Interfaces;
 using GoldenBread.Desktop.Services;
 using GoldenBread.Desktop.ViewModels.Base;
 using GoldenBread.Domain.Models;
+using GoldenBread.Domain.Requests;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using ReactiveUI.Validation.Helpers;
@@ -18,7 +20,7 @@ using System.Threading.Tasks;
 
 namespace GoldenBread.Desktop.ViewModels.Pages
 {
-    public class UsersViewModel : PageViewModelBase<User>
+    public class UsersViewModel : PageViewModelBase<User>, IDetailPanelViewModel
     {
         // ==== Fields ====
         private readonly UserService _userService;
@@ -28,9 +30,15 @@ namespace GoldenBread.Desktop.ViewModels.Pages
         // ==== Props ====
         [Reactive] public string EditFirstname { get; set; }
         [Reactive] public string EditLastname { get; set; }
+        [Reactive] public string EditPatronymic { get; set; }
+        [Reactive] public string EditBirthday { get; set; }
         [Reactive] public string EditEmail { get; set; }
-        [Reactive] public UserRole EditRole { get; set; }
+        [Reactive] public string EditPassword { get; set; }
+        [Reactive] public UserRoleItem? EditRole { get; set; }
+        [Reactive] public VerificationStatusItem? EditStatus { get; set; }
 
+        public IEnumerable<UserRoleItem> AvailableRoles { get; set; } // Collection roles
+        public IEnumerable<VerificationStatusItem> AvailableStatuses { get; set; } // Collection statuses
 
 
         // ==== Designer ====
@@ -42,11 +50,24 @@ namespace GoldenBread.Desktop.ViewModels.Pages
             _userService = userService;
             _authService = authorizationService;
 
-            NotEmpty(this, vm => vm.EditFirstname);
-            NotEmpty(this, vm => vm.EditLastname);
-            NotEmpty(this, vm => vm.EditEmail);
+            AvailableRoles = Enum.GetValues<UserRole>()
+                .Select(role => new UserRoleItem { Role = role })
+                .ToList();
 
-            Initialize();
+            AvailableStatuses = Enum.GetValues<VerificationStatus>()
+                .Select(status => new VerificationStatusItem { Status = status })
+                .ToList();
+
+            this.ValidateRequired(this, vm => vm.EditFirstname);
+            this.ValidateRequired(this, vm => vm.EditLastname);
+            this.ValidateRequired(this, vm => vm.EditBirthday);
+            this.ValidateRequired(this, vm => vm.EditEmail);
+            this.ValidateRequired(this, vm => vm.EditPassword);
+
+            this.ValidateAge(this, vm => vm.EditBirthday);
+            this.ValidateDateFormat(this, vm => vm.EditBirthday);
+
+            this.Initialize();
         }
 
 
@@ -55,25 +76,35 @@ namespace GoldenBread.Desktop.ViewModels.Pages
         {
             EditFirstname = user.Firstname;
             EditLastname = user.Lastname;
+            EditPatronymic = user.Patronymic;
+            EditBirthday = user.Birthday.ToDateString(); 
             EditEmail = user.Email;
+            EditPassword = user.Password;
+            EditRole = AvailableRoles.FirstOrDefault(x => x.Role == user.Role);
+            EditStatus = AvailableStatuses.FirstOrDefault(x => x.Status == user.VerificationStatus);
         }
 
-        protected override void ClearEditFields()
+        public override void ClearEditFields()
         {
             EditFirstname = string.Empty;
             EditLastname = string.Empty;
+            EditPatronymic = string.Empty;
+            EditBirthday = string.Empty;
             EditEmail = string.Empty;
+            EditPassword = string.Empty;
+            EditRole = null;
+            EditStatus = null;
         }
 
         protected override string GetSearchableText(User user) 
             => $"{user.Firstname} {user.Lastname} {user.RoleValue}";
-
+            
         protected override bool GetDeleteOptions()
         {
             return SelectedItem.UserId != _authService.CurrentUser.UserId;
         }
 
-        protected override async Task LoadDataAsync()
+        public override async Task LoadDataAsync()
         {
             var users = await _userService.GetAllAsync();
             _sourceCache.Clear();
@@ -82,27 +113,40 @@ namespace GoldenBread.Desktop.ViewModels.Pages
 
 
         // ==== Commands Methods ====
-        protected override async Task OnSaveAsync()
+        public override async Task OnSaveAsync()
         {
+            var request = new UserRequest
+            {
+                Firstname = EditFirstname,
+                Lastname = EditLastname,
+                Patronymic = EditPatronymic,
+                Birthday = EditBirthday.ToDateOnly(),
+                Email = EditEmail,
+                Password = EditPassword,
+                Role = EditRole.Role,
+                VerificationStatus = EditStatus.Status,
+                AccountType = AccountType.User
+            };
+
             if (CurrentMode == PanelMode.Add)
             {
-                var result = await _userService.CreateAsync(SelectedItem);
-                if (result.IsSuccess)
-                    AddOrUpdateItem(result.Data);
-                else
-                    await MessageBoxHelper.ShowErrorMessageBox(result.Message);
+                var result = await _userService.CreateAsync(request);
+                if (result.IsSuccess) { AddOrUpdateItem(result.Data); }
+                else { await MessageBoxHelper.ShowErrorMessageBox(result.Message); }
             }
             else if (CurrentMode == PanelMode.Edit)
             {
-                var result = await _userService.UpdateAsync(SelectedItem);
-                if (result.IsSuccess)
-                    AddOrUpdateItem(result.Data);
-                else
-                    await MessageBoxHelper.ShowErrorMessageBox(result.Message);
+                request.UserId = SelectedItem.UserId;
+
+                var result = await _userService.UpdateAsync(request);
+                if (result.IsSuccess) { AddOrUpdateItem(result.Data); }
+                else { await MessageBoxHelper.ShowErrorMessageBox(result.Message); }
             }
+
+            this.DeactivateValidation();
         }
 
-        protected override async Task OnDeleteAsync()
+        public override async Task OnDeleteAsync()
         {
             var result = await MessageBoxHelper.ShowQuestionMessageBox(
                 "Вы действительно хотите уволить выбранного пользователя?");
@@ -115,8 +159,7 @@ namespace GoldenBread.Desktop.ViewModels.Pages
                     RemoveItem(SelectedItem);
                     await MessageBoxHelper.ShowOkMessageBox(resultResponse.Message);
                 }
-                else
-                    await MessageBoxHelper.ShowErrorMessageBox(resultResponse.Message);
+                else { await MessageBoxHelper.ShowErrorMessageBox(resultResponse.Message); }
             }
         }
     }
@@ -147,8 +190,8 @@ namespace GoldenBread.Desktop.ViewModels.Pages
             CurrentMode = PanelMode.View;
         }
 
-        protected override Task LoadDataAsync() => Task.CompletedTask;
-        protected override Task OnSaveAsync() => Task.CompletedTask;
-        protected override Task OnDeleteAsync() => Task.CompletedTask;
+        public override Task LoadDataAsync() => Task.CompletedTask;
+        public override Task OnSaveAsync() => Task.CompletedTask;
+        public override Task OnDeleteAsync() => Task.CompletedTask;
     }
 }

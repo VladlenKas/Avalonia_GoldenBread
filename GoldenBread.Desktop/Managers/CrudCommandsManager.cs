@@ -28,58 +28,59 @@ namespace GoldenBread.Desktop.Managers
 
 
         // ==== Designer ====
-        public CrudCommandsManager(
-            DetailPanelManager panelManager,
+        public CrudCommandsManager(PageViewModelBase<T> page, 
             AuthorizationService authService,
-            Func<Task> saveAction,
-            Func<Task> deleteAction,
-            Func<Task> refreshAction,
-            IObservable<bool> canDelete,
-            ValidatableViewModelBase viewModel,
-            IDetailPanelViewModel? detailVm = null)
+            IObservable<bool> canDelete)
         {
             CanAdd = authService.HasPermission(Permission.Add);
             CanEdit = authService.HasPermission(Permission.Edit);
             CanDelete = authService.HasPermission(Permission.Delete);
 
+            // Open the add-view panel 
             if (CanAdd)
                 AddCommand = ReactiveCommand.CreateFromTask(async () =>
                 {
-                    detailVm?.ClearEditFields();
-                    panelManager.OpenAdd();
-                }
-                );
+                    page.ClearEditFields();
+                    page.PanelManager.OpenAdd();
+                });
 
+            // Save 
             if (CanEdit)
             {
-                EnterEditModeCommand = ReactiveCommand.Create(() => panelManager.EnterEdit());
+                EnterEditModeCommand = ReactiveCommand.Create(() => page.PanelManager.EnterEdit());
                 SaveCommand = ReactiveCommand.CreateFromTask(async () =>
                 {
-                    var success = viewModel.Validate();
-                    if (!success) return;
+                    if (!page.Validate()) return;
 
-                    await saveAction();
-                    panelManager.CurrentMode = PanelMode.View;
-                    await refreshAction();
+                    var result = await MessageBoxHelper
+                        .ShowQuestionMessageBox("Вы подтверждаете сохранение?");
+                    if (!result) return; 
+
+                    await page.OnSaveAsync();
+                    page.PanelManager.CurrentMode = PanelMode.View;
                 }); 
             }
 
+            // Delete
             if (CanDelete)
             {
                 DeleteFromPanelCommand = ReactiveCommand.CreateFromTask(async () =>
                 {
-                    await deleteAction();
-                    panelManager.IsDetailPanelOpen = false;
-                    await refreshAction();
+                    var result = await MessageBoxHelper
+                        .ShowQuestionMessageBox("Вы действительно хотите удалить выбранный элемент?");
+                    if (!result) return;
+
+                    await page.OnDeleteAsync();
+                    page.PanelManager.IsDetailPanelOpen = false;
                 }, canDelete);
             }
 
+            // Exit
             CancelCommand = ReactiveCommand.CreateFromTask(async () =>
             {
-
-                if (panelManager.CurrentMode == PanelMode.View)
+                if (page.CurrentMode == PanelMode.View)
                 {
-                    panelManager.IsDetailPanelOpen = false;
+                    page.PanelManager.IsDetailPanelOpen = false;
                     return;
                 }
 
@@ -87,9 +88,10 @@ namespace GoldenBread.Desktop.Managers
                     .ShowQuestionMessageBox("Вы действительно хотите выйти?\n" +
                     "Несохраненные изменения будут потеряны!");
 
-                if (result)
+                if (result) 
                 {
-                    detailVm?.ResetOnCancel();
+                    page.ResetOnCancel();
+                    await page.LoadDataAsync();
                 }
             });
         }

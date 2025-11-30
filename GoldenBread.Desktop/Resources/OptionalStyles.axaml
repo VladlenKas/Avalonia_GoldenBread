@@ -1,6 +1,23 @@
 ﻿<Styles xmlns="https://github.com/avaloniaui"
 		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
+	<Design.PreviewWith>
+		<Border Padding="20">
+			<StackPanel Spacing="12">
+				<ComboBox HorizontalAlignment="Stretch" PlaceholderText="Select element">
+					<ComboBox.Items>
+						<ComboBoxItem Content="1 value"/>
+						<ComboBoxItem Content="2 value"/>
+					</ComboBox.Items>
+				</ComboBox>
+				<MaskedTextBox Width="200" Watermark="Inter email" Mask="__/__/____"/>
+				<TextBox Width="200"  Watermark="Inter email"/>
+				<TextBox Classes="Icon" Tag="mdi-magnify" Height="32" Width="200" Watermark="Inter pass"/>
+				<Button Width="200" Height="40" Content="Войти" IsEnabled="True"/>
+			</StackPanel>
+		</Border>
+	</Design.PreviewWith>
+
 	<!-- Window -->
 	<Style Selector="Window">
 		<Setter Property="Icon" Value="/Assets/goldenbread-logo.ico"/>
@@ -45,6 +62,6 @@
         
     <Style Selector="DataGridRow:selected">
         <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="CornerRadius" Value="8"/>
     </Style>
-
 </Styles>

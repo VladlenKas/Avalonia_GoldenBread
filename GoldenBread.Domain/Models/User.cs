@@ -40,13 +40,13 @@ public partial class User
 {
     // == Custom props ==
     [NotMapped]
-    public string Fullname => $"{Lastname} {Firstname} {Patronymic}";
+    public string Fullname => $"{Lastname} {Firstname} {Patronymic}" ?? "Неизвестно";
 
     [NotMapped]
-    public string RoleValue => Role.Value.Humanize();
+    public string RoleValue => Role.Value.Humanize() ?? "Неизвестно";
 
     [NotMapped]
-    public string VerificationStatusValue => VerificationStatus.Value.Humanize();
+    public string VerificationStatusValue => VerificationStatus.Value.Humanize() ?? "Неизвестно";
 
 
     // == Original props ==
