@@ -4,9 +4,9 @@ using Avalonia.Markup.Xaml;
 
 namespace GoldenBread.Desktop.Views.Pages;
 
-public partial class ProductsView : UserControl
+public partial class EmployeesPageView : UserControl
 {
-    public ProductsView()
+    public EmployeesPageView()
     {
         InitializeComponent();
     }

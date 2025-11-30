@@ -1,5 +1,4 @@
-﻿using FluentValidation;
-using GoldenBread.Desktop.ViewModels;
+﻿using GoldenBread.Desktop.ViewModels;
 using ReactiveUI;
 using ReactiveUI.Validation.Abstractions;
 using ReactiveUI.Validation.Extensions;

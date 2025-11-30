@@ -43,10 +43,10 @@ public partial class User
     public string Fullname => $"{Lastname} {Firstname} {Patronymic}" ?? "Неизвестно";
 
     [NotMapped]
-    public string RoleValue => Role.Value.Humanize() ?? "Неизвестно";
+    public string RoleValue => /*Role.Value.Humanize() ?? */"Неизвестно";
 
     [NotMapped]
-    public string VerificationStatusValue => VerificationStatus.Value.Humanize() ?? "Неизвестно";
+    public string VerificationStatusValue => /*VerificationStatus.Value.Humanize() ??*/ "Неизвестно";
 
 
     // == Original props ==

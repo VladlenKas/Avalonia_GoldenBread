@@ -1,22 +1,25 @@
 ﻿using Avalonia.Controls;
 using GoldenBread.Desktop.Helpers;
-using GoldenBread.Desktop.Interfaces;
 using GoldenBread.Desktop.Services;
 using GoldenBread.Desktop.ViewModels.Base;
+using GoldenBread.Desktop.Views;
+using Microsoft.Extensions.DependencyInjection;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using ReactiveUI.Validation.Extensions;
 using ReactiveUI.Validation.Helpers;
+using Splat;
+using System;
 using System.Reactive;
 using System.Threading.Tasks;
 
 namespace GoldenBread.Desktop.ViewModels
 {
-    public partial class LoginViewModel : ValidatableViewModelBase
+    public partial class LoginViewModel : ViewModelBase
     {
         // ==== Filds ====
         private readonly AuthorizationService _authService;
-        private readonly ViewService _viewService;
+        private readonly IServiceProvider _serviceProvider;
 
 
         // ==== Props ====
@@ -28,29 +31,11 @@ namespace GoldenBread.Desktop.ViewModels
         public ReactiveCommand<Window, Unit> LoginUserCommand { get; }
 
 
-        // ==== For View ====
-        public LoginViewModel()
-        {
-            this.ValidateRequired(this, x => x.Email);
-            this.ValidateRequired(this, x => x.Password);
-
-            LoginUserCommand = ReactiveCommand.CreateFromTask<Window>(async window =>
-            {
-                this.ActivateValidation();
-
-                if (!this.ValidationContext.GetIsValid())
-                    return;
-
-                await ExecuteLoginAsync(window);
-            });
-        }
-
-
         // ==== For Builder ====
-        public LoginViewModel(AuthorizationService authService, ViewService viewService)
+        public LoginViewModel(IServiceProvider serviceProvider)
         {
-            _authService = authService;
-            _viewService = viewService;
+            _serviceProvider = serviceProvider;
+            _authService = _serviceProvider.GetRequiredService<AuthorizationService>();
 
             ValidateRequired(this, x => x.Email);
             ValidateRequired(this, x => x.Password);
@@ -72,7 +57,11 @@ namespace GoldenBread.Desktop.ViewModels
             if (_authService.IsAuthenticated)
             {
                 await MessageBoxHelper.ShowOkMessageBox(result.Message);
-                _viewService.ShowWindow<MenuViewModel>();
+
+                var menu = _serviceProvider.GetRequiredService<MenuView>();
+                menu.DataContext = _serviceProvider.GetRequiredService<MenuViewModel>();
+                menu.Show();
+
                 window.Close();
             }
             else 

@@ -1,0 +1,23 @@
+﻿<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+		xmlns:materialIcons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia">
+
+<Style Selector="ListBox.sidebar">
+    <Setter Property="Background" Value="#1E1E1E"/>
+    <Setter Property="Padding" Value="0"/>
+  </Style>
+  
+  <Style Selector="ListBox.sidebar ListBoxItem">
+    <Setter Property="Padding" Value="15,12"/>
+    <Setter Property="Margin" Value="5"/>
+    <Setter Property="CornerRadius" Value="8"/>
+  </Style>
+  
+  <Style Selector="ListBox.sidebar ListBoxItem:selected">
+    <Setter Property="Background" Value="#0078D4"/>
+  </Style>
+  
+  <Style Selector="ListBox.sidebar ListBoxItem:pointerover /template/ ContentPresenter">
+    <Setter Property="Background" Value="#2D2D2D"/>
+  </Style>
+</Styles>

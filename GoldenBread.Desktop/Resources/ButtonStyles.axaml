@@ -1,16 +1,17 @@
 ﻿<Styles xmlns="https://github.com/avaloniaui"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-		xmlns:icon="https://github.com/projektanker/icons.avalonia">
+		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+		xmlns:materialIcons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia">
+
 	<Design.PreviewWith>
 		<Border Padding="20">
 			<StackPanel Spacing="12">
 				<Button Width="200" Height="40" Content="Войти" IsEnabled="False"/>
-				<Button Width="200" Height="40" Content="Войти" IsEnabled="True" Classes="Sidebar" Tag="mdi-account-outline"/>
-				<Button Width="200" Height="40" Content="Войти" IsEnabled="True" Classes="Sidebar Ghost" Tag="mdi-account-outline"/>
-				<Button Width="40" Height="40" Content="Войти" IsEnabled="True" Classes="IconOnly Danger" Tag="mdi-trash-can-outline"/>
-				<RadioButton Width="200" Height="40" Content="Войти" IsEnabled="True" Classes="Sidebar" Tag="mdi-account-outline"/>
-				<RadioButton Width="200" Height="40" Content="Войти" IsEnabled="True" Classes="Sidebar" Tag="mdi-account-outline"/>
-				<RadioButton Width="200" Height="40" Content="Войти" IsEnabled="True" Classes="Sidebar" Tag="mdi-account-outline"/>
+				<Button Width="200" Height="40" Content="Войти" IsEnabled="True" Classes="Sidebar" />
+				<Button Width="200" Height="40" Content="Войти" IsEnabled="True" Classes="Sidebar Ghost" />
+				<Button Width="40" Height="40" Content="Войти" IsEnabled="True" Classes="IconOnly Danger" />
+				<RadioButton Width="200" Height="40" Content="Войти" IsEnabled="True" Classes="Sidebar" />
+				<RadioButton Width="200" Height="40" Content="Войти" IsEnabled="True" Classes="Sidebar" />
+				<RadioButton Width="200" Height="40" Content="Войти" IsEnabled="True" Classes="Sidebar"/>
 				<RadioButton Width="200" Height="40" Content="Ингредиенты" Classes="Topbar"/>
 			</StackPanel>
 		</Border>
@@ -69,9 +70,9 @@
 		<Setter Property="ContentTemplate">
 			<DataTemplate>
 				<Grid ColumnDefinitions="Auto *">
-					<icon:Icon Classes="Medium" />
-					<TextBlock Grid.Column="1" 
-							   Text="{Binding}" 
+					<materialIcons:MaterialIcon Classes="Medium" />
+					<TextBlock Grid.Column="1"
+							   Text="{Binding}"
 							   Margin="4 0 0 0"
 							   VerticalAlignment="Center"/>
 				</Grid>
@@ -85,9 +86,9 @@
 		<Setter Property="ContentTemplate">
 			<DataTemplate>
 				<Grid ColumnDefinitions="Auto *">
-					<icon:Icon Classes="Medium" />
-					<TextBlock Grid.Column="1" 
-							   Text="{Binding}" 
+					<materialIcons:MaterialIcon Classes="Medium" />
+					<TextBlock Grid.Column="1"
+							   Text="{Binding}"
 							   Margin="8 0 0 0"
 							   VerticalAlignment="Center"/>
 				</Grid>
@@ -100,7 +101,7 @@
 		<Setter Property="Padding" Value="0"/>
 		<Setter Property="ContentTemplate">
 			<DataTemplate>
-				<icon:Icon Classes="Medium" VerticalAlignment="Center"/>
+				<materialIcons:MaterialIcon Classes="Medium" VerticalAlignment="Center"/>
 			</DataTemplate>
 		</Setter>
 	</Style>
@@ -108,20 +109,20 @@
 	<!-- == Icon Sizes For Each Button Size == -->
 
 	<!-- for small -->
-	<Style Selector="Button.Small icon|Icon.Medium">
-        <Setter Property="Value" Value="{Binding $parent[Button].Tag}"/>
+	<Style Selector="Button.Small materialIcons|MaterialIcon.Medium">
+		<Setter Property="Kind" Value="{Binding $parent[Button].Tag}"/>
 		<Setter Property="FontSize" Value="12"/>
 	</Style>
 
 	<!-- for medium (default) -->
-	<Style Selector="Button icon|Icon.Medium, Button.Medium icon|Icon.Medium">
-        <Setter Property="Value" Value="{Binding $parent[Button].Tag}"/>
+	<Style Selector="Button materialIcons|MaterialIcon.Medium, Button.Medium materialIcons|MaterialIcon.Medium">
+		<Setter Property="Kind" Value="{Binding $parent[Button].Tag}"/>
 		<Setter Property="FontSize" Value="16"/>
 	</Style>
 
 	<!-- for large -->
-	<Style Selector="Button.Large icon|Icon.Medium">
-        <Setter Property="Value" Value="{Binding $parent[Button].Tag}"/>
+	<Style Selector="Button.Large materialIcons|MaterialIcon.Medium">
+		<Setter Property="Kind" Value="{Binding $parent[Button].Tag}"/>
 		<Setter Property="FontSize" Value="20"/>
 	</Style>
 
@@ -168,17 +169,17 @@
 	<Style Selector="Button.Primary, Button:not(.Secondary):not(.Danger):not(.Success):not(.Ghost):not(.Action):not(.Edit)">
 		<Setter Property="Background" Value="{DynamicResource Interactive.Primary.Default}"/>
 		<Setter Property="Foreground" Value="{DynamicResource Foreground.OnAccent}"/>
-    
+
 		<Style Selector="^:pointerover /template/ ContentPresenter#PART_ContentPresenter">
 			<Setter Property="Background" Value="{DynamicResource Interactive.Primary.Hover}"/>
 			<Setter Property="Foreground" Value="#90ffffff"/>
 		</Style>
-    
+
 		<Style Selector="^:pressed /template/ ContentPresenter#PART_ContentPresenter">
 			<Setter Property="Background" Value="{DynamicResource Interactive.Primary.Pressed}"/>
 			<Setter Property="Foreground" Value="#80ffffff"/>
 		</Style>
-    
+
 		<Style Selector="^:disabled /template/ ContentPresenter#PART_ContentPresenter">
 			<Setter Property="Background" Value="{DynamicResource Interactive.Primary.Default}"/>
 			<Setter Property="Foreground" Value="#75ffffff"/>
@@ -190,17 +191,17 @@
 	<Style Selector="Button.Secondary">
 		<Setter Property="Background" Value="{DynamicResource Interactive.Neutral.Default}"/>
 		<Setter Property="Foreground" Value="{DynamicResource Foreground.Primary}"/>
-    
+
 		<Style Selector="^:pointerover /template/ ContentPresenter#PART_ContentPresenter">
 			<Setter Property="Background" Value="{DynamicResource Interactive.Neutral.Hover}"/>
 			<Setter Property="Foreground" Value="#90ffffff"/>
 		</Style>
-    
+
 		<Style Selector="^:pressed /template/ ContentPresenter#PART_ContentPresenter">
 			<Setter Property="Background" Value="{DynamicResource Interactive.Neutral.Pressed}"/>
 			<Setter Property="Foreground" Value="#80ffffff"/>
 		</Style>
-    
+
 		<Style Selector="^:disabled /template/ ContentPresenter#PART_ContentPresenter">
 			<Setter Property="Background" Value="{DynamicResource Interactive.Neutral.Default}"/>
 			<Setter Property="Foreground" Value="#75ffffff"/>
@@ -212,17 +213,17 @@
 	<Style Selector="Button.Danger">
 		<Setter Property="Background" Value="#e74c3c"/>
 		<Setter Property="Foreground" Value="White"/>
-    
+
 		<Style Selector="^:pointerover /template/ ContentPresenter#PART_ContentPresenter">
 			<Setter Property="Foreground" Value="#90ffffff"/>
 			<Setter Property="Background" Value="#c0392b"/>
 		</Style>
-    
+
 		<Style Selector="^:pressed /template/ ContentPresenter#PART_ContentPresenter">
 			<Setter Property="Foreground" Value="#80ffffff"/>
 			<Setter Property="Background" Value="#a93226"/>
 		</Style>
-    
+
 		<Style Selector="^:disabled /template/ ContentPresenter#PART_ContentPresenter">
 			<Setter Property="Background" Value="#e74c3c"/>
 			<Setter Property="Foreground" Value="#75ffffff"/>
@@ -234,17 +235,17 @@
 	<Style Selector="Button.Edit">
 		<Setter Property="Background" Value="#3498db"/>
 		<Setter Property="Foreground" Value="White"/>
-    
+
 		<Style Selector="^:pointerover /template/ ContentPresenter#PART_ContentPresenter">
 			<Setter Property="Background" Value="#2980b9"/>
 			<Setter Property="Foreground" Value="#90ffffff"/>
 		</Style>
-    
+
 		<Style Selector="^:pressed /template/ ContentPresenter#PART_ContentPresenter">
 			<Setter Property="Background" Value="#21618c"/>
 			<Setter Property="Foreground" Value="#80ffffff"/>
 		</Style>
-    
+
 		<Style Selector="^:disabled /template/ ContentPresenter#PART_ContentPresenter">
 			<Setter Property="Background" Value="#3498db"/>
 			<Setter Property="Foreground" Value="#75ffffff"/>
@@ -256,17 +257,17 @@
 	<Style Selector="Button.Success">
 		<Setter Property="Background" Value="#27ae60"/>
 		<Setter Property="Foreground" Value="White"/>
-    
+
 		<Style Selector="^:pointerover /template/ ContentPresenter#PART_ContentPresenter">
 			<Setter Property="Foreground" Value="#90ffffff"/>
 			<Setter Property="Background" Value="#229954"/>
 		</Style>
-    
+
 		<Style Selector="^:pressed /template/ ContentPresenter#PART_ContentPresenter">
 			<Setter Property="Foreground" Value="#80ffffff"/>
 			<Setter Property="Background" Value="#1e8449"/>
 		</Style>
-    
+
 		<Style Selector="^:disabled /template/ ContentPresenter#PART_ContentPresenter">
 			<Setter Property="Background" Value="#27ae60"/>
 			<Setter Property="Foreground" Value="#75ffffff"/>
@@ -278,12 +279,12 @@
 	<Style Selector="Button.Ghost">
 		<Setter Property="Foreground" Value="{DynamicResource Foreground.Secondary}"/>
 		<Setter Property="Background" Value="Transparent"/>
-    
+
 		<Style Selector="^:pointerover /template/ ContentPresenter#PART_ContentPresenter">
 			<Setter Property="Background" Value="{DynamicResource Interactive.Neutral.Hover}"/>
 			<Setter Property="Foreground" Value="{DynamicResource Foreground.Primary}"/>
 		</Style>
-    
+
 		<Style Selector="^:pressed /template/ ContentPresenter#PART_ContentPresenter">
 			<Setter Property="Foreground" Value="{DynamicResource Foreground.Secondary}"/>
 			<Setter Property="Background" Value="{DynamicResource Interactive.Neutral.Pressed}"/>
@@ -294,12 +295,12 @@
 	<Style Selector="Button.Action">
 		<Setter Property="Foreground" Value="{DynamicResource Foreground.Primary}"/>
 		<Setter Property="Background" Value="{DynamicResource Interactive.Neutral.Default}"/>
-    
+
 		<Style Selector="^:pointerover /template/ ContentPresenter#PART_ContentPresenter">
 			<Setter Property="Foreground" Value="{DynamicResource Foreground.Secondary}"/>
 			<Setter Property="Background" Value="{DynamicResource Interactive.Neutral.Default}"/>
 		</Style>
-    
+
 		<Style Selector="^:pressed /template/ ContentPresenter#PART_ContentPresenter">
 			<Setter Property="Foreground" Value="{DynamicResource Foreground.Secondary}"/>
 			<Setter Property="Background" Value="{DynamicResource Interactive.Neutral.Pressed}"/>
@@ -319,27 +320,27 @@
 		<Setter Property="HorizontalContentAlignment" Value="Left"/>
 		<Setter Property="HorizontalAlignment" Value="Stretch"/>
 		<Setter Property="Template">
-        <ControlTemplate>
-            <ContentPresenter Name="PART_ContentPresenter"
-							  Tag="{TemplateBinding Tag}"
-						      Background="{TemplateBinding Background}"
-							  Foreground="{TemplateBinding Foreground}"
-							  BorderBrush="{TemplateBinding BorderBrush}"
-							  BorderThickness="{TemplateBinding BorderThickness}"
-							  CornerRadius="{TemplateBinding CornerRadius}"
-							  Content="{TemplateBinding Content}"
-							  ContentTemplate="{TemplateBinding ContentTemplate}"
-							  Padding="{TemplateBinding Padding}"
-							  VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
-							  HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"/>
-        </ControlTemplate>
-    </Setter>
+			<ControlTemplate>
+				<ContentPresenter Name="PART_ContentPresenter"
+								  Tag="{TemplateBinding Tag}"
+								  Background="{TemplateBinding Background}"
+								  Foreground="{TemplateBinding Foreground}"
+								  BorderBrush="{TemplateBinding BorderBrush}"
+								  BorderThickness="{TemplateBinding BorderThickness}"
+								  CornerRadius="{TemplateBinding CornerRadius}"
+								  Content="{TemplateBinding Content}"
+								  ContentTemplate="{TemplateBinding ContentTemplate}"
+								  Padding="{TemplateBinding Padding}"
+								  VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
+								  HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"/>
+			</ControlTemplate>
+		</Setter>
 		<Setter Property="ContentTemplate">
 			<DataTemplate>
 				<Grid ColumnDefinitions="Auto *">
-					<icon:Icon Classes="Medium"/>
-					<TextBlock Grid.Column="1" 
-				     		   Text="{Binding}" 
+					<materialIcons:MaterialIcon Classes="Medium"/>
+					<TextBlock Grid.Column="1"
+							   Text="{Binding}"
 							   Margin="8 0 0 0"
 							   VerticalAlignment="Center"/>
 				</Grid>
@@ -364,10 +365,10 @@
 			<Setter Property="Background" Value="{DynamicResource Interactive.Neutral.Hover}"/>
 			<Setter Property="Foreground" Value="{DynamicResource Foreground.Primary}"/>
 		</Style>
-		
+
 		<Style Selector="^:pressed:not(:checked) /template/ ContentPresenter#PART_ContentPresenter">
 			<Setter Property="Background" Value="{DynamicResource Interactive.Neutral.Pressed}"/>
-		<Setter Property="Foreground" Value="{DynamicResource Foreground.Secondary}"/>
+			<Setter Property="Foreground" Value="{DynamicResource Foreground.Secondary}"/>
 		</Style>
 
 		<Style Selector="^:disabled /template/ ContentPresenter#PART_ContentPresenter">
@@ -387,21 +388,21 @@
 		<Setter Property="VerticalContentAlignment" Value="Top"/>
 		<Setter Property="HorizontalContentAlignment" Value="Center"/>
 		<Setter Property="Template">
-        <ControlTemplate>
-            <ContentPresenter Name="PART_ContentPresenter"
-							  Tag="{TemplateBinding Tag}"
-						      Background="{TemplateBinding Background}"
-							  Foreground="{TemplateBinding Foreground}"
-							  BorderBrush="{TemplateBinding BorderBrush}"
-							  BorderThickness="{TemplateBinding BorderThickness}"
-							  CornerRadius="{TemplateBinding CornerRadius}"
-							  Content="{TemplateBinding Content}"
-							  ContentTemplate="{TemplateBinding ContentTemplate}"
-							  Padding="{TemplateBinding Padding}"
-							  VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
-							  HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"/>
-        </ControlTemplate>
-    </Setter>
+			<ControlTemplate>
+				<ContentPresenter Name="PART_ContentPresenter"
+								  Tag="{TemplateBinding Tag}"
+								  Background="{TemplateBinding Background}"
+								  Foreground="{TemplateBinding Foreground}"
+								  BorderBrush="{TemplateBinding BorderBrush}"
+								  BorderThickness="{TemplateBinding BorderThickness}"
+								  CornerRadius="{TemplateBinding CornerRadius}"
+								  Content="{TemplateBinding Content}"
+								  ContentTemplate="{TemplateBinding ContentTemplate}"
+								  Padding="{TemplateBinding Padding}"
+								  VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
+								  HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"/>
+			</ControlTemplate>
+		</Setter>
 		<Setter Property="ContentTemplate">
 			<DataTemplate>
 				<Grid>
@@ -418,7 +419,7 @@
 							<Setter Property="Opacity" Value="1"/>
 						</Style>
 					</Grid.Styles>
-		  
+
 					<TextBlock Text="{Binding}"/>
 					<Separator Margin="0 20 0 0" Height="2"
 							   Background="{DynamicResource Foreground.Primary}"
@@ -427,14 +428,14 @@
 			</DataTemplate>
 		</Setter>
 
-	<Style Selector="^ /template/ ContentPresenter#PART_ContentPresenter">
-		<Setter Property="Transitions">
-			<Transitions>
-				<BrushTransition Property="Background" Duration="0:0:0.2"/>
-				<BrushTransition Property="Foreground" Duration="0:0:0.2"/>
-			</Transitions>
-		</Setter>
-	</Style>
+		<Style Selector="^ /template/ ContentPresenter#PART_ContentPresenter">
+			<Setter Property="Transitions">
+				<Transitions>
+					<BrushTransition Property="Background" Duration="0:0:0.2"/>
+					<BrushTransition Property="Foreground" Duration="0:0:0.2"/>
+				</Transitions>
+			</Setter>
+		</Style>
 
 		<Style Selector="^ /template/ ContentPresenter#PART_ContentPresenter">
 			<Setter Property="Transitions">
@@ -452,17 +453,17 @@
 
 		<Style Selector="^:pointerover:not(:checked) /template/ ContentPresenter#PART_ContentPresenter">
 			<Setter Property="Background" Value="{DynamicResource Interactive.Neutral.Default}"/>
-		<Setter Property="Foreground" Value="{DynamicResource Foreground.Primary}"/>
+			<Setter Property="Foreground" Value="{DynamicResource Foreground.Primary}"/>
 		</Style>
-		
+
 		<Style Selector="^:pressed:not(:checked) /template/ ContentPresenter#PART_ContentPresenter">
 			<Setter Property="Background" Value="{DynamicResource Interactive.Neutral.Default}"/>
-		<Setter Property="Foreground" Value="{DynamicResource Foreground.Secondary}"/>
+			<Setter Property="Foreground" Value="{DynamicResource Foreground.Secondary}"/>
 		</Style>
 
 		<Style Selector="^:disabled /template/ ContentPresenter#PART_ContentPresenter">
 			<Setter Property="Background" Value="{DynamicResource Interactive.Neutral.Default}"/>
-		<Setter Property="Foreground" Value="{DynamicResource Foreground.Secondary}"/>
+			<Setter Property="Foreground" Value="{DynamicResource Foreground.Secondary}"/>
 		</Style>
 	</Style>
 

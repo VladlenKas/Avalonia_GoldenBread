@@ -1,5 +1,4 @@
-﻿using GoldenBread.Desktop.Enums;
-using GoldenBread.Desktop.Helpers;
+﻿using GoldenBread.Desktop.Helpers;
 using GoldenBread.Domain.Models;
 using GoldenBread.Domain.Requests;
 using GoldenBread.Domain.Responses;
@@ -43,21 +42,6 @@ namespace GoldenBread.Desktop.Services
             }
 
             return apiResponse;
-        }
-
-        /// <summary>
-        /// A function for granting rights depending on the position
-        /// </summary>
-        /// <param name="permission"></param>
-        /// <returns></returns>
-        public bool HasPermission(Permission permission)
-        {
-            return CurrentRole switch
-            {
-                UserRole.Admin => true,
-                UserRole.ManagerProduction => permission != Permission.Delete,
-                _ => false
-            };
         }
 
         public void Logout()

@@ -7,6 +7,7 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
     <ApplicationIcon>Assets\goldenbread-logo.ico</ApplicationIcon>
+	<RootNamespace>GoldenBread.Desktop</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
@@ -18,25 +19,23 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Avalonia" Version="11.3.8" />
-    <PackageReference Include="Avalonia.Controls.DataGrid" Version="11.3.8" />
-    <PackageReference Include="Avalonia.Desktop" Version="11.3.8" />
-    <PackageReference Include="Avalonia.Themes.Fluent" Version="11.3.8" />
-    <PackageReference Include="Avalonia.Fonts.Inter" Version="11.3.8" />
+    <PackageReference Include="Avalonia" Version="11.3.9" />
+    <PackageReference Include="Avalonia.Controls.DataGrid" Version="11.3.9" />
+    <PackageReference Include="Avalonia.Desktop" Version="11.3.9" />
+    <PackageReference Include="Avalonia.Themes.Fluent" Version="11.3.9" />
+    <PackageReference Include="Avalonia.Fonts.Inter" Version="11.3.9" />
     <!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
-    <PackageReference Include="Avalonia.Diagnostics" Version="11.3.8">
+    <PackageReference Include="Avalonia.Diagnostics" Version="11.3.9">
       <IncludeAssets Condition="'$(Configuration)' != 'Debug'">None</IncludeAssets>
       <PrivateAssets Condition="'$(Configuration)' != 'Debug'">All</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="FluentValidation" Version="12.1.0" />
+    <PackageReference Include="Material.Icons.Avalonia" Version="2.4.1" />
 	<PackageReference Include="MessageBox.Avalonia" Version="3.3.0" />
     <PackageReference Include="Microsoft.AspNet.WebApi.Client" Version="6.0.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="10.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Hosting" Version="10.0.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
     <PackageReference Include="Projektanker.Icons.Avalonia" Version="9.6.2" />
-    <PackageReference Include="Projektanker.Icons.Avalonia.MaterialDesign" Version="9.6.2" />
-    <PackageReference Include="ReactiveUI" Version="22.2.1" />
+    <PackageReference Include="ReactiveUI" Version="22.3.1" />
     <PackageReference Include="ReactiveUI.Avalonia" Version="11.3.8" />
     <PackageReference Include="ReactiveUI.Fody" Version="19.5.41" />
     <PackageReference Include="ReactiveUI.Validation" Version="6.0.5" />
@@ -47,30 +46,4 @@
     <ProjectReference Include="..\GoldenBread.Domain\GoldenBread.Domain.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Compile Update="Views\Controls\ToolbarView.axaml.cs">
-      <DependentUpon>ToolbarView.axaml</DependentUpon>
-    </Compile>
-    <Compile Update="Views\Pages\CompaniesView.axaml.cs">
-      <DependentUpon>CompaniesView.axaml</DependentUpon>
-    </Compile>
-    <Compile Update="Views\Pages\EmployeesView.axaml.cs">
-      <DependentUpon>EmployeesView.axaml</DependentUpon>
-    </Compile>
-    <Compile Update="Views\Pages\IngredientsView.axaml.cs">
-      <DependentUpon>IngredientsView.axaml</DependentUpon>
-    </Compile>
-    <Compile Update="Views\Controls\TopbarView.axaml.cs">
-      <DependentUpon>TopbarView.axaml</DependentUpon>
-    </Compile>
-    <Compile Update="Views\LoginView.axaml.cs">
-      <DependentUpon>LoginView.axaml</DependentUpon>
-    </Compile>
-    <Compile Update="Views\Pages\ProductsView.axaml.cs">
-      <DependentUpon>ProductsView.axaml</DependentUpon>
-    </Compile>
-    <Compile Update="Views\Pages\UsersView.axaml.cs">
-      <DependentUpon>UsersView.axaml</DependentUpon>
-    </Compile>
-  </ItemGroup>
 </Project>

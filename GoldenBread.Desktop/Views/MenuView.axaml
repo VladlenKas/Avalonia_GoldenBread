@@ -1,36 +1,83 @@
 ﻿<Window xmlns="https://github.com/avaloniaui"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:reactiveui="http://reactiveui.net/"
-        xmlns:controls="using:GoldenBread.Desktop.Views.Controls"
-        x:Class="GoldenBread.Desktop.Views.MenuView"
-        xmlns:vm="using:GoldenBread.Desktop.ViewModels"
-        x:DataType="vm:MenuViewModel"
-        Width="1280" Height="800"
-        Title="Главное меню"
-        x:CompileBindings="False"
-        Background="{DynamicResource Background.Specific}">
-    
-    <Grid ColumnDefinitions="Auto * *" RowDefinitions="Auto *">
+		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+		xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+		xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+		xmlns:reactiveui="http://reactiveui.net/"
+		xmlns:materialIcons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+		x:Class="GoldenBread.Desktop.Views.MenuView"
+		xmlns:vm="using:GoldenBread.Desktop.ViewModels"
+		x:DataType="vm:MenuViewModel"
+		Width="1280" Height="800"
+		Title="Главное меню"
+		Background="{DynamicResource Background.Specific}">
 
-        <!-- Sidebar -->
-        <controls:SidebarView Grid.Column="0" 
-                              Grid.RowSpan="2"
-                              DataContext="{Binding Sidebar}"/>
+	<Design.DataContext>
+		<vm:MenuViewModel/>
+	</Design.DataContext>
 
-        <!-- Topbar -->
-        <controls:TopbarView Grid.Column="1" 
-                             Grid.ColumnSpan="2"
-                             Grid.Row="0"
-                             DataContext="{Binding Topbar}"
-                             VerticalAlignment="Top"/>
+	<SplitView IsPaneOpen="{Binding IsPaneOpen}"
+			   DisplayMode="CompactInline"
+			   PaneBackground="Pink"
+			   OpenPaneLength="250"
+			   CompactPaneLength="68">
 
-        <!-- Content area -->
-        <ContentControl Grid.Column="1" 
-                        Grid.ColumnSpan="2"
-                        Grid.Row="1"
-                        Content="{Binding CurrentPage}"/>
+		<SplitView.Pane>
+			<Border Margin="16 8 16 16">
+				<DockPanel>
+					<Button DockPanel.Dock="Top"
+							Command="{Binding TogglePaneCommand}"
+							Margin="5" Padding="10">
+					</Button>
 
-    </Grid>
+					<!-- Sidebar с разделами -->
+					<ListBox ItemsSource="{Binding Sections}"
+							 SelectedItem="{Binding SelectedSection}"
+							 Classes="sidebar"
+							 Background="Pink">
+						<ListBox.ItemTemplate>
+							<DataTemplate>
+								<StackPanel Orientation="Horizontal" Spacing="10">
+									<materialIcons:MaterialIcon Kind="{Binding IconKey}"/>
+									<TextBlock Text="{Binding Name}"/>
+								</StackPanel>
+							</DataTemplate>
+						</ListBox.ItemTemplate>
+					</ListBox>
+				</DockPanel>
+			</Border>
+		</SplitView.Pane>
+
+		<SplitView.Content>
+			<!-- Правая часть: вкладки + контент -->
+			<DockPanel>
+				<!-- Вкладки страниц сверху -->
+				<ListBox DockPanel.Dock="Top"
+						 ItemsSource="{Binding SelectedSection.Pages}"
+						 SelectedItem="{Binding SelectedPage}"
+						 Background="{StaticResource SidebarBackground}"
+						 Classes="tabs">
+
+					<ListBox.ItemsPanel>
+						<ItemsPanelTemplate>
+							<StackPanel Orientation="Horizontal"/>
+						</ItemsPanelTemplate>
+					</ListBox.ItemsPanel>
+
+					<ListBox.ItemTemplate>
+						<DataTemplate>
+							<Border Padding="15,8" CornerRadius="4">
+								<TextBlock Text="{Binding Title}"/>
+							</Border>
+						</DataTemplate>
+					</ListBox.ItemTemplate>
+				</ListBox>
+
+				<!-- Контент выбранной страницы -->
+				<Border CornerRadius="12,0,0,0" Background="#2D2D2D">
+					<TransitioningContentControl Content="{Binding CurrentPageContent}"/>
+				</Border>
+
+			</DockPanel>
+		</SplitView.Content>
+	</SplitView>
 </Window>

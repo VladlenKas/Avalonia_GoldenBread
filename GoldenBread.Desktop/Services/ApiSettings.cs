@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GoldenBread.Desktop.Settings
+namespace GoldenBread.Desktop.Services
 {
     public class ApiSettings
     {

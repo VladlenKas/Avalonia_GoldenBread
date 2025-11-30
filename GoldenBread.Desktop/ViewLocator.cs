@@ -1,12 +1,7 @@
 ﻿using Avalonia.Controls;
 using Avalonia.Controls.Templates;
-using GoldenBread.Desktop.ViewModels;
 using GoldenBread.Desktop.ViewModels.Base;
-using ReactiveUI;
-using ReactiveUI.Validation.Helpers;
 using System;
-using System.Diagnostics;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace GoldenBread.Desktop
 {
@@ -24,10 +19,7 @@ namespace GoldenBread.Desktop
 
             if (type != null)
             {
-                // Find View from DI
-                var view = Program.ServiceProvider.GetService(type) as Control;
-
-                return view ?? (Control)Activator.CreateInstance(type)!;
+                return (Control)Activator.CreateInstance(type)!;
             }
 
             return new TextBlock { Text = "Not Found: " + name };
@@ -35,7 +27,7 @@ namespace GoldenBread.Desktop
 
         public bool Match(object? data)
         {
-            return data is ValidatableViewModelBase;
+            return data is ViewModelBase;
         }
     }
 }

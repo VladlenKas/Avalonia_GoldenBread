@@ -1,0 +1,55 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			 x:Class="GoldenBread.Desktop.Views.Controls.DetailsPanelControl"
+			 x:CompileBindings="False">
+
+	<Border Background="Transparent">
+
+		<StackPanel Spacing="8">
+			<!-- Title mode -->
+			<TextBlock Text="{Binding HeaderTitle}"
+					   FontSize="18"
+					   FontWeight="Bold"
+					   Margin="0 0 0 8"/>
+
+			<WrapPanel Orientation="Horizontal"
+					   ItemSpacing="8">
+
+				<!-- View mode -->
+				<Button Content="Редактировать"
+						Command="{Binding EditCommand}"
+						IsVisible="{Binding IsViewMode}"/>
+
+				<Button Content="Удалить"
+						Command="{Binding DeleteCommand}"
+						IsVisible="{Binding IsViewMode}"
+						Classes="danger"/>
+
+				<!-- Edit mode -->
+				<Button Content="Сохранить"
+						Command="{Binding SaveCommand}"
+						IsVisible="{Binding IsEditMode}"
+						Classes="accent"/>
+
+				<!-- Create mode -->
+				<Button Content="Сохранить"
+						Command="{Binding SaveCommand}"
+						IsVisible="{Binding IsCreateMode}"
+						Classes="accent"/>
+
+				<Button Content="Отменить"
+						Command="{Binding CancelCommand}"
+						IsVisible="{Binding IsEditMode}"/>
+
+				<!-- Close -->
+				<Button Content="✕"
+						Command="{Binding CloseCommand}"
+						ToolTip.Tip="Закрыть"
+						Width="32"
+						Height="32"/>
+			</WrapPanel>
+		</StackPanel>
+	</Border>
+</UserControl>

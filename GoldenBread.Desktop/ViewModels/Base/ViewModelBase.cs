@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace GoldenBread.Desktop.ViewModels.Base
 {
-    public class ValidatableViewModelBase :  ReactiveValidationObject
+    public class ViewModelBase :  ReactiveValidationObject
     {
         [Reactive] private bool IsDirty { get; set; }
 
@@ -34,7 +34,7 @@ namespace GoldenBread.Desktop.ViewModels.Base
         public ValidationHelper ValidateRequired<TViewModel>(
         TViewModel viewModel,
         Expression<Func<TViewModel, string>> property)
-        where TViewModel : ValidatableViewModelBase
+        where TViewModel : ViewModelBase
         {
             return viewModel.ValidationRule(
                 property,
@@ -49,7 +49,7 @@ namespace GoldenBread.Desktop.ViewModels.Base
         public ValidationHelper ValidateAge<TViewModel>(
         TViewModel viewModel,
         Expression<Func<TViewModel, string>> property)
-        where TViewModel : ValidatableViewModelBase
+        where TViewModel : ViewModelBase
         {
             return viewModel.ValidationRule(
                 property,
@@ -79,7 +79,7 @@ namespace GoldenBread.Desktop.ViewModels.Base
         public ValidationHelper ValidateDateFormat<TViewModel>(
         TViewModel viewModel,
         Expression<Func<TViewModel, string>> property)
-        where TViewModel : ValidatableViewModelBase
+        where TViewModel : ViewModelBase
         {
             return viewModel.ValidationRule(
                 property,

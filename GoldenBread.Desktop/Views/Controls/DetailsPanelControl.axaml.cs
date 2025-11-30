@@ -4,10 +4,10 @@ using Avalonia.Markup.Xaml;
 
 namespace GoldenBread.Desktop.Views.Controls;
 
-public partial class ToolbarView : UserControl
+public partial class DetailsPanelControl : UserControl
 {
-    public ToolbarView()
+    public DetailsPanelControl()
     {
         InitializeComponent();
-    }   
+    }
 }
