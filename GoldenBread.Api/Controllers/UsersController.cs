@@ -1,8 +1,9 @@
-﻿using GoldenBread.Api.Services;
-using GoldenBread.Api.Helpers;
+﻿using GoldenBread.Api.Helpers;
+using GoldenBread.Api.Services;
+using GoldenBread.Domain.Models;
+using GoldenBread.Domain.Requests;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using GoldenBread.Domain.Models;
 
 namespace GoldenBread.Api.Controllers
 {
@@ -11,7 +12,7 @@ namespace GoldenBread.Api.Controllers
     public class UsersController : ApiControllerBase
     {
         [HttpGet]
-        public async Task<IActionResult> GetAllAsync([FromServices] UserApiService service)
+        public async Task<IActionResult> GetAllAsync([FromServices] UserService service)
         {
             try
             {
@@ -24,8 +25,27 @@ namespace GoldenBread.Api.Controllers
             }
         }
 
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteAsync([FromServices] UserService service, int id)
+        {
+            try
+            {
+                var result = await service.DeleteAsync(id);
+                if (!result)
+                {
+                    return NotFoundError(MessageHelper.UserNotFound);
+                }
+
+                return Success<object>(MessageHelper.UserDeleted);
+            }
+            catch (Exception ex)
+            {
+                return ServerError(MessageHelper.ErrorFromApi);
+            }
+        }
+
         [HttpPost]
-        public async Task<IActionResult> CreateAsync([FromServices] UserApiService service, [FromBody] User user)
+        public async Task<IActionResult> CreateAsync([FromServices] UserService service, [FromBody] UserRequest user)
         {
             try
             {
@@ -39,7 +59,7 @@ namespace GoldenBread.Api.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateAsync([FromServices] UserApiService service, int id, [FromBody] User user)
+        public async Task<IActionResult> UpdateAsync([FromServices] UserService service, int id, [FromBody] UserRequest user)
         {
             try
             {
@@ -50,26 +70,6 @@ namespace GoldenBread.Api.Controllers
                 }
 
                 return SuccessWithData(result, MessageHelper.UserUpdated);
-            }
-            catch (Exception ex)
-            {
-                return ServerError(MessageHelper.ErrorFromApi);
-            }
-        }
-
-
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteAsync([FromServices] UserApiService service, int id)
-        {
-            try
-            {
-                var result = await service.DeleteAsync(id);
-                if (!result)
-                {
-                    return NotFoundError(MessageHelper.UserNotFound);
-                }
-
-                return Success<object>(MessageHelper.UserDeleted);
             }
             catch (Exception ex)
             {

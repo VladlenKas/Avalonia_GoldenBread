@@ -12,7 +12,7 @@ namespace GoldenBread.Api.Controllers
     {
         [HttpPost]
         public async Task<IActionResult> Login(
-            [FromServices] AuthorizationApiService service, 
+            [FromServices] AuthorizationService service, 
             [FromBody] LoginRequest request)
         {
             try

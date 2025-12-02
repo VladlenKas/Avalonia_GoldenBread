@@ -1,30 +1,31 @@
 ﻿<UserControl xmlns="https://github.com/avaloniaui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:local="using:GoldenBread.Desktop.Views.Pages"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="GoldenBread.Desktop.Views.Pages.UsersPageView"
+			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+			 xmlns:local="using:GoldenBread.Desktop.Views.Pages"
+			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			 mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+			 x:Class="GoldenBread.Desktop.Views.Pages.UsersPageView"
 			 xmlns:controls="using:GoldenBread.Desktop.Views.Controls"
-             xmlns:vm="using:GoldenBread.Desktop.ViewModels.Pages"
-             x:DataType="vm:UsersPageViewModel">
+			 xmlns:vm="using:GoldenBread.Desktop.ViewModels.Pages"
+			 xmlns:vmControls="using:GoldenBread.Desktop.ViewModels.Controls"
+			 x:DataType="vm:UsersPageViewModel">
 
-		<Design.DataContext>
-			<vm:UsersPageViewModel/>
-		</Design.DataContext>
+	<Design.DataContext>
+		<vm:UsersPageViewModel/>
+	</Design.DataContext>
 
-    	<Grid>
-		<!-- Основной контент: DataGrid -->
+	<Grid>
+		<!-- Content -->
 		<DataGrid AutoGenerateColumns="True"
 				  ItemsSource="{Binding Users}"
 				  SelectedItem="{Binding SelectedUser}"/>
 
-		<!-- Затемнение -->
+		<!-- Shading -->
 		<Border Classes="overlay-backdrop"
 				Classes.show="{Binding DetailsPanel.IsOpen}"
 				PointerPressed="OnOverlayClick"/>
 
-		<!-- Панель справа (поверх всего) -->
+		<!-- Details Panel -->
 		<Border HorizontalAlignment="Right"
 				VerticalAlignment="Stretch"
 				Width="400"
@@ -34,12 +35,11 @@
 				Padding="16"
 				Classes="animated-panel"
 				Classes.open="{Binding DetailsPanel.IsOpen}">
-			 
+
 			<StackPanel Spacing="12">
-				<!-- Шапка с кнопками -->
 				<controls:DetailsPanelControl DataContext="{Binding DetailsPanel}"/>
 
-				<!-- Поля клиента -->
+				<!-- Fields -->
 				<StackPanel Spacing="8">
 					<TextBlock Text="Имя"/>
 					<TextBox Text="{Binding DetailsPanel.EditableEntity.Lastname}"

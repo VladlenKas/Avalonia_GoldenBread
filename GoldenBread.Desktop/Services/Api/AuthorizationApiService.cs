@@ -7,9 +7,9 @@ using System.Net.Http.Json;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GoldenBread.Desktop.Services
+namespace GoldenBread.Desktop.Services.Api
 {
-    public class AuthorizationService(ApiClient apiClient)
+    public class AuthorizationApiService(ApiClient apiClient)
     {
         // == Fields ==
         private User? _currentUser;

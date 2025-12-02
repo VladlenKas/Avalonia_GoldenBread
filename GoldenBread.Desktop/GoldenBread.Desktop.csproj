@@ -1,49 +1,50 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup>
-    <OutputType>WinExe</OutputType>
-    <TargetFramework>net8.0</TargetFramework>
-    <Nullable>enable</Nullable>
-    <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
-    <ApplicationManifest>app.manifest</ApplicationManifest>
-    <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
-    <ApplicationIcon>Assets\goldenbread-logo.ico</ApplicationIcon>
-	<RootNamespace>GoldenBread.Desktop</RootNamespace>
-  </PropertyGroup>
+	<PropertyGroup>
+		<OutputType>WinExe</OutputType>
+		<TargetFramework>net8.0</TargetFramework>
+		<Nullable>enable</Nullable>
+		<BuiltInComInteropSupport>true</BuiltInComInteropSupport>
+		<ApplicationManifest>app.manifest</ApplicationManifest>
+		<AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
+		<ApplicationIcon>Assets\goldenbread-logo.ico</ApplicationIcon>
+		<RootNamespace>GoldenBread.Desktop</RootNamespace>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <AvaloniaResource Include="Assets\**" />
-  </ItemGroup>
+	<ItemGroup>
+		<AvaloniaResource Include="Assets\**" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <Resource Include="Assets\goldenbread-logo.ico" />
-  </ItemGroup>
+	<ItemGroup>
+		<Resource Include="Assets\goldenbread-logo.ico" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Avalonia" Version="11.3.9" />
-    <PackageReference Include="Avalonia.Controls.DataGrid" Version="11.3.9" />
-    <PackageReference Include="Avalonia.Desktop" Version="11.3.9" />
-    <PackageReference Include="Avalonia.Themes.Fluent" Version="11.3.9" />
-    <PackageReference Include="Avalonia.Fonts.Inter" Version="11.3.9" />
-    <!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
-    <PackageReference Include="Avalonia.Diagnostics" Version="11.3.9">
-      <IncludeAssets Condition="'$(Configuration)' != 'Debug'">None</IncludeAssets>
-      <PrivateAssets Condition="'$(Configuration)' != 'Debug'">All</PrivateAssets>
-    </PackageReference>
-    <PackageReference Include="Material.Icons.Avalonia" Version="2.4.1" />
-	<PackageReference Include="MessageBox.Avalonia" Version="3.3.0" />
-    <PackageReference Include="Microsoft.AspNet.WebApi.Client" Version="6.0.0" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="10.0.0" />
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
-    <PackageReference Include="Projektanker.Icons.Avalonia" Version="9.6.2" />
-    <PackageReference Include="ReactiveUI" Version="22.3.1" />
-    <PackageReference Include="ReactiveUI.Avalonia" Version="11.3.8" />
-    <PackageReference Include="ReactiveUI.Fody" Version="19.5.41" />
-    <PackageReference Include="ReactiveUI.Validation" Version="6.0.5" />
-    <PackageReference Include="ReactiveValidation" Version="2.0.3" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="Avalonia" Version="11.3.9" />
+		<PackageReference Include="Avalonia.Controls.DataGrid" Version="11.3.9" />
+		<PackageReference Include="Avalonia.Desktop" Version="11.3.9" />
+		<PackageReference Include="Avalonia.Themes.Fluent" Version="11.3.9" />
+		<PackageReference Include="Avalonia.Fonts.Inter" Version="11.3.9" />
+		<!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
+		<PackageReference Include="Avalonia.Diagnostics" Version="11.3.9">
+			<IncludeAssets Condition="'$(Configuration)' != 'Debug'">None</IncludeAssets>
+			<PrivateAssets Condition="'$(Configuration)' != 'Debug'">All</PrivateAssets>
+		</PackageReference>
+		<PackageReference Include="Material.Icons.Avalonia" Version="2.4.1" />
+		<PackageReference Include="MessageBox.Avalonia" Version="3.3.0" />
+		<PackageReference Include="Microsoft.AspNet.WebApi.Client" Version="6.0.0" />
+		<PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="10.0.0" />
+		<PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
+		<PackageReference Include="Projektanker.Icons.Avalonia" Version="9.6.2" />
+		<PackageReference Include="ReactiveUI" Version="22.3.1" />
+		<PackageReference Include="ReactiveUI.Avalonia" Version="11.3.8" />
+		<PackageReference Include="ReactiveUI.Fody" Version="19.5.41" />
+		<PackageReference Include="ReactiveUI.Validation" Version="6.0.5" />
+		<PackageReference Include="ReactiveValidation" Version="2.0.3" />
 
-  <ItemGroup>
-    <ProjectReference Include="..\GoldenBread.Domain\GoldenBread.Domain.csproj" />
-  </ItemGroup>
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\GoldenBread.Domain\GoldenBread.Domain.csproj" />
+	</ItemGroup>
 
 </Project>

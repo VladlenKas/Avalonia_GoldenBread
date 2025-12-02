@@ -10,7 +10,7 @@ namespace GoldenBread.Api.Controllers
     public class EmployeesController : ApiControllerBase
     {
         [HttpGet]
-        public async Task<IActionResult> GetEmployees([FromServices] EmployeeApiService service)
+        public async Task<IActionResult> GetEmployees([FromServices] EmployeeService service)
         {
             try
             {

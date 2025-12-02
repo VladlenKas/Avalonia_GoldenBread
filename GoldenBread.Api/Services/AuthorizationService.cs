@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace GoldenBread.Api.Services
 {
-    public class AuthorizationApiService(GoldenBreadContext context)
+    public class AuthorizationService(GoldenBreadContext context)
     {
         // Login
         public async Task<User> LoginAsync(string email, string password)

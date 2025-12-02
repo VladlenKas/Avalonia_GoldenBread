@@ -2,9 +2,12 @@
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
 using GoldenBread.Desktop.Services;
+using GoldenBread.Desktop.Services.Api;
+using GoldenBread.Desktop.Services.Crud;
 using GoldenBread.Desktop.ViewModels;
 using GoldenBread.Desktop.ViewModels.Pages;
 using GoldenBread.Desktop.Views;
+using GoldenBread.Domain.Models;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Net.Http;
@@ -66,8 +69,9 @@ namespace GoldenBread.Desktop
 
             // Services & Managers
             services.AddSingleton<ApiClient>();
-            services.AddSingleton<AuthorizationService>();
-            services.AddSingleton<UserService>();
+            services.AddSingleton<AuthorizationApiService>();
+
+            AddServices(services);
 
             // ViewModels Windows
             services.AddSingleton<LoginViewModel>();
@@ -78,6 +82,22 @@ namespace GoldenBread.Desktop
 
             services.AddSingleton<LoginView>();
             services.AddSingleton<MenuView>();
+
+        }
+       
+        private static IServiceCollection AddServices(IServiceCollection services)
+        {
+            // Services without interface
+            services.AddSingleton<ApiClient>();
+            services.AddSingleton<AuthorizationApiService>();
+
+            // API-services
+            services.AddTransient<IApiService<User>, UserApiService>();
+
+            // CRUD-srvices
+            services.AddTransient<ICrudService<User>, UserCrudService>();
+
+            return services;
         }
     }
 }

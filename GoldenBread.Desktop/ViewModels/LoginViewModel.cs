@@ -1,6 +1,6 @@
 ﻿using Avalonia.Controls;
 using GoldenBread.Desktop.Helpers;
-using GoldenBread.Desktop.Services;
+using GoldenBread.Desktop.Services.Api;
 using GoldenBread.Desktop.ViewModels.Base;
 using GoldenBread.Desktop.Views;
 using Microsoft.Extensions.DependencyInjection;
@@ -18,7 +18,7 @@ namespace GoldenBread.Desktop.ViewModels
     public partial class LoginViewModel : ViewModelBase
     {
         // ==== Filds ====
-        private readonly AuthorizationService _authService;
+        private readonly AuthorizationApiService _authService;
         private readonly IServiceProvider _serviceProvider;
 
 
@@ -35,7 +35,7 @@ namespace GoldenBread.Desktop.ViewModels
         public LoginViewModel(IServiceProvider serviceProvider)
         {
             _serviceProvider = serviceProvider;
-            _authService = _serviceProvider.GetRequiredService<AuthorizationService>();
+            _authService = _serviceProvider.GetRequiredService<AuthorizationApiService>();
 
             ValidateRequired(this, x => x.Email);
             ValidateRequired(this, x => x.Password);

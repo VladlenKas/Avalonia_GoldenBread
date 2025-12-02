@@ -1,5 +1,6 @@
-﻿using GoldenBread.Desktop.ViewModels.Base;
-using GoldenBread.Desktop.ViewModels.DetailsPanels;
+﻿using GoldenBread.Desktop.Services.Crud;
+using GoldenBread.Desktop.ViewModels.Base;
+using GoldenBread.Desktop.ViewModels.Controls;
 using GoldenBread.Domain.Models;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
@@ -16,18 +17,25 @@ namespace GoldenBread.Desktop.ViewModels.Pages
 {
     public class UsersPageViewModel : ViewModelBase
     {
-        public ObservableCollection<User> Users { get; } = new();
+        // ==== Services ====
+        private readonly ICrudService<User> _userCrudService;
 
+        // ==== Props ====
         [Reactive] public User? SelectedUser { get; set; }
+        public ObservableCollection<User> Users { get; } = new();
+        public DetailsPanelViewModel<User> DetailsPanel { get; }
 
-        public UsersDetailsPanelViewModel DetailsPanel { get; } = new();
-
+        // ==== Commands ====
         public ReactiveCommand<Unit, Unit> CreateCommand { get; }
 
-        public UsersPageViewModel()
+        // ==== Designer ====
+        public UsersPageViewModel(ICrudService<User> userCrudService)
         {
+            _userCrudService = userCrudService;
+
             LoadSampleData();
 
+            DetailsPanel = new DetailsPanelViewModel<User>(_userCrudService);
             CreateCommand = ReactiveCommand.Create(() => DetailsPanel.ShowCreate());
 
             this.WhenAnyValue(x => x.SelectedUser)
@@ -35,6 +43,7 @@ namespace GoldenBread.Desktop.ViewModels.Pages
                 .Subscribe(m => DetailsPanel.ShowDetails(m));
         }
 
+        // ==== Methods ====
         private void LoadSampleData()
         {
             Users.Add(new User

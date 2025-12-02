@@ -18,9 +18,9 @@ internal class Program
         builder.Services.AddSwaggerGen();
 
         // Services for db requests
-        builder.Services.AddScoped<AuthorizationApiService>();
-        builder.Services.AddScoped<EmployeeApiService>();
-        builder.Services.AddScoped<UserApiService>();
+        builder.Services.AddScoped<AuthorizationService>();
+        builder.Services.AddScoped<EmployeeService>();
+        builder.Services.AddScoped<UserService>();
 
         builder.Services.AddDbContext<GoldenBreadContext>(options =>
         {
