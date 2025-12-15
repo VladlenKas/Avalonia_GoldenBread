@@ -1,5 +1,6 @@
-﻿using GoldenBread.Desktop.Services.Crud;
-using GoldenBread.Desktop.ViewModels.Base;
+﻿using GoldenBread.Desktop.Bases;
+using GoldenBread.Desktop.Interfaces;
+using GoldenBread.Desktop.Services.Crud;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using ReactiveUI.Validation.Helpers;
@@ -9,6 +10,7 @@ using System.Reactive;
 using System.Reactive.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace GoldenBread.Desktop.ViewModels.Controls
 {
@@ -20,15 +22,16 @@ namespace GoldenBread.Desktop.ViewModels.Controls
         Create
     }
 
-    public class DetailsPanelViewModel<TEntity> : ViewModelBase where TEntity : class, new()
+    public class DetailsPanelViewModel<T> : ViewModelValidationBase, IDetailsPanelViewModel
+        where T : class, new()
     {
         // ==== Services ====
-        private readonly ICrudService<TEntity> _crudService;
+        private readonly ICrudService<T> _crudService;
 
         // ==== Reactive Props ====
         [Reactive] public PanelMode Mode { get; set; }
-        [Reactive] public TEntity? OriginalEntity { get; protected set; }
-        [Reactive] public TEntity? EditableEntity { get; protected set; }
+        [Reactive] public T? OriginalEntity { get; protected set; }
+        [Reactive] public T? EditableEntity { get; protected set; }
         [Reactive] public string HeaderTitle { get; private set; }
 
         // ==== OAPHs ====
@@ -50,9 +53,12 @@ namespace GoldenBread.Desktop.ViewModels.Controls
         public ReactiveCommand<Unit, Unit> CancelCommand { get; set; }
         public ReactiveCommand<Unit, Unit> CloseCommand { get; set; }
 
+        // ==== Events ====
+        public event Action<T>? OnEntitySaved;
+        public event Action<int>? OnEntityDeleted;
 
         // ==== Deigner ====
-        public DetailsPanelViewModel(ICrudService<TEntity> crudService)
+        public DetailsPanelViewModel(ICrudService<T> crudService)
         {
             Mode = PanelMode.Hidden;
             _crudService = crudService;
@@ -120,7 +126,8 @@ namespace GoldenBread.Desktop.ViewModels.Controls
                         if (!ok) return; 
 
                         OriginalEntity = EditableEntity;
-                        Mode = Mode == PanelMode.Create ? PanelMode.Hidden : PanelMode.View;
+                        OnEntitySaved?.Invoke(EditableEntity);
+                        Mode = PanelMode.Hidden;
                     }
                 }, canSave);
 
@@ -132,6 +139,8 @@ namespace GoldenBread.Desktop.ViewModels.Controls
                         var ok = await DeleteEntityAsync(OriginalEntity);
                         if (!ok) return;
 
+                        var entityId = GetEntityId(OriginalEntity);
+                        OnEntityDeleted?.Invoke(entityId);
                         Mode = PanelMode.Hidden;
                     }
                 }, canDelete);
@@ -166,7 +175,8 @@ namespace GoldenBread.Desktop.ViewModels.Controls
                 });
         }
 
-        public void ShowDetails(TEntity entity)
+        // For panel
+        public void ShowDetails(T entity)
         {
             OriginalEntity = entity;
             EditableEntity = CloneEntity(OriginalEntity);
@@ -176,14 +186,30 @@ namespace GoldenBread.Desktop.ViewModels.Controls
         public void ShowCreate()
         {
             OriginalEntity = null;
-            EditableEntity = new TEntity();
+            EditableEntity = new T();
             Mode = PanelMode.Create;
         }
 
+        // For crud
+        private Func<T, int> _keySelector;
+
+        public void SetKeySelector(Func<T, int> keySelector)
+        {
+            _keySelector = keySelector;
+        }
+
+        private int GetEntityId(T entity)
+        {
+            return _keySelector?.Invoke(entity) ?? 0;
+        }
+
         // ==== Methods for commands ====
-        private TEntity CloneEntity(TEntity entity) => _crudService.Clone(entity);
-        private bool ValidateEntity(TEntity entity) => _crudService.Validate(entity);
-        private Task<bool> SaveEntityAsync(TEntity entity) => _crudService.SaveAsync(entity);
-        private Task<bool> DeleteEntityAsync(TEntity entity) => _crudService.DeleteAsync(entity);
+        private T CloneEntity(T entity) => _crudService.Clone(entity);
+        private bool ValidateEntity(T entity) => _crudService.Validate(entity);
+        private Task<bool> SaveEntityAsync(T entity) => _crudService.SaveAsync(entity);
+        private Task<bool> DeleteEntityAsync(T entity) => _crudService.DeleteAsync(entity);
+
+        // ==== Interfaces ====
+        ICommand? IDetailsPanelViewModel.CloseCommand => CloseCommand;
     }
 }

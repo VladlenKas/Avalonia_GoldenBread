@@ -1,6 +1,6 @@
 ﻿using Avalonia.Controls;
 using Avalonia.Controls.Templates;
-using GoldenBread.Desktop.ViewModels.Base;
+using GoldenBread.Desktop.Bases;
 using System;
 
 namespace GoldenBread.Desktop
@@ -27,7 +27,7 @@ namespace GoldenBread.Desktop
 
         public bool Match(object? data)
         {
-            return data is ViewModelBase;
+            return data is ViewModelValidationBase;
         }
     }
 }

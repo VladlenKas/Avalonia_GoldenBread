@@ -8,6 +8,7 @@ using GoldenBread.Desktop.ViewModels;
 using GoldenBread.Desktop.ViewModels.Pages;
 using GoldenBread.Desktop.Views;
 using GoldenBread.Domain.Models;
+using GoldenBread.Domain.ReactiveModels;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Net.Http;
@@ -95,7 +96,7 @@ namespace GoldenBread.Desktop
             services.AddTransient<IApiService<User>, UserApiService>();
 
             // CRUD-srvices
-            services.AddTransient<ICrudService<User>, UserCrudService>();
+            services.AddTransient<ICrudService<UserReactive>, UserCrudService>();
 
             return services;
         }

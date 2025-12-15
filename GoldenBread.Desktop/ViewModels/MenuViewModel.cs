@@ -6,13 +6,13 @@ using System.Reactive;
 using System.Reactive.Linq;
 using Material.Icons;
 using Microsoft.Extensions.DependencyInjection;
-using GoldenBread.Desktop.ViewModels.Base;
 using GoldenBread.Desktop.ViewModels.Pages;
 using GoldenBread.Desktop.Services.Api;
+using GoldenBread.Desktop.Bases;
 
 namespace GoldenBread.Desktop.ViewModels
 {
-    public class SectionViewModel : ViewModelBase
+    public class SectionViewModel : ViewModelValidationBase
     {
         public string Name { get; set; } = null!;
         public MaterialIconKind IconKey { get; set; }
@@ -25,13 +25,13 @@ namespace GoldenBread.Desktop.ViewModels
         public Type PageType { get; set; } = null!;
     }
 
-    public class MenuViewModel : ViewModelBase
+    public class MenuViewModel : ViewModelValidationBase
     {
         private AuthorizationApiService _authService;
 
         [Reactive] public SectionViewModel SelectedSection { get; set; }
         [Reactive] public PageInfo SelectedPage { get; set; }
-        [Reactive] public ViewModelBase CurrentPageContent { get; set; }
+        [Reactive] public ViewModelValidationBase CurrentPageContent { get; set; }
 
         [Reactive] public bool IsPaneOpen { get; set; } = true;
         public ReactiveCommand<Unit, bool> TogglePaneCommand { get; }
@@ -101,7 +101,7 @@ namespace GoldenBread.Desktop.ViewModels
                 .WhereNotNull()
                 .Subscribe(page =>
                 {
-                    var vm = serviceProvider.GetRequiredService(page.PageType) as ViewModelBase;
+                    var vm = serviceProvider.GetRequiredService(page.PageType) as ViewModelValidationBase;
                     CurrentPageContent = vm;
                 });
         }
@@ -126,7 +126,7 @@ namespace GoldenBread.Desktop.ViewModels
                 .WhereNotNull()
                 .Subscribe(page =>
                 {
-                    var vm = serviceProvider.GetRequiredService(page.PageType) as ViewModelBase;
+                    var vm = serviceProvider.GetRequiredService(page.PageType) as ViewModelValidationBase;
                     CurrentPageContent = vm;
                 });
         }

@@ -1,13 +1,14 @@
 ﻿using GoldenBread.Desktop.Helpers;
 using GoldenBread.Domain.Models;
+using GoldenBread.Domain.ReactiveModels;
+using GoldenBread.Domain.Requests;
 using GoldenBread.Domain.Responses;
 using System;
-using System.Net.Http.Json;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http.Json;
 using System.Text;
 using System.Threading.Tasks;
-using GoldenBread.Domain.Requests;
 
 namespace GoldenBread.Desktop.Services.Api
 {
@@ -49,6 +50,50 @@ namespace GoldenBread.Desktop.Services.Api
             AccountType = user.AccountType,
             VerificationStatus = user.VerificationStatus,
             Dismissed = user.Dismissed
+        };
+
+        public static UserReactive ToViewModel(User user) => new()
+        {
+            UserId = user.UserId,
+            Firstname = user.Firstname,
+            Lastname = user.Lastname,
+            Patronymic = user.Patronymic,
+            Birthday = user.Birthday,
+            Email = user.Email,
+            Password = user.Password,
+            Role = user.Role,
+            AccountType = user.AccountType,
+            VerificationStatus = user.VerificationStatus,
+        };
+
+        // UserReactive → User (POCO для API)
+        public static User ToModel(UserReactive vm) => new()
+        {
+            UserId = vm.UserId,
+            Firstname = vm.Firstname,
+            Lastname = vm.Lastname,
+            Patronymic = vm.Patronymic,
+            Birthday = vm.Birthday,
+            Email = vm.Email,
+            Password = vm.Password,
+            Role = vm.Role,
+            AccountType = vm.AccountType,
+            VerificationStatus = vm.VerificationStatus,
+        };
+
+        // Клонирование UserReactive
+        public static UserReactive Clone(UserReactive vm) => new()
+        {
+            UserId = vm.UserId,
+            Firstname = vm.Firstname,
+            Lastname = vm.Lastname,
+            Patronymic = vm.Patronymic,
+            Birthday = vm.Birthday,
+            Email = vm.Email,
+            Password = vm.Password,
+            Role = vm.Role,
+            AccountType = vm.AccountType,
+            VerificationStatus = vm.VerificationStatus,
         };
     }
 }

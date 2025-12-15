@@ -1,7 +1,7 @@
 ﻿using Avalonia.Controls;
+using GoldenBread.Desktop.Bases;
 using GoldenBread.Desktop.Helpers;
 using GoldenBread.Desktop.Services.Api;
-using GoldenBread.Desktop.ViewModels.Base;
 using GoldenBread.Desktop.Views;
 using Microsoft.Extensions.DependencyInjection;
 using ReactiveUI;
@@ -15,7 +15,7 @@ using System.Threading.Tasks;
 
 namespace GoldenBread.Desktop.ViewModels
 {
-    public partial class LoginViewModel : ViewModelBase
+    public partial class LoginViewModel : ViewModelValidationBase
     {
         // ==== Filds ====
         private readonly AuthorizationApiService _authService;

@@ -16,14 +16,24 @@
 
 	<Grid>
 		<!-- Content -->
-		<DataGrid AutoGenerateColumns="True"
-				  ItemsSource="{Binding Users}"
-				  SelectedItem="{Binding SelectedUser}"/>
+		<DataGrid AutoGenerateColumns="False"
+				  ItemsSource="{Binding Items}"
+				  SelectedItem="{Binding SelectedItem}"
+				  SelectionMode="Single">
+			<DataGrid.Columns>
+				<DataGridTextColumn Header="ID" Binding="{Binding UserId}" Width="60"/>
+				<DataGridTextColumn Header="Фамилия, имя, отчество" Binding="{Binding Fullname}" Width="*"/>
+				<DataGridTextColumn Header="Должность" Binding="{Binding RoleValue}" Width="200"/>
+				<DataGridTextColumn Header="Дата рождения" Binding="{Binding Birthday}" Width="150"/>
+				<DataGridTextColumn Header="Эл. почта" Binding="{Binding Email}" Width="200"/>
+				<DataGridTextColumn Header="Статус" Binding="{Binding VerificationStatusValue}" Width="180"/>
+			</DataGrid.Columns>
+		</DataGrid>
 
 		<!-- Shading -->
 		<Border Classes="overlay-backdrop"
 				Classes.show="{Binding DetailsPanel.IsOpen}"
-				PointerPressed="OnOverlayClick"/>
+				x:Name="ShadingBorder"/>
 
 		<!-- Details Panel -->
 		<Border HorizontalAlignment="Right"
@@ -42,23 +52,37 @@
 				<!-- Fields -->
 				<StackPanel Spacing="8">
 					<TextBlock Text="Имя"/>
-					<TextBox Text="{Binding DetailsPanel.EditableEntity.Lastname}"
-							 IsReadOnly="{Binding !DetailsPanel.IsEditMode}"/>
-
-					<TextBlock Text="Телефон"/>
 					<TextBox Text="{Binding DetailsPanel.EditableEntity.Firstname}"
 							 IsReadOnly="{Binding !DetailsPanel.IsEditMode}"/>
 
-					<TextBlock Text="Email"/>
+					<TextBlock Text="Фамилия"/>
+					<TextBox Text="{Binding DetailsPanel.EditableEntity.Lastname}"
+							 IsReadOnly="{Binding !DetailsPanel.IsEditMode}"/>
+
+					<TextBlock Text="Отчество"/>
+					<TextBox Text="{Binding DetailsPanel.EditableEntity.Patronymic}"
+							 IsReadOnly="{Binding !DetailsPanel.IsEditMode}"/>
+
+					<TextBlock Text="Дата рождения"/>
+					<TextBox Text="{Binding DetailsPanel.EditableEntity.Birthday}"
+							 IsReadOnly="{Binding !DetailsPanel.IsEditMode}"/>
+
+					<TextBlock Text="Эл. почта"/>
 					<TextBox Text="{Binding DetailsPanel.EditableEntity.Email}"
 							 IsReadOnly="{Binding !DetailsPanel.IsEditMode}"/>
 
-					<TextBlock Text="Адрес"/>
+					<TextBlock Text="Пароль"/>
 					<TextBox Text="{Binding DetailsPanel.EditableEntity.Password}"
-							 TextWrapping="Wrap"
-							 AcceptsReturn="True"
-							 MinHeight="60"
 							 IsReadOnly="{Binding !DetailsPanel.IsEditMode}"/>
+
+					<!--<TextBlock Text="Должность"/>
+					<TextBox Text="{Binding DetailsPanel.EditableEntity.Email}"
+							 IsReadOnly="{Binding !DetailsPanel.IsEditMode}"/>
+
+					<TextBlock Text="Статус"/>
+					<TextBox Text="{Binding DetailsPanel.EditableEntity.Email}"
+							 IsReadOnly="{Binding !DetailsPanel.IsEditMode}"/>-->
+
 				</StackPanel>
 			</StackPanel>
 		</Border>

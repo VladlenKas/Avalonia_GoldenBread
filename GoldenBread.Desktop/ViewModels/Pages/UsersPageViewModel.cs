@@ -1,86 +1,83 @@
-﻿using GoldenBread.Desktop.Services.Crud;
-using GoldenBread.Desktop.ViewModels.Base;
-using GoldenBread.Desktop.ViewModels.Controls;
+﻿using GoldenBread.Desktop.Bases;
+using GoldenBread.Desktop.Services.Api;
+using GoldenBread.Desktop.Services.Crud;
 using GoldenBread.Domain.Models;
-using ReactiveUI;
+using GoldenBread.Domain.ReactiveModels;
 using ReactiveUI.Fody.Helpers;
-using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Reactive;
-using System.Reactive.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace GoldenBread.Desktop.ViewModels.Pages
+namespace GoldenBread.Desktop.ViewModels.Pages;
+
+public class UsersPageViewModel : PageViewModelBase<UserReactive>
 {
-    public class UsersPageViewModel : ViewModelBase
+    private readonly IApiService<User> _userApiService;
+
+    public UsersPageViewModel(ICrudService<UserReactive> userCrudService,
+        IApiService<User> userApiService)
+        : base(userCrudService, u => u.UserId)
     {
-        // ==== Services ====
-        private readonly ICrudService<User> _userCrudService;
-
-        // ==== Props ====
-        [Reactive] public User? SelectedUser { get; set; }
-        public ObservableCollection<User> Users { get; } = new();
-        public DetailsPanelViewModel<User> DetailsPanel { get; }
-
-        // ==== Commands ====
-        public ReactiveCommand<Unit, Unit> CreateCommand { get; }
-
-        // ==== Designer ====
-        public UsersPageViewModel(ICrudService<User> userCrudService)
-        {
-            _userCrudService = userCrudService;
-
-            LoadSampleData();
-
-            DetailsPanel = new DetailsPanelViewModel<User>(_userCrudService);
-            CreateCommand = ReactiveCommand.Create(() => DetailsPanel.ShowCreate());
-
-            this.WhenAnyValue(x => x.SelectedUser)
-                .WhereNotNull()
-                .Subscribe(m => DetailsPanel.ShowDetails(m));
-        }
-
-        // ==== Methods ====
-        private void LoadSampleData()
-        {
-            Users.Add(new User
-            {
-                Lastname = "АЛалалла",
-                Email = "dsadads"
-            });
-            Users.Add(new User
-            {
-                Lastname = "АЛалалла",
-                Email = "dsadads"
-            });
-            Users.Add(new User
-            {
-                Lastname = "АЛалалла",
-                Email = "dsadads"
-            });
-            Users.Add(new User
-            {
-                Lastname = "АЛалалла",
-                Email = "dsadads"
-            });
-            Users.Add(new User
-            {
-                Lastname = "АЛалалла",
-                Email = "dsadads"
-            });
-            Users.Add(new User
-            {
-                Lastname = "АЛалалла",
-                Email = "dsadads"
-            });
-            Users.Add(new User
-            {
-                Lastname = "АЛалалла",
-                Email = "dsadads"
-            });
-        }
+        _userApiService = userApiService;
+        DetailsPanel.SetKeySelector(u => u.UserId);
+        LoadData();
     }
+
+    private async void LoadData()
+    {
+        var users = await _userApiService.GetAllAsync(); // Получаем User из API
+        var reactiveUsers = users.Select(UserApiService.ToViewModel);
+        AddOrUpdateItems(reactiveUsers);
+    }
+
 }
+
+/*public class UsersPageViewModelDesigner : PageViewModelBase<User>
+{
+    private static ICrudService<User> userCrudService;
+
+    public UsersPageViewModelDesigner() : base(userCrudService)
+    {
+        LoadSampleData();
+    }
+
+    private void LoadSampleData()
+    {
+        Items.Add(new User
+        {
+            Lastname = "АЛалалла",
+            Email = "dsadads"
+        });
+        Items.Add(new User
+        {
+            Lastname = "АЛалалла",
+            Email = "dsadads"
+        });
+        Items.Add(new User
+        {
+            Lastname = "АЛалалла",
+            Email = "dsadads"
+        });
+        Items.Add(new User
+        {
+            Lastname = "АЛалалла",
+            Email = "dsadads"
+        });
+        Items.Add(new User
+        {
+            Lastname = "АЛалалла",
+            Email = "dsadads"
+        });
+        Items.Add(new User
+        {
+            Lastname = "АЛалалла",
+            Email = "dsadads"
+        });
+        Items.Add(new User
+        {
+            Lastname = "АЛалалла",
+            Email = "dsadads"
+        });
+    }
+}*/
+
