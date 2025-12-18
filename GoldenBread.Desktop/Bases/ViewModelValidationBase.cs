@@ -15,21 +15,17 @@ namespace GoldenBread.Desktop.Bases
 {
     public class ViewModelValidationBase :  ReactiveValidationObject
     {
-        [Reactive] private bool IsDirty { get; set; }
+        [Reactive] public bool IsDirty { get; set; }
 
         public void ActivateValidation() => IsDirty = true;
         public void DeactivateValidation() => IsDirty = false;
+
         public bool Validate()
         {
             ActivateValidation();
-
-            if (ValidationContext.GetIsValid())
-                return true;
-
-            return false;
+            return ValidationContext.GetIsValid();
         }
 
-        // ==== Validation Rules ====
         // Not Empty
         public ValidationHelper ValidateRequired<TViewModel>(
         TViewModel viewModel,

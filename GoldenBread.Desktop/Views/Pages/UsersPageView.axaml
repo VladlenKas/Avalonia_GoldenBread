@@ -10,25 +10,33 @@
 			 xmlns:vmControls="using:GoldenBread.Desktop.ViewModels.Controls"
 			 x:DataType="vm:UsersPageViewModel">
 
-	<Design.DataContext>
-		<vm:UsersPageViewModel/>
-	</Design.DataContext>
-
 	<Grid>
 		<!-- Content -->
-		<DataGrid AutoGenerateColumns="False"
-				  ItemsSource="{Binding Items}"
-				  SelectedItem="{Binding SelectedItem}"
-				  SelectionMode="Single">
-			<DataGrid.Columns>
-				<DataGridTextColumn Header="ID" Binding="{Binding UserId}" Width="60"/>
-				<DataGridTextColumn Header="Фамилия, имя, отчество" Binding="{Binding Fullname}" Width="*"/>
-				<DataGridTextColumn Header="Должность" Binding="{Binding RoleValue}" Width="200"/>
-				<DataGridTextColumn Header="Дата рождения" Binding="{Binding Birthday}" Width="150"/>
-				<DataGridTextColumn Header="Эл. почта" Binding="{Binding Email}" Width="200"/>
-				<DataGridTextColumn Header="Статус" Binding="{Binding VerificationStatusValue}" Width="180"/>
-			</DataGrid.Columns>
-		</DataGrid>
+		<DockPanel VerticalSpacing="24" Margin="24">
+			<DockPanel LastChildFill="False" DockPanel.Dock="Top">
+				<TextBox DockPanel.Dock="Left"
+						 Width="300"/>
+				<Button DockPanel.Dock="Right"
+						Command="{Binding CreateCommand}"
+						Content="Добавить"
+						Width="150"/>
+			</DockPanel>
+
+			<DataGrid AutoGenerateColumns="False"
+					  ItemsSource="{Binding Items}"
+					  SelectedItem="{Binding SelectedItem}"
+					  SelectionMode="Single"
+					  DockPanel.Dock="Bottom">
+				<DataGrid.Columns>
+					<DataGridTextColumn Header="ID" Binding="{Binding UserId}" Width="60"/>
+					<DataGridTextColumn Header="Фамилия, имя, отчество" Binding="{Binding Fullname}" Width="*"/>
+					<DataGridTextColumn Header="Дата рождения" Binding="{Binding Birthday}" Width="150"/>
+					<DataGridTextColumn Header="Эл. почта" Binding="{Binding Email}" Width="200"/>
+					<DataGridTextColumn Header="Должность" Binding="{Binding RoleValue}" Width="200"/>
+					<DataGridTextColumn Header="Статус" Binding="{Binding VerificationStatusValue}" Width="180"/>
+				</DataGrid.Columns>
+			</DataGrid>
+		</DockPanel>
 
 		<!-- Shading -->
 		<Border Classes="overlay-backdrop"
@@ -53,35 +61,35 @@
 				<StackPanel Spacing="8">
 					<TextBlock Text="Имя"/>
 					<TextBox Text="{Binding DetailsPanel.EditableEntity.Firstname}"
-							 IsReadOnly="{Binding !DetailsPanel.IsEditMode}"/>
+							 IsReadOnly="{Binding !DetailsPanel.IsEditable}"/>
 
 					<TextBlock Text="Фамилия"/>
 					<TextBox Text="{Binding DetailsPanel.EditableEntity.Lastname}"
-							 IsReadOnly="{Binding !DetailsPanel.IsEditMode}"/>
+							 IsReadOnly="{Binding !DetailsPanel.IsEditable}"/>
 
 					<TextBlock Text="Отчество"/>
 					<TextBox Text="{Binding DetailsPanel.EditableEntity.Patronymic}"
-							 IsReadOnly="{Binding !DetailsPanel.IsEditMode}"/>
+							 IsReadOnly="{Binding !DetailsPanel.IsEditable}"/>
 
 					<TextBlock Text="Дата рождения"/>
 					<TextBox Text="{Binding DetailsPanel.EditableEntity.Birthday}"
-							 IsReadOnly="{Binding !DetailsPanel.IsEditMode}"/>
+							 IsReadOnly="{Binding !DetailsPanel.IsEditable}"/>
 
 					<TextBlock Text="Эл. почта"/>
 					<TextBox Text="{Binding DetailsPanel.EditableEntity.Email}"
-							 IsReadOnly="{Binding !DetailsPanel.IsEditMode}"/>
+							 IsReadOnly="{Binding !DetailsPanel.IsEditable}"/>
 
 					<TextBlock Text="Пароль"/>
 					<TextBox Text="{Binding DetailsPanel.EditableEntity.Password}"
-							 IsReadOnly="{Binding !DetailsPanel.IsEditMode}"/>
+							 IsReadOnly="{Binding !DetailsPanel.IsEditable}"/>
 
 					<!--<TextBlock Text="Должность"/>
 					<TextBox Text="{Binding DetailsPanel.EditableEntity.Email}"
-							 IsReadOnly="{Binding !DetailsPanel.IsEditMode}"/>
+					IsReadOnly="{Binding !DetailsPanel.IsEditMode}"/>
 
 					<TextBlock Text="Статус"/>
 					<TextBox Text="{Binding DetailsPanel.EditableEntity.Email}"
-							 IsReadOnly="{Binding !DetailsPanel.IsEditMode}"/>-->
+					IsReadOnly="{Binding !DetailsPanel.IsEditMode}"/>-->
 
 				</StackPanel>
 			</StackPanel>

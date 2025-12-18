@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace GoldenBread.Desktop.Bases;
 
-public partial class UserControlBase : UserControl
+public partial class DetailsPanelOverlayPage : UserControl
 {
     // For fast closing detail panel on the pages
     protected override void OnPointerPressed(PointerPressedEventArgs e)

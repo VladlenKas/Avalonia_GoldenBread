@@ -12,8 +12,8 @@ namespace GoldenBread.Desktop.Services.Api
     public interface IApiService<TEntity>
     {
         Task<List<TEntity>> GetAllAsync();
-        Task<ApiResponse<object>> DeleteAsync(int id);
         Task<ApiResponse<TEntity>> UpdateAsync(TEntity entity);
         Task<ApiResponse<TEntity>> CreateAsync(TEntity entity);
+        Task<ApiResponse<object>> DeleteAsync(int id);
     }
 }

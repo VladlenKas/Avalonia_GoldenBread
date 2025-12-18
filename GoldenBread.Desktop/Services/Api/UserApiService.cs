@@ -1,6 +1,5 @@
 ﻿using GoldenBread.Desktop.Helpers;
 using GoldenBread.Domain.Models;
-using GoldenBread.Domain.ReactiveModels;
 using GoldenBread.Domain.Requests;
 using GoldenBread.Domain.Responses;
 using System;
@@ -52,37 +51,9 @@ namespace GoldenBread.Desktop.Services.Api
             Dismissed = user.Dismissed
         };
 
-        public static UserReactive ToViewModel(User user) => new()
-        {
-            UserId = user.UserId,
-            Firstname = user.Firstname,
-            Lastname = user.Lastname,
-            Patronymic = user.Patronymic,
-            Birthday = user.Birthday,
-            Email = user.Email,
-            Password = user.Password,
-            Role = user.Role,
-            AccountType = user.AccountType,
-            VerificationStatus = user.VerificationStatus,
-        };
-
-        // UserReactive → User (POCO для API)
-        public static User ToModel(UserReactive vm) => new()
-        {
-            UserId = vm.UserId,
-            Firstname = vm.Firstname,
-            Lastname = vm.Lastname,
-            Patronymic = vm.Patronymic,
-            Birthday = vm.Birthday,
-            Email = vm.Email,
-            Password = vm.Password,
-            Role = vm.Role,
-            AccountType = vm.AccountType,
-            VerificationStatus = vm.VerificationStatus,
-        };
 
         // Клонирование UserReactive
-        public static UserReactive Clone(UserReactive vm) => new()
+        public static User Clone(User vm) => new()
         {
             UserId = vm.UserId,
             Firstname = vm.Firstname,

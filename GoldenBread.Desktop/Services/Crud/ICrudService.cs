@@ -9,7 +9,6 @@ namespace GoldenBread.Desktop.Services.Crud
     public interface ICrudService<TEntity>
     {
         TEntity Clone(TEntity entity);
-        bool Validate(TEntity entity);
         Task<bool> SaveAsync(TEntity entity);
         Task<bool> DeleteAsync(TEntity entity);
     }

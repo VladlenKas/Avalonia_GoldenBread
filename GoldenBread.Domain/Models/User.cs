@@ -38,18 +38,12 @@ public enum VerificationStatus
 
 public partial class User 
 {
-    // == Custom props ==
-    [NotMapped]
-    public string Fullname => $"{Lastname} {Firstname} {Patronymic}" ?? "Неизвестно";
+    [NotMapped] public string Fullname => $"{Lastname} {Firstname} {Patronymic}" ?? "Неизвестно";
 
-    [NotMapped]
-    public string RoleValue => /*Role.Value.Humanize() ?? */"Неизвестно";
+    [NotMapped] public string RoleValue => Role?.Humanize() ?? "Неизвестно";
 
-    [NotMapped]
-    public string VerificationStatusValue => /*VerificationStatus.Value.Humanize() ??*/ "Неизвестно";
+    [NotMapped]public string VerificationStatusValue => VerificationStatus?.Humanize() ?? "Неизвестно";
 
-
-    // == Original props ==
     public UserRole? Role { get; set; } 
 
     public AccountType? AccountType { get; set; }

@@ -1,11 +1,8 @@
-﻿using GoldenBread.Desktop.Helpers;
-using GoldenBread.Domain.Models;
+﻿using GoldenBread.Domain.Models;
 using GoldenBread.Domain.Requests;
 using GoldenBread.Domain.Responses;
-using System.Net.Http;
-using System.Net.Http.Json;
-using System.Text;
 using System.Threading.Tasks;
+
 
 namespace GoldenBread.Desktop.Services.Api
 {

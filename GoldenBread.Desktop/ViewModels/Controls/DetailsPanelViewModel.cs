@@ -3,6 +3,7 @@ using GoldenBread.Desktop.Interfaces;
 using GoldenBread.Desktop.Services.Crud;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
+using ReactiveUI.Validation.Abstractions;
 using ReactiveUI.Validation.Helpers;
 using System;
 using System.Linq;
@@ -25,6 +26,9 @@ namespace GoldenBread.Desktop.ViewModels.Controls
     public class DetailsPanelViewModel<T> : ViewModelValidationBase, IDetailsPanelViewModel
         where T : class, new()
     {
+        private ObservableAsPropertyHelper<bool> _isEditable;
+        public bool IsEditable => _isEditable.Value; //
+
         // ==== Services ====
         private readonly ICrudService<T> _crudService;
 
@@ -68,6 +72,11 @@ namespace GoldenBread.Desktop.ViewModels.Controls
         // ==== Methods ====
         private void Initialize()
         {
+            _isEditable = this
+        .WhenAnyValue(x => x.Mode)
+        .Select(m => m == PanelMode.Edit || m == PanelMode.Create)
+        .ToProperty(this, x => x.IsEditable);
+
             // OAPHs
             _isViewMode = this
                 .WhenAnyValue(x => x.Mode)
@@ -96,7 +105,7 @@ namespace GoldenBread.Desktop.ViewModels.Controls
 
             var canSave = this
                 .WhenAnyValue(x => x.EditableEntity)
-                .Select(m => m != null && ValidateEntity(m!));
+                .Select(m => m != null);
 
             var canDelete = this
                 .WhenAnyValue(x => x.Mode)
@@ -104,7 +113,7 @@ namespace GoldenBread.Desktop.ViewModels.Controls
 
             var canCancel = this
                 .WhenAnyValue(x => x.Mode)
-                .Select(m => m == PanelMode.Edit);
+                .Select(m => m == PanelMode.Edit || m == PanelMode.Create);
 
             // Commands
             EditCommand = ReactiveCommand.Create(
@@ -134,7 +143,7 @@ namespace GoldenBread.Desktop.ViewModels.Controls
             DeleteCommand = ReactiveCommand.CreateFromTask(
                 async () =>
                 {
-                    if (OriginalEntity != null)
+                    if (OriginalEntity != null) 
                     {
                         var ok = await DeleteEntityAsync(OriginalEntity);
                         if (!ok) return;
@@ -148,10 +157,14 @@ namespace GoldenBread.Desktop.ViewModels.Controls
             CancelCommand = ReactiveCommand.Create(
                 () =>
                 {
-                    if (OriginalEntity != null)
+                    if (Mode == PanelMode.Edit && OriginalEntity != null)
                     {
                         EditableEntity = CloneEntity(OriginalEntity);
                         Mode = PanelMode.View;
+                    }
+                    else if (Mode == PanelMode.Create)
+                    {
+                        Mode = PanelMode.Hidden;
                     }
                 }, canCancel);
 
@@ -205,7 +218,6 @@ namespace GoldenBread.Desktop.ViewModels.Controls
 
         // ==== Methods for commands ====
         private T CloneEntity(T entity) => _crudService.Clone(entity);
-        private bool ValidateEntity(T entity) => _crudService.Validate(entity);
         private Task<bool> SaveEntityAsync(T entity) => _crudService.SaveAsync(entity);
         private Task<bool> DeleteEntityAsync(T entity) => _crudService.DeleteAsync(entity);
 
