@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 
 namespace GoldenBread.Domain.Responses
 {
-    // ApiResponse.cs
     public class ApiResponse<T>
     {
         public bool IsSuccess { get; set; } 

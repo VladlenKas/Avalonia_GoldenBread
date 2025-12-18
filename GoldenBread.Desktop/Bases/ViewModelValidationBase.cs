@@ -26,7 +26,7 @@ namespace GoldenBread.Desktop.Bases
             return ValidationContext.GetIsValid();
         }
 
-        // Not Empty
+        // Для пустых полей
         public ValidationHelper ValidateRequired<TViewModel>(
         TViewModel viewModel,
         Expression<Func<TViewModel, string>> property)
@@ -41,7 +41,7 @@ namespace GoldenBread.Desktop.Bases
                 ValidationMessages.Required);
         }
 
-        // Age
+        // Возраст
         public ValidationHelper ValidateAge<TViewModel>(
         TViewModel viewModel,
         Expression<Func<TViewModel, string>> property)
@@ -71,7 +71,7 @@ namespace GoldenBread.Desktop.Bases
                 ValidationMessages.InvalidAge);
         }
 
-        // Date format
+        // Формат даты
         public ValidationHelper ValidateDateFormat<TViewModel>(
         TViewModel viewModel,
         Expression<Func<TViewModel, string>> property)

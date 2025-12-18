@@ -50,21 +50,5 @@ namespace GoldenBread.Desktop.Services.Api
             VerificationStatus = user.VerificationStatus,
             Dismissed = user.Dismissed
         };
-
-
-        // Клонирование UserReactive
-        public static User Clone(User vm) => new()
-        {
-            UserId = vm.UserId,
-            Firstname = vm.Firstname,
-            Lastname = vm.Lastname,
-            Patronymic = vm.Patronymic,
-            Birthday = vm.Birthday,
-            Email = vm.Email,
-            Password = vm.Password,
-            Role = vm.Role,
-            AccountType = vm.AccountType,
-            VerificationStatus = vm.VerificationStatus,
-        };
     }
 }
