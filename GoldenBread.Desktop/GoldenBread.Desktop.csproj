@@ -15,6 +15,13 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <AvaloniaXaml Remove="ViewModels\Controls\**" />
+	  <Compile Remove="ViewModels\Controls\**" />
+	  <EmbeddedResource Remove="ViewModels\Controls\**" />
+	  <None Remove="ViewModels\Controls\**" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<Resource Include="Assets\goldenbread-logo.ico" />
 	</ItemGroup>
 
@@ -34,6 +41,7 @@
 		<PackageReference Include="Microsoft.AspNet.WebApi.Client" Version="6.0.0" />
 		<PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="10.0.0" />
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
+		<PackageReference Include="Portable.BouncyCastle" Version="1.9.0" />
 		<PackageReference Include="Projektanker.Icons.Avalonia" Version="9.6.2" />
 		<PackageReference Include="ReactiveUI" Version="22.3.1" />
 		<PackageReference Include="ReactiveUI.Avalonia" Version="11.3.8" />
@@ -45,10 +53,6 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\GoldenBread.Domain\GoldenBread.Domain.csproj" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <Folder Include="ViewModels\Controls\" />
 	</ItemGroup>
 
 </Project>

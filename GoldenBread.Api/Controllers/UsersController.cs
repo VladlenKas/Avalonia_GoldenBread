@@ -45,7 +45,7 @@ namespace GoldenBread.Api.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateAsync([FromServices] UserService service, [FromBody] UserRequest user)
+        public async Task<IActionResult> CreateAsync([FromServices] UserService service, [FromBody] User user)
         {
             try
             {
@@ -59,7 +59,7 @@ namespace GoldenBread.Api.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateAsync([FromServices] UserService service, int id, [FromBody] UserRequest user)
+        public async Task<IActionResult> UpdateAsync([FromServices] UserService service, int id, [FromBody] User user)
         {
             try
             {

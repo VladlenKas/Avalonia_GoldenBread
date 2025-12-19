@@ -1,142 +1,117 @@
-﻿using DynamicData;
+﻿using AutoMapper;
+using DynamicData;
 using GoldenBread.Desktop.Helpers;
-using GoldenBread.Desktop.Services.Api;
-using GoldenBread.Desktop.Services.Crud;
+using GoldenBread.Desktop.Interfaces;
+using GoldenBread.Desktop.Managers;
+using GoldenBread.Desktop.Mappers;
+using GoldenBread.Desktop.Services;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace GoldenBread.Desktop.Bases
 {
-    public abstract class PageViewModelBase<TEntity> : ViewModelValidationBase
+    public abstract class PageViewModelBase<TEntity> : 
+        ViewModelValidationBase, IDrawerViewModel
         where TEntity : class
     {
         // ==== Fields ====
-        protected readonly ICrudService<TEntity> _crudService;
-        protected readonly IApiService<TEntity> _apiService;
+        protected readonly IMapper<TEntity> _mapper;
+        protected readonly IService<TEntity> _service;
         protected readonly SourceCache<TEntity, int> _sourceCache;
         private readonly Func<TEntity, int> _keySelector;
+        private TEntity? _editingEntity;
 
+        // ==== Managers ====
+        public readonly CrudDrawerManager DrawerManager;
 
         // ==== Properties ====
-        public IObservable<IChangeSet<TEntity, int>> ItemsObservable { get; }
         public ReadOnlyObservableCollection<TEntity> Items { get; }
         [Reactive] public TEntity? SelectedItem { get; set; }
-        [Reactive] public PanelMode CurrentMode { get; set; } = PanelMode.None;
-        [Reactive] public string SearchText { get; set; } = string.Empty;
-        [Reactive] public string PanelTitle { get; set; } = string.Empty;
 
-        private TEntity? _editingEntity; // Временная копия для редактирования
+        public bool IsDrawerVisible
+        {
+            get => DrawerManager.IsOpen;
+            set => DrawerManager.IsOpen = value;
+        }
 
+        public DrawerMode CurrentMode
+        {
+            get => DrawerManager.CurrentMode;
+            set => DrawerManager.CurrentMode = value;
+        }
 
-        // ==== Computed Properties ====
-        private readonly ObservableAsPropertyHelper<bool> _isViewMode;
-        public bool IsViewMode => _isViewMode.Value;
-
-        private readonly ObservableAsPropertyHelper<bool> _isEditMode;
-        public bool IsEditMode => _isEditMode.Value;
-
-        private readonly ObservableAsPropertyHelper<bool> _isAddMode;
-        public bool IsAddMode => _isAddMode.Value;
-
-        private readonly ObservableAsPropertyHelper<bool> _isEditOrAddMode;
-        public bool IsEditOrAddMode => _isEditOrAddMode.Value;
-
-        private readonly ObservableAsPropertyHelper<bool> _isPanelVisible;
-        public bool IsPanelVisible => _isPanelVisible.Value;
-
+        public string DrawerTitle => DrawerManager.ModeTitle;
+        public bool ShowViewButtons => DrawerManager.ShowViewButtons;
+        public bool ShowEditButtons => DrawerManager.ShowEditButtons;
 
         // ==== Commands ====
         public ReactiveCommand<Unit, Unit> AddCommand { get; set; }
         public ReactiveCommand<Unit, Unit> EditCommand { get; set; }
         public ReactiveCommand<Unit, Unit> SaveCommand { get; set; }
         public ReactiveCommand<Unit, Unit> CancelCommand { get; set; }
+        public ReactiveCommand<Unit, Unit> CloseCommand { get; set; }
         public ReactiveCommand<Unit, Unit> DeleteCommand { get; set; }
-
+        public ReactiveCommand<Unit, Unit> RefreshCommand { get; set; }
 
         // ==== Constructor ====
         protected PageViewModelBase(
             Func<TEntity, int> keySelector,
-            IApiService<TEntity> apiService,
-            ICrudService<TEntity> crudService)
+            IService<TEntity> service,
+            IMapper<TEntity> mapper)
         {
             _keySelector = keySelector;
-            _apiService = apiService;
-            _crudService = crudService;
+            _service = service;
+            _mapper = mapper;
             _sourceCache = new SourceCache<TEntity, int>(keySelector);
+            DrawerManager = new CrudDrawerManager();
 
-            _isViewMode = this.WhenAnyValue(x => x.CurrentMode)
-            .Select(mode => mode == PanelMode.View)
-            .ToProperty(this, x => x.IsViewMode);
-
-            _isEditMode = this.WhenAnyValue(x => x.CurrentMode)
-                .Select(mode => mode == PanelMode.Edit)
-                .ToProperty(this, x => x.IsEditMode);
-
-            _isAddMode = this.WhenAnyValue(x => x.CurrentMode)
-                .Select(mode => mode == PanelMode.Add)
-                .ToProperty(this, x => x.IsAddMode);
-
-            _isEditOrAddMode = this.WhenAnyValue(x => x.CurrentMode)
-                .Select(mode => mode == PanelMode.Edit || mode == PanelMode.Add)
-                .ToProperty(this, x => x.IsEditOrAddMode);
-
-            _isPanelVisible = this.WhenAnyValue(x => x.CurrentMode)
-                .Select(mode => mode != PanelMode.None)
-                .ToProperty(this, x => x.IsPanelVisible);
-
-            ItemsObservable = _sourceCache.Connect();
-            ItemsObservable
+            _sourceCache.Connect()
                 .Bind(out var items)
                 .Subscribe();
+
             Items = items;
 
-            CreateCommands();
+            InitializeCommands();
             SetupSubscriptions();
+
+            CurrentMode = DrawerMode.None;
         }
 
 
         // ==== Command Creation ====
-        private void CreateCommands()
+        private void InitializeCommands()
         {
-            // Команда добавления
-            AddCommand = ReactiveCommand.Create(ExecuteAdd);
-
-            // Команда редактирования
-            var canEdit = this.WhenAnyValue(x => x.SelectedItem)
-                .Select(item => item != null && CurrentMode == PanelMode.View);
+            var canEdit = this.WhenAnyValue(
+                    x => x.SelectedItem,
+                    x => x.CurrentMode)
+                .Select(t => t.Item1 != null && t.Item2 == DrawerMode.View);
             EditCommand = ReactiveCommand.Create(ExecuteEdit, canEdit);
 
-            // Команда сохранения
-            var canSave = this.WhenAnyValue(x => x.IsDirty)
-                .Select(dirty => !dirty)
-                .Merge(ValidationContext.Valid)
+            var canSave = this.WhenAnyValue(x => x.CurrentMode)
+                .Select(mode => mode == DrawerMode.Edit || mode == DrawerMode.Add)
                 .CombineLatest(
-                    this.WhenAnyValue(x => x.CurrentMode),
-                    (isValid, mode) => isValid && (mode == PanelMode.Edit || mode == PanelMode.Add));
-
+                    ValidationContext.Valid,
+                    (modeOk, isValid) => modeOk && isValid);
             SaveCommand = ReactiveCommand.CreateFromTask(ExecuteSaveAsync, canSave);
 
-            // Команда отмены
-            var canCancel = this.WhenAnyValue(x => x.CurrentMode)
-                .Select(mode => mode == PanelMode.Edit || mode == PanelMode.Add);
-            CancelCommand = ReactiveCommand.Create(ExecuteCancel, canCancel);
-
-            // Команда удаления
             var canDelete = this.WhenAnyValue(
                     x => x.SelectedItem,
                     x => x.CurrentMode)
-                .Select(tuple => tuple.Item1 != null &&
-                               tuple.Item2 == PanelMode.View &&
-                               CanDelete(tuple.Item1));
+                .Select(t => t.Item1 != null &&
+                            t.Item2 == DrawerMode.View &&
+                            CanDelete(t.Item1));
             DeleteCommand = ReactiveCommand.CreateFromTask(ExecuteDeleteAsync, canDelete);
+
+            AddCommand = ReactiveCommand.Create(ExecuteAdd);
+            RefreshCommand = ReactiveCommand.CreateFromTask(LoadDataAsync);
+            CloseCommand = ReactiveCommand.Create(ExecuteClose);
+            CancelCommand = ReactiveCommand.Create(ExecuteCancel);
         }
 
 
@@ -146,21 +121,34 @@ namespace GoldenBread.Desktop.Bases
             // При выборе элемента переходим в режим просмотра
             this.WhenAnyValue(x => x.SelectedItem)
                 .Where(item => item != null)
-                .Subscribe(_ => SwitchToViewMode());
+                .ObserveOn(RxApp.MainThreadScheduler)
+                .Subscribe(_ =>
+                { 
+                    DrawerManager.OpenView();
+                    _mapper.MapEntityToViewModel(SelectedItem!, this);
+                });
 
-            // Очистка валидации при смене режима
-            this.WhenAnyValue(x => x.CurrentMode)
-                .Subscribe(_ => DeactivateValidation());
+            // Подписываемся на обновления UI панели
+            DrawerManager.WhenAnyValue(
+                x => x.IsOpen,
+                x => x.CurrentMode)
+            .ObserveOn(RxApp.MainThreadScheduler)
+            .Subscribe(_ =>
+            {
+                this.RaisePropertyChanged(nameof(IsDrawerVisible));
+                this.RaisePropertyChanged(nameof(CurrentMode));
+                this.RaisePropertyChanged(nameof(DrawerTitle));
+                this.RaisePropertyChanged(nameof(ShowViewButtons));
+                this.RaisePropertyChanged(nameof(ShowEditButtons));
+            });
         }
 
 
         // ==== Command Handlers ====
         private void ExecuteAdd()
         {
-            CurrentMode = PanelMode.Add;
-            PanelTitle = GetAddTitle();
-
-            _editingEntity = default;
+            DrawerManager.OpenAdd();
+            _editingEntity = null;
             ClearEditFields();
             DeactivateValidation();
         }
@@ -169,14 +157,9 @@ namespace GoldenBread.Desktop.Bases
         {
             if (SelectedItem == null) return;
 
-            CurrentMode = PanelMode.Edit;
-            PanelTitle = GetEditTitle();
-
-            // Создаем копию для редактирования
-            _editingEntity = _crudService.Clone(SelectedItem);
-
-            // Копируем данные в реактивные свойства
-            _crudService.MapToViewModel(_editingEntity, this);
+            DrawerManager.OpenEdit();
+            _editingEntity = _service.Clone(SelectedItem);
+            _mapper.MapEntityToViewModel(_editingEntity, this);
             DeactivateValidation();
         }
 
@@ -186,22 +169,15 @@ namespace GoldenBread.Desktop.Bases
 
             try
             {
-                bool isNew = CurrentMode == PanelMode.Add;
-
-                // Создаем/обновляем сущность из VM свойств
-                var entity = _crudService.MapFromViewModel(this, _editingEntity);
-
-                // Сохраняем через сервис
-                var result = await _crudService.SaveAsync(entity, isNew);
+                bool isNew = CurrentMode == DrawerMode.Add;
+                var entity = _mapper.MapEntityFromViewModel(this, _editingEntity);
+                var result = await _service.SaveAsync(entity, isNew);
 
                 if (result.IsSuccess)
                 {
-                    // Обновляем кэш
                     _sourceCache.AddOrUpdate(result.Data);
-
-                    // Переходим в режим просмотра
                     SelectedItem = result.Data;
-                    SwitchToViewMode();
+                    DrawerManager.OpenView();
 
                     await MessageBoxHelper.ShowOkMessageBox(result.Message);
                 }
@@ -222,18 +198,27 @@ namespace GoldenBread.Desktop.Bases
 
         private void ExecuteCancel()
         {
-            if (CurrentMode == PanelMode.Edit && SelectedItem != null)
+            if (CurrentMode == DrawerMode.Edit && SelectedItem != null)
             {
-                // Возвращаемся к просмотру оригинальных данных
-                SwitchToViewMode();
+                DrawerManager.OpenView();
+                _mapper.MapEntityToViewModel(SelectedItem, this);
             }
-            else if (CurrentMode == PanelMode.Add)
+            else if (CurrentMode == DrawerMode.Add)
             {
-                // Просто скрываем панель
-                CurrentMode = PanelMode.None;
+                DrawerManager.Close();
                 ClearEditFields();
+                SelectedItem = null;
             }
 
+            DeactivateValidation();
+        }
+
+        private void ExecuteClose()
+        {
+            DrawerManager.Close();
+            ClearEditFields();
+
+            SelectedItem = null;
             DeactivateValidation();
         }
 
@@ -241,18 +226,17 @@ namespace GoldenBread.Desktop.Bases
         {
             if (SelectedItem == null) return;
 
-            var confirmed = await MessageBoxHelper.ShowQuestionMessageBox(
-                GetDeleteConfirmationMessage());
+            var confirmed = await MessageBoxHelper.ShowQuestionMessageBox(ValidationMessages.ConfirmDelete);
 
             if (!confirmed) return;
 
-            var result = await _crudService.DeleteAsync(SelectedItem);
+            var result = await _service.DeleteAsync(SelectedItem);
 
             if (result.IsSuccess)
             {
                 _sourceCache.RemoveKey(_keySelector(SelectedItem));
-                CurrentMode = PanelMode.None;
-                SelectedItem = default;
+                DrawerManager.Close();
+                SelectedItem = null;
 
                 await MessageBoxHelper.ShowOkMessageBox(result.Message);
             }
@@ -262,35 +246,16 @@ namespace GoldenBread.Desktop.Bases
             }
         }
 
-
-        // ==== Helper Methods ====
-        private void SwitchToViewMode()
-        {
-            if (SelectedItem == null) return;
-
-            CurrentMode = PanelMode.View;
-            PanelTitle = GetViewTitle();
-
-            // Показываем данные из оригинальной модели
-            _crudService.MapToViewModel(SelectedItem, this);
-        }
-
+        protected void Initialize() => RefreshCommand.Execute().Subscribe();
 
         // ==== Abstract/Virtual Methods ====
+        public abstract Task LoadDataAsync();
         protected abstract void ClearEditFields();
         protected virtual bool CanDelete(TEntity entity) => true;
-        protected virtual string GetViewTitle() => "Просмотр";
-        protected virtual string GetEditTitle() => "Редактирование";
-        protected virtual string GetAddTitle() => "Добавление";
-        protected virtual string GetDeleteConfirmationMessage() =>
-            "Вы действительно хотите удалить выбранный элемент?";
-
-        public abstract Task LoadDataAsync();
     }
 
-
     // ==== Enums ====
-    public enum PanelMode
+    public enum DrawerMode
     {
         None,
         View,

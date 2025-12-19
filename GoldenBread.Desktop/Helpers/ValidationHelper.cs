@@ -25,6 +25,8 @@ namespace GoldenBread.Desktop.Helpers
 
         public const string InvalidAge = "Возраст должен быть в промежутке от 18 до 90 лет";
         public const string InvalidDateFormat = "Неверный формат даты. Используйте дд.мм.гггг";
+
+        public const string ConfirmDelete = "Вы подтверждаете удаление?";
     }
 
     internal static class ValidationRegexes

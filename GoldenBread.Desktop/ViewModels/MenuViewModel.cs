@@ -7,8 +7,8 @@ using System.Reactive.Linq;
 using Material.Icons;
 using Microsoft.Extensions.DependencyInjection;
 using GoldenBread.Desktop.ViewModels.Pages;
-using GoldenBread.Desktop.Services.Api;
 using GoldenBread.Desktop.Bases;
+using GoldenBread.Desktop.Services;
 
 namespace GoldenBread.Desktop.ViewModels
 {
@@ -27,7 +27,7 @@ namespace GoldenBread.Desktop.ViewModels
 
     public class MenuViewModel : ViewModelValidationBase
     {
-        private AuthorizationApiService _authService;
+        private AuthService _authService;
 
         [Reactive] public SectionViewModel SelectedSection { get; set; }
         [Reactive] public PageInfo SelectedPage { get; set; }
@@ -106,7 +106,7 @@ namespace GoldenBread.Desktop.ViewModels
                 });
         }
         // == For Builder ==
-        public MenuViewModel(IServiceProvider serviceProvider, AuthorizationApiService authService)
+        public MenuViewModel(IServiceProvider serviceProvider, AuthService authService)
         {
             _authService = authService;
 

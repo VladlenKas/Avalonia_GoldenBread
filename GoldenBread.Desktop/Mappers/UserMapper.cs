@@ -1,54 +1,17 @@
 ﻿using GoldenBread.Desktop.Helpers;
-using GoldenBread.Desktop.Services.Api;
 using GoldenBread.Desktop.ViewModels.Pages;
 using GoldenBread.Domain.Models;
-using GoldenBread.Domain.Requests;
-using GoldenBread.Domain.Responses;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GoldenBread.Desktop.Services.Crud
+namespace GoldenBread.Desktop.Mappers
 {
-    public class UserCrudService(IApiService<User> userApiService) : ICrudService<User>
+    internal class UserMapper : IMapper<User>
     {
-        public User Clone(User entity)
-        {
-            return new User
-            {
-                UserId = entity.UserId,
-                Firstname = entity.Firstname,
-                Lastname = entity.Lastname,
-                Patronymic = entity.Patronymic,
-                Birthday = entity.Birthday,
-                Email = entity.Email,
-                Password = entity.Password,
-                Role = entity.Role,
-                VerificationStatus = entity.VerificationStatus,
-                AccountType = entity.AccountType
-            };
-        }
-
-        public async Task<ApiResponse<User>> SaveAsync(User entity, bool isNew)
-        {
-            if (isNew)
-            {
-                return await userApiService.CreateAsync(entity);
-            }
-            else
-            {
-                return await userApiService.UpdateAsync(entity);
-            }
-        }
-
-        public async Task<ApiResponse<object>> DeleteAsync(User entity)
-        {
-            return await userApiService.DeleteAsync(entity.UserId);
-        }
-
-        public void MapToViewModel(User entity, object viewModel)
+        public void MapEntityToViewModel(User entity, object viewModel)
         {
             if (viewModel is UsersPageViewModel vm)
             {
@@ -63,7 +26,7 @@ namespace GoldenBread.Desktop.Services.Crud
             }
         }
 
-        public User MapFromViewModel(object viewModel, User? existingEntity = null)
+        public User MapEntityFromViewModel(object viewModel, User? existingEntity = null)
         {
             var user = existingEntity ?? new User();
 
@@ -80,7 +43,7 @@ namespace GoldenBread.Desktop.Services.Crud
                 user.AccountType = AccountType.User;
             }
 
-            return user; 
+            return user;
         }
     }
 }

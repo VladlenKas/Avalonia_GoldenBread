@@ -1,7 +1,9 @@
-﻿using DynamicData;
+﻿using AutoMapper;
+using DynamicData;
 using GoldenBread.Desktop.Bases;
-using GoldenBread.Desktop.Services.Api;
-using GoldenBread.Desktop.Services.Crud;
+using GoldenBread.Desktop.Mappers;
+using GoldenBread.Desktop.Repositories;
+using GoldenBread.Desktop.Services;
 using GoldenBread.Domain.Models;
 using ReactiveUI.Fody.Helpers;
 using System;
@@ -14,7 +16,6 @@ namespace GoldenBread.Desktop.ViewModels.Pages;
 
 public class UsersPageViewModel : PageViewModelBase<User>
 {
-    // ==== Reactive Properties (для редактирования) ====
     [Reactive] public string EditFirstname { get; set; } = string.Empty;
     [Reactive] public string EditLastname { get; set; } = string.Empty;
     [Reactive] public string EditPatronymic { get; set; } = string.Empty;
@@ -27,17 +28,23 @@ public class UsersPageViewModel : PageViewModelBase<User>
     public IEnumerable<UserRoleItem> AvailableRoles { get; set; }
     public IEnumerable<VerificationStatusItem> AvailableStatuses { get; set; }
 
-    private readonly AuthorizationApiService _authService;
+    private readonly AuthService _authService;
 
     public UsersPageViewModel(
-        IApiService<User> userApiService,
-        ICrudService<User> userCrudService,
-        AuthorizationApiService authService)
-        : base(e => e.UserId, userApiService, userCrudService)
+        IService<User> service,
+        IMapper<User> mapper,
+        AuthService authService)
+        : base(e => e.UserId, service, mapper)
     {
         _authService = authService;
 
-        // Инициализация коллекций
+        InitializeCollections();
+        InitializeValidationRules();
+        Initialize();
+    }
+
+    private void InitializeCollections()
+    {
         AvailableRoles = Enum.GetValues<UserRole>()
             .Select(role => new UserRoleItem { Role = role })
             .ToList();
@@ -45,15 +52,17 @@ public class UsersPageViewModel : PageViewModelBase<User>
         AvailableStatuses = Enum.GetValues<VerificationStatus>()
             .Select(status => new VerificationStatusItem { Status = status })
             .ToList();
+    }
 
-        // Правила валидации
-        this.ValidateRequired(this, vm => vm.EditFirstname);
-        this.ValidateRequired(this, vm => vm.EditLastname);
-        this.ValidateRequired(this, vm => vm.EditBirthday);
-        this.ValidateRequired(this, vm => vm.EditEmail);
-        this.ValidateRequired(this, vm => vm.EditPassword);
-        this.ValidateAge(this, vm => vm.EditBirthday);
-        this.ValidateDateFormat(this, vm => vm.EditBirthday);
+    private void InitializeValidationRules()
+    {
+        ValidateRequired(this, vm => vm.EditFirstname);
+        ValidateRequired(this, vm => vm.EditLastname);
+        ValidateRequired(this, vm => vm.EditBirthday);
+        ValidateRequired(this, vm => vm.EditEmail);
+        ValidateRequired(this, vm => vm.EditPassword);
+        ValidateAge(this, vm => vm.EditBirthday);
+        ValidateDateFormat(this, vm => vm.EditBirthday);
     }
 
     // ==== Overrides ====
@@ -74,16 +83,9 @@ public class UsersPageViewModel : PageViewModelBase<User>
         return entity.UserId != _authService.CurrentUser?.UserId;
     }
 
-    protected override string GetViewTitle() => "Информация о пользователе";
-    protected override string GetEditTitle() => "Редактирование пользователя";
-    protected override string GetAddTitle() => "Добавление пользователя";
-
-    protected override string GetDeleteConfirmationMessage() =>
-        "Вы действительно хотите уволить выбранного пользователя?";
-
     public override async Task LoadDataAsync()
     {
-        var users = await _apiService.GetAllAsync();
+        var users = await _service.GetAllAsync();
         _sourceCache.Clear();
         _sourceCache.AddOrUpdate(users);
     }

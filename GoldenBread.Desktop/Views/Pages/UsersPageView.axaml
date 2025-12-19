@@ -40,22 +40,23 @@
 
 		<!-- Shading -->
 		<Border Classes="overlay-backdrop"
-				Classes.show="{Binding IsPanelVisible}"
+				Classes.show="{Binding IsDrawerVisible}"
 				x:Name="ShadingBorder"/>
 
 		<!-- Details Panel -->
 		<Border HorizontalAlignment="Right"
 				VerticalAlignment="Stretch"
-				Width="400"
-				Background="Purple"
-				CornerRadius="8 0 0 8"
-				BoxShadow="-4 0 20 0 #60000000"
+				Margin="16"
+				Width="500"
+				Background="#ffffff"
+				CornerRadius="8"
+				BoxShadow="0 16 40 0 #209AAACF"
 				Padding="16"
 				Classes="animated-panel"
-				Classes.open="{Binding IsPanelVisible}">
+				Classes.open="{Binding IsDrawerVisible}">
 
 			<StackPanel Spacing="12">
-				<TextBlock Text="{Binding PanelTitle}"
+				<TextBlock Text="{Binding DrawerTitle}"
 						   FontSize="18"
 						   FontWeight="Bold"
 						   Margin="0 0 0 8"/>
@@ -66,65 +67,67 @@
 					<!-- Режим просмотра -->
 					<Button Content="Редактировать"
 							Command="{Binding EditCommand}"
-							IsVisible="{Binding IsViewMode}"/>
+							IsVisible="{Binding ShowViewButtons}"/>
 
 					<Button Content="Удалить"
 							Command="{Binding DeleteCommand}"
-							IsVisible="{Binding IsViewMode}"
+							IsVisible="{Binding ShowViewButtons}"
 							Classes="danger"/>
 
 					<!-- Режим редактирования -->
 					<Button Content="Сохранить"
 							Command="{Binding SaveCommand}"
-							IsVisible="{Binding IsEditOrAddMode}"
+							IsVisible="{Binding ShowEditButtons}"
 							Classes="accent"/>
 
 					<Button Content="Отменить"
 							Command="{Binding CancelCommand}"
-							IsVisible="{Binding IsEditMode}"/>
+							IsVisible="{Binding ShowEditButtons}"/>
 
 					<!-- Закрытие -->
 					<Button Content="✕"
-							Command="{Binding CancelCommand}"
+							Command="{Binding CloseCommand}"
 							Width="40"
 							Height="40"/>
-
 				</WrapPanel>
 
 				<!-- Fields -->
 				<StackPanel Spacing="8">
 					<TextBlock Text="Имя"/>
 					<TextBox Text="{Binding EditFirstname}"
-							 IsReadOnly="{Binding IsEditMode}"/>
+							 IsReadOnly="{Binding ShowViewButtons}"/>
 
 					<TextBlock Text="Фамилия"/>
 					<TextBox Text="{Binding EditLastname}"
-							 IsReadOnly="{Binding IsEditMode}"/>
+							 IsReadOnly="{Binding ShowViewButtons}"/>
 
 					<TextBlock Text="Отчество"/>
 					<TextBox Text="{Binding EditPatronymic}"
-							 IsReadOnly="{Binding IsEditMode}"/>
+							 IsReadOnly="{Binding ShowViewButtons}"/>
 
 					<TextBlock Text="Дата рождения"/>
 					<TextBox Text="{Binding EditBirthday}"
-							 IsReadOnly="{Binding IsEditMode}"/>
+							 IsReadOnly="{Binding ShowViewButtons}"/>
 
 					<TextBlock Text="Эл. почта"/>
 					<TextBox Text="{Binding EditEmail}"
-							 IsReadOnly="{Binding IsEditMode}"/>
+							 IsReadOnly="{Binding ShowViewButtons}"/>
 
 					<TextBlock Text="Пароль"/>
 					<TextBox Text="{Binding EditPassword}"
-							 IsReadOnly="{Binding IsEditMode}"/>
+							 IsReadOnly="{Binding ShowViewButtons}"/>
 
-					<!--<TextBlock Text="Должность"/>
-					<TextBox Text="{Binding DetailsPanel.EditableEntity.Email}"
-					IsReadOnly="{Binding !DetailsPanel.IsEditMode}"/>
+					<TextBlock Text="Должность"/>
+					<ComboBox ItemsSource="{Binding AvailableRoles}"
+							  SelectedItem="{Binding EditRole}" 
+							  IsHitTestVisible="{Binding ShowEditButtons}"
+							  DisplayMemberBinding="{Binding DisplayName}"/>
 
-					<TextBlock Text="Статус"/>
-					<TextBox Text="{Binding DetailsPanel.EditableEntity.Email}"
-					IsReadOnly="{Binding !DetailsPanel.IsEditMode}"/>-->
-
+					<TextBlock Text="Статус аккаунта"/>
+					<ComboBox ItemsSource="{Binding AvailableStatuses}"
+							  SelectedItem="{Binding EditStatus}"
+							  IsHitTestVisible="{Binding ShowEditButtons}"
+							  DisplayMemberBinding="{Binding DisplayName}"/>
 				</StackPanel>
 			</StackPanel>
 		</Border>

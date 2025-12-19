@@ -1,11 +1,11 @@
 ﻿using Avalonia.Controls;
 using Avalonia.Input;
 using GoldenBread.Desktop.Interfaces;
-using GoldenBread.Desktop.ViewModels.Pages;
+using System.Reactive;
 
 namespace GoldenBread.Desktop.Bases;
 
-public partial class DetailsPanelOverlayPage : UserControl
+public partial class DrawerPageBase : UserControl
 {
     // Для быстрого закрытия панели
     protected override void OnPointerPressed(PointerPressedEventArgs e)
@@ -14,9 +14,9 @@ public partial class DetailsPanelOverlayPage : UserControl
 
         if (e.Source is Border border && border.Name is "ShadingBorder")   
         {
-            if (DataContext is UsersPageViewModel vm && vm.IsViewMode)
+            if (DataContext is IDrawerViewModel vm)
             {
-                vm.CancelCommand.Execute();
+                vm.CloseCommand.Execute().Subscribe(Observer.Create<Unit>(_ => { }));
             }
         }
     }

@@ -5,14 +5,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GoldenBread.Desktop.Services.Crud
+namespace GoldenBread.Desktop.Services
 {
-    public interface ICrudService<TEntity> where TEntity : class
+    public interface IService<TEntity> where TEntity : class
     {
         TEntity Clone(TEntity entity);
+        Task<List<TEntity>> GetAllAsync();
         Task<ApiResponse<TEntity>> SaveAsync(TEntity entity, bool isNew);
         Task<ApiResponse<object>> DeleteAsync(TEntity entity);
-        void MapToViewModel(TEntity entity, object viewModel);
-        TEntity MapFromViewModel(object viewModel, TEntity? existingEntity = null);
     }
 }   

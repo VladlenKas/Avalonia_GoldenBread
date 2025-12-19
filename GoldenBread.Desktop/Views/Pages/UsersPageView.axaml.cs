@@ -8,7 +8,7 @@ using System;
 
 namespace GoldenBread.Desktop.Views.Pages;
 
-public partial class UsersPageView : DetailsPanelOverlayPage
+public partial class UsersPageView : DrawerPageBase
 {
     public UsersPageView()
     {

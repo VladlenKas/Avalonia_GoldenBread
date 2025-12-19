@@ -1,15 +1,13 @@
-﻿using GoldenBread.Domain.Models;
-using GoldenBread.Domain.Requests;
-using GoldenBread.Domain.Responses;
+﻿using GoldenBread.Domain.Responses;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GoldenBread.Desktop.Services.Api
+namespace GoldenBread.Desktop.Repositories
 {
-    public interface IApiService<TEntity>
+    public interface IRepository<TEntity> where TEntity : class
     {
         Task<List<TEntity>> GetAllAsync();
         Task<ApiResponse<TEntity>> UpdateAsync(TEntity entity);

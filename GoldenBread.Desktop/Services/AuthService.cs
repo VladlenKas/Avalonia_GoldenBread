@@ -1,12 +1,13 @@
-﻿using GoldenBread.Domain.Models;
+﻿using GoldenBread.Desktop.Api;
+using GoldenBread.Domain.Models;
 using GoldenBread.Domain.Requests;
 using GoldenBread.Domain.Responses;
 using System.Threading.Tasks;
 
 
-namespace GoldenBread.Desktop.Services.Api
+namespace GoldenBread.Desktop.Services
 {
-    public class AuthorizationApiService(ApiClient apiClient)
+    public class AuthService(ApiClient apiClient)
     {
         // == Fields ==
         private User? _currentUser;

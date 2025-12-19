@@ -1,9 +1,10 @@
 ﻿using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
+using GoldenBread.Desktop.Api;
+using GoldenBread.Desktop.Mappers;
+using GoldenBread.Desktop.Repositories;
 using GoldenBread.Desktop.Services;
-using GoldenBread.Desktop.Services.Api;
-using GoldenBread.Desktop.Services.Crud;
 using GoldenBread.Desktop.ViewModels;
 using GoldenBread.Desktop.ViewModels.Pages;
 using GoldenBread.Desktop.Views;
@@ -69,7 +70,8 @@ namespace GoldenBread.Desktop
 
             // Services & Managers
             services.AddSingleton<ApiClient>();
-            services.AddSingleton<AuthorizationApiService>();
+            services.AddSingleton<AuthService>();
+            services.AddSingleton<UserService>();
 
             AddServices(services);
 
@@ -82,20 +84,17 @@ namespace GoldenBread.Desktop
 
             services.AddSingleton<LoginView>();
             services.AddSingleton<MenuView>();
-
         }
        
         private static IServiceCollection AddServices(IServiceCollection services)
         {
             // Services without interface
             services.AddSingleton<ApiClient>();
-            services.AddSingleton<AuthorizationApiService>();
+            services.AddSingleton<AuthService>();
 
-            // API-services
-            services.AddTransient<IApiService<User>, UserApiService>();
-
-            // CRUD-srvices
-            services.AddTransient<ICrudService<User>, UserCrudService>();
+            services.AddTransient<IRepository<User>, UserRepository>();
+            services.AddTransient<IService<User>, UserService>();
+            services.AddTransient<IMapper<User>, UserMapper>();
 
             return services;
         }

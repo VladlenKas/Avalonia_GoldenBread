@@ -1,7 +1,7 @@
 ﻿using Avalonia.Controls;
 using GoldenBread.Desktop.Bases;
 using GoldenBread.Desktop.Helpers;
-using GoldenBread.Desktop.Services.Api;
+using GoldenBread.Desktop.Services;
 using GoldenBread.Desktop.Views;
 using Microsoft.Extensions.DependencyInjection;
 using ReactiveUI;
@@ -15,7 +15,7 @@ namespace GoldenBread.Desktop.ViewModels
 {
     public partial class LoginViewModel : ViewModelValidationBase
     {
-        private readonly AuthorizationApiService _authService;
+        private readonly AuthService _authService;
         private readonly IServiceProvider _serviceProvider;
 
         [Reactive] public string Email { get; set; } = string.Empty;
@@ -26,19 +26,19 @@ namespace GoldenBread.Desktop.ViewModels
         public LoginViewModel(IServiceProvider serviceProvider)
         {
             _serviceProvider = serviceProvider;
-            _authService = _serviceProvider.GetRequiredService<AuthorizationApiService>();
+            _authService = _serviceProvider.GetRequiredService<AuthService>();
 
-            CreateValidationRules();
-            CreateCommands();
+            InitializeValidationRules();
+            InitializeCommands();
         }
 
-        private void CreateValidationRules()
+        private void InitializeValidationRules()
         {
             ValidateRequired(this, x => x.Email);
             ValidateRequired(this, x => x.Password);
         }
 
-        private void CreateCommands()
+        private void InitializeCommands()
         {
             var canLogin = this.WhenAnyValue(x => x.IsDirty)
                 .Select(dirty => !dirty)
