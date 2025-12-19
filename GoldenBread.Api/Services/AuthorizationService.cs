@@ -8,7 +8,7 @@ namespace GoldenBread.Api.Services
         // Login
         public async Task<User> LoginAsync(string email, string password)
         {
-            var user = await context.Users.SingleOrDefaultAsync(u =>
+            var user = await context.RegularUsers.SingleOrDefaultAsync(u =>
                     u.Email == email &&
                     u.Password == password);
 

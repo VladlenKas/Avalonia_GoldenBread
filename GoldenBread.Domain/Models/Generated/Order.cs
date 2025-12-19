@@ -3,18 +3,8 @@ using System.Collections.Generic;
 
 namespace GoldenBread.Domain.Models;
 
-public enum OrderStatus
-{
-    Awaiting,
-    InProgress,
-    Completed,
-    Canceled
-}
-
 public partial class Order
 {
-    public OrderStatus Status { get; set; }
-
     public int OrderId { get; set; }
 
     public int UserId { get; set; }

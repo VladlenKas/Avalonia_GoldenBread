@@ -95,31 +95,13 @@
 					<StackPanel Grid.Row="2" Orientation="Horizontal">
 						<PathIcon Data="M16,6L18.29,8.29L13.41,13.17L9.41,9.17L2,16.59L3.41,18L9.41,12L13.41,16L19.71,9.71L22,12V6H16Z"
 								  Width="16" Height="16"
-								  Margin="0,0,8,0">
-							<PathIcon.Foreground>
-								<SolidColorBrush>
-									<SolidColorBrush.Color>
-										<MultiBinding Converter="{StaticResource TrendColorConverter}">
-											<Binding Path="TrendPercent"/>
-										</MultiBinding>
-									</SolidColorBrush.Color>
-								</SolidColorBrush>
-							</PathIcon.Foreground>
-						</PathIcon>
+								  Margin="0,0,8,0"
+								  Foreground="{Binding TrendPercent, Converter={StaticResource TrendColorConverter}}"/>
 						<TextBlock Text="Тренд:" FontSize="14" Foreground="#666" Margin="0,0,4,0"/>
 						<TextBlock Text="{Binding TrendFormatted}"
 								   FontSize="14"
-								   FontWeight="SemiBold">
-							<TextBlock.Foreground>
-								<SolidColorBrush>
-									<SolidColorBrush.Color>
-										<MultiBinding Converter="{StaticResource TrendColorConverter}">
-											<Binding Path="TrendPercent"/>
-										</MultiBinding>
-									</SolidColorBrush.Color>
-								</SolidColorBrush>
-							</TextBlock.Foreground>
-						</TextBlock>
+								   FontWeight="SemiBold"
+								   Foreground="{Binding TrendPercent, Converter={StaticResource TrendColorConverter}}"/>
 					</StackPanel>
 				</Grid>
 			</StackPanel>

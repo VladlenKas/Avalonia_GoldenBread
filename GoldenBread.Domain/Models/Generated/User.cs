@@ -7,49 +7,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace GoldenBread.Domain.Models;
 
-public enum AccountType
-{
-    [Description("Пользователь")]
-    User,
-    [Description("Компания")]
-    Company
-}
-
-public enum UserRole
-{
-    [Description("Менеджер производства")]
-    ManagerProduction,
-    [Description("Администратор")]
-    Admin
-}
-    
-public enum VerificationStatus
-{
-    [Description("Ожидает подтверждения")]
-    Pending,
-    [Description("Подтвержден")]
-    Approved,
-    [Description("Отклонен")]
-    Rejected,
-    [Description("Заморожен")]
-    Suspended
-}
-
-
 public partial class User 
 {
-    [NotMapped] public string Fullname => $"{Lastname} {Firstname} {Patronymic}" ?? "Неизвестно";
-
-    [NotMapped] public string RoleValue => Role?.Humanize() ?? "Неизвестно";
-
-    [NotMapped]public string VerificationStatusValue => VerificationStatus?.Humanize() ?? "Неизвестно";
-
-    public UserRole? Role { get; set; } 
-
-    public AccountType? AccountType { get; set; }
-
-    public VerificationStatus? VerificationStatus { get; set; }
-
     public int UserId { get; set; } 
 
     public string? Firstname { get; set; }
@@ -82,3 +41,4 @@ public partial class User
 
     public virtual ICollection<Order> Orders { get; set; } = new List<Order>();
 }
+

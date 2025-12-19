@@ -228,17 +228,8 @@
 									<TextBlock Grid.Column="1"
 											   Text="{Binding SelectedItem.TrendFormatted}"
 											   FontWeight="Bold"
-											   Margin="8,0,0,0">
-										<TextBlock.Foreground>
-											<SolidColorBrush>
-												<SolidColorBrush.Color>
-													<MultiBinding Converter="{StaticResource TrendColorConverter}">
-														<Binding Path="SelectedItem.TrendPercent"/>
-													</MultiBinding>
-												</SolidColorBrush.Color>
-											</SolidColorBrush>
-										</TextBlock.Foreground>
-									</TextBlock>
+											   Margin="8,0,0,0"
+											   Foreground="{Binding SelectedItem.TrendPercent, Converter={StaticResource TrendColorConverter}}"/>
 								</Grid>
 							</StackPanel>
 						</Border>

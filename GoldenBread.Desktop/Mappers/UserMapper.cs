@@ -1,5 +1,6 @@
 ﻿using GoldenBread.Desktop.Helpers;
 using GoldenBread.Desktop.ViewModels.Pages;
+using GoldenBread.Domain.Enums;
 using GoldenBread.Domain.Models;
 using System;
 using System.Collections.Generic;

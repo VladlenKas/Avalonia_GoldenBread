@@ -3,17 +3,8 @@ using System.Collections.Generic;
 
 namespace GoldenBread.Domain.Models;
 
-public enum IngredientBatchStatus
-{
-    Available,
-    Expired,
-    OutOfStock
-}
-
 public partial class IngredientBatch
 {
-    public IngredientBatchStatus Status { get; set; }
-
     public int IngredientBatchId { get; set; }
 
     public int IngredientId { get; set; }

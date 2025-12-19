@@ -46,11 +46,7 @@ public partial class GoldenBreadContext : DbContext
 
     public virtual DbSet<Supplier> Suppliers { get; set; }
 
-    public virtual DbSet<User> AllUsers { get; set; }
-
-    // Models with not deleted status
-    public IQueryable<User> Users => AllUsers.Where(x => x.Dismissed == 0 && x.AccountType == AccountType.User);
-    public IQueryable<User> Companies => AllUsers.Where(x => x.Dismissed == 0 && x.AccountType == AccountType.Company);
+    public virtual DbSet<User> Users { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -485,3 +481,4 @@ public partial class GoldenBreadContext : DbContext
 
     partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
 }
+

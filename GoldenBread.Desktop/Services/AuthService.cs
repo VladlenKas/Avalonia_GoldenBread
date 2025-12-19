@@ -1,4 +1,5 @@
 ﻿using GoldenBread.Desktop.Api;
+using GoldenBread.Domain.Enums;
 using GoldenBread.Domain.Models;
 using GoldenBread.Domain.Requests;
 using GoldenBread.Domain.Responses;

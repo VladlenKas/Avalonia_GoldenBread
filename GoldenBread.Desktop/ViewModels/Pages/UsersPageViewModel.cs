@@ -1,8 +1,8 @@
-﻿using AutoMapper;
-using DynamicData;
+﻿using DynamicData;
 using GoldenBread.Desktop.Bases;
 using GoldenBread.Desktop.Mappers;
 using GoldenBread.Desktop.Services;
+using GoldenBread.Domain.Enums;
 using GoldenBread.Domain.Models;
 using ReactiveUI.Fody.Helpers;
 using System;

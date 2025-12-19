@@ -3,19 +3,8 @@ using System.Collections.Generic;
 
 namespace GoldenBread.Domain.Models;
 
-public enum IngredientUnit
-{
-    G,
-    Kg,
-    Ml,
-    L,
-    Pcs
-}
-
 public partial class Ingredient
 {
-    public IngredientUnit Unit { get; set; }
-
     public int IngredientId { get; set; }
 
     public int SupplierId { get; set; }

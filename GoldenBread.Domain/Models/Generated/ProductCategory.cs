@@ -16,5 +16,6 @@ public partial class ProductCategory
     public byte[]? Icon { get; set; }
 
     public byte[]? Image { get; set; }
+
     public virtual ICollection<Product> Products { get; set; } = new List<Product>();
 }

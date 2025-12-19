@@ -1,4 +1,5 @@
 ﻿using GoldenBread.Api.Services;
+using GoldenBread.Domain.Enums;
 using GoldenBread.Domain.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json;

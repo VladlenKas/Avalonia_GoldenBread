@@ -9,19 +9,19 @@ namespace GoldenBread.Api.Services
         // Get List
         public async Task<List<User>> GetAllAsync()
         {
-            return await context.Users.ToListAsync();
+            return await context.RegularUsers.ToListAsync();
         }
 
         public async Task<User> CreateAsync(User request)
         {
-            context.AllUsers.Add(request);
+            context.Users.Add(request);
             await context.SaveChangesAsync();
             return request;
         }
 
         public async Task<User?> UpdateAsync(int id, User request)
         {
-            var existingUser = await context.AllUsers.FindAsync(id);
+            var existingUser = await context.Users.FindAsync(id);
             if (existingUser == null)
                 return null;
 
@@ -40,12 +40,12 @@ namespace GoldenBread.Api.Services
 
         public async Task<bool> DeleteAsync(int id)
         {
-            var user = await context.AllUsers.FindAsync(id);
+            var user = await context.Users.FindAsync(id);
             if (user == null)
                 return false;
 
             user.Dismissed = 1;
-            context.AllUsers.Update(user);
+            context.Users.Update(user);
             await context.SaveChangesAsync();
             return true;
         }
