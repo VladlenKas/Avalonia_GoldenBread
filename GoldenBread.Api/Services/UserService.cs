@@ -25,6 +25,15 @@ namespace GoldenBread.Api.Services
             if (existingUser == null)
                 return null;
 
+            existingUser.Firstname = request.Firstname;
+            existingUser.Lastname = request.Lastname;
+            existingUser.Patronymic = request.Patronymic;
+            existingUser.Birthday = request.Birthday;
+            existingUser.Email = request.Email;
+            existingUser.Password = request.Password;
+            existingUser.Role = request.Role;
+            existingUser.VerificationStatus = request.VerificationStatus;
+
             await context.SaveChangesAsync();
             return existingUser;
         }
@@ -40,6 +49,5 @@ namespace GoldenBread.Api.Services
             await context.SaveChangesAsync();
             return true;
         }
-
     }
 }

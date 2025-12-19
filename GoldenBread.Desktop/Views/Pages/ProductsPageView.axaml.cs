@@ -2,9 +2,9 @@
 
 namespace GoldenBread.Desktop.Views.Pages;
 
-public partial class UsersPageView : DrawerPageBase
+public partial class ProductsPageView : DrawerPageBase
 {
-    public UsersPageView()
+    public ProductsPageView()
     {
         InitializeComponent();
     }

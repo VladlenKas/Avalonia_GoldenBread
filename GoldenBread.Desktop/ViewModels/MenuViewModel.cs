@@ -44,7 +44,7 @@ namespace GoldenBread.Desktop.ViewModels
                 Pages = new()
                 {
                     new PageInfo { Title = "Ингредиенты", PageType = typeof(UsersPageViewModel) },
-                    new PageInfo { Title = "Продукция", PageType = typeof(EmployeesPageViewModel) },
+                    new PageInfo { Title = "Продукция", PageType = typeof(ProductsPageViewModel) },
                     new PageInfo { Title = "Склад", PageType = typeof(EmployeesPageViewModel) }
                 },
                 IconKey = MaterialIconKind.BookmarkBoxOutline

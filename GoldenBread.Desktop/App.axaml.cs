@@ -75,12 +75,13 @@ namespace GoldenBread.Desktop
 
             AddServices(services);
 
-            // ViewModels Windows
+            // ViewModels
             services.AddSingleton<LoginViewModel>();
             services.AddSingleton<MenuViewModel>();
 
             services.AddSingleton<UsersPageViewModel>();
             services.AddSingleton<EmployeesPageViewModel>();
+            services.AddSingleton<ProductsPageViewModel>();
 
             services.AddSingleton<LoginView>();
             services.AddSingleton<MenuView>();
@@ -88,13 +89,23 @@ namespace GoldenBread.Desktop
        
         private static IServiceCollection AddServices(IServiceCollection services)
         {
-            // Services without interface
+            // Сервисы без интерфейсов
             services.AddSingleton<ApiClient>();
             services.AddSingleton<AuthService>();
 
+            // Пользователи
             services.AddTransient<IRepository<User>, UserRepository>();
             services.AddTransient<IService<User>, UserService>();
             services.AddTransient<IMapper<User>, UserMapper>();
+
+            // Продукты
+            services.AddTransient<IRepository<Product>, ProductRepository>();
+            services.AddTransient<IService<Product>, ProductService>();
+            services.AddTransient<IMapper<Product>, ProductMapper>();
+
+            // Категории
+            services.AddTransient<IRepository<ProductCategory>, ProductCategoryRepository>();
+            services.AddTransient<IService<ProductCategory>, ProductCategoryService>();
 
             return services;
         }

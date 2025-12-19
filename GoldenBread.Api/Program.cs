@@ -1,6 +1,8 @@
 ﻿using GoldenBread.Api.Services;
 using GoldenBread.Domain.Models;
 using Microsoft.EntityFrameworkCore;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 internal class Program
 {
@@ -10,17 +12,21 @@ internal class Program
 
         var connectionString = builder.Configuration.GetConnectionString("Postgres");
 
-        // Add services to the container.
-
-        builder.Services.AddControllers();
-        // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+        builder.Services.AddControllers()
+            .AddJsonOptions(options =>
+            {
+                options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+                options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
+            });
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
 
-        // Services for db requests
+        // Регистрация сервисов
         builder.Services.AddScoped<AuthorizationService>();
         builder.Services.AddScoped<EmployeeService>();
         builder.Services.AddScoped<UserService>();
+        builder.Services.AddScoped<ProductService>();
+        builder.Services.AddScoped<ProductCategoryService>();
 
         builder.Services.AddDbContext<GoldenBreadContext>(options =>
         {
@@ -34,7 +40,6 @@ internal class Program
                 npgsql.MapEnum<VerificationStatus>("verification_status");
             });
             options.UseSnakeCaseNamingConvention();
-            options.UseLazyLoadingProxies();
         });
 
         var app = builder.Build();

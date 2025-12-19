@@ -15,7 +15,8 @@
 		<DockPanel VerticalSpacing="24" Margin="24">
 			<DockPanel LastChildFill="False" DockPanel.Dock="Top">
 				<TextBox DockPanel.Dock="Left"
-						 Width="300"/>
+						 Width="300"
+						 Watermark="Поиск товаров..."/>
 				<Button DockPanel.Dock="Right"
 						Command="{Binding AddCommand}"
 						Content="Добавить"
@@ -44,15 +45,7 @@
 				x:Name="ShadingBorder"/>
 
 		<!-- Details Panel -->
-		<Border HorizontalAlignment="Right"
-				VerticalAlignment="Stretch"
-				Margin="16"
-				Width="500"
-				Background="#ffffff"
-				CornerRadius="8"
-				BoxShadow="0 16 40 0 #209AAACF"
-				Padding="16"
-				Classes="animated-panel"
+		<Border Classes="animated-panel"
 				Classes.open="{Binding IsDrawerVisible}">
 
 			<StackPanel Spacing="12">
@@ -119,7 +112,7 @@
 
 					<TextBlock Text="Должность"/>
 					<ComboBox ItemsSource="{Binding AvailableRoles}"
-							  SelectedItem="{Binding EditRole}" 
+							  SelectedItem="{Binding EditRole}"
 							  IsHitTestVisible="{Binding ShowEditButtons}"
 							  DisplayMemberBinding="{Binding DisplayName}"/>
 

@@ -15,7 +15,7 @@ namespace GoldenBread.Api.Controllers
             try
             {
                 var employees = await service.GetAllAsync();
-                return SuccessWithData(employees, MessageHelper.SuccesFromApi);
+                return SuccessWithData(employees, MessageHelper.SuccessFromApi);
             }
             catch (Exception ex)
             {

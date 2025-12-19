@@ -55,4 +55,10 @@
 		<ProjectReference Include="..\GoldenBread.Domain\GoldenBread.Domain.csproj" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <AvaloniaResource Update="Assets\product-placeholder.png">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </AvaloniaResource>
+	</ItemGroup>
+
 </Project>

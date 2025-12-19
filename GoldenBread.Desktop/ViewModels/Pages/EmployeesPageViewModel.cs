@@ -1,13 +1,9 @@
 ﻿using GoldenBread.Desktop.Bases;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using GoldenBread.Domain.Models;
 
 namespace GoldenBread.Desktop.ViewModels.Pages
 {
-    internal class EmployeesPageViewModel : ViewModelValidationBase
+    public class EmployeesPageViewModel : ViewModelValidationBase
     {
     }
 }

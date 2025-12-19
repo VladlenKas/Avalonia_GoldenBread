@@ -1,23 +1,21 @@
 ﻿using GoldenBread.Api.Helpers;
 using GoldenBread.Api.Services;
 using GoldenBread.Domain.Models;
-using GoldenBread.Domain.Requests;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GoldenBread.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class UsersController : ApiControllerBase
+    public class ProductCategoriesController : ApiControllerBase
     {
         [HttpGet]
-        public async Task<IActionResult> GetAllAsync([FromServices] UserService service)
+        public async Task<IActionResult> GetAllAsync([FromServices] ProductCategoryService service)
         {
             try
             {
-                var users = await service.GetAllAsync();
-                return SuccessWithData(users, MessageHelper.SuccessFromApi);
+                var categories = await service.GetAllAsync();
+                return SuccessWithData(categories, MessageHelper.SuccessFromApi);
             }
             catch (Exception ex)
             {
@@ -26,17 +24,17 @@ namespace GoldenBread.Api.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteAsync([FromServices] UserService service, int id)
+        public async Task<IActionResult> DeleteAsync([FromServices] ProductCategoryService service, int id)
         {
             try
             {
                 var result = await service.DeleteAsync(id);
                 if (!result)
                 {
-                    return NotFoundError(MessageHelper.UserNotFound);
+                    return NotFoundError("Категория не найдена");
                 }
 
-                return Success<object>(MessageHelper.UserDeleted);
+                return Success<object>("Категория удалена");
             }
             catch (Exception ex)
             {
@@ -45,12 +43,12 @@ namespace GoldenBread.Api.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateAsync([FromServices] UserService service, [FromBody] User user)
+        public async Task<IActionResult> CreateAsync([FromServices] ProductCategoryService service, [FromBody] ProductCategory category)
         {
             try
             {
-                var createdUser = await service.CreateAsync(user);
-                return SuccessWithData(createdUser, MessageHelper.UserCreated);
+                var created = await service.CreateAsync(category);
+                return SuccessWithData(created, "Категория создана");
             }
             catch (Exception ex)
             {
@@ -59,17 +57,17 @@ namespace GoldenBread.Api.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateAsync([FromServices] UserService service, int id, [FromBody] User user)
+        public async Task<IActionResult> UpdateAsync([FromServices] ProductCategoryService service, int id, [FromBody] ProductCategory category)
         {
             try
             {
-                var result = await service.UpdateAsync(id, user);
+                var result = await service.UpdateAsync(id, category);
                 if (result == null)
                 {
-                    return NotFoundError(MessageHelper.UserNotFound);
+                    return NotFoundError("Категория не найдена");
                 }
 
-                return SuccessWithData(result, MessageHelper.UserUpdated);
+                return SuccessWithData(result, "Категория обновлена");
             }
             catch (Exception ex)
             {

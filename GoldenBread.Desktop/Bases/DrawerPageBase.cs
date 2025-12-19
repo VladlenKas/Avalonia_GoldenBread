@@ -1,6 +1,8 @@
 ﻿using Avalonia.Controls;
 using Avalonia.Input;
 using GoldenBread.Desktop.Interfaces;
+using GoldenBread.Desktop.ViewModels.Pages;
+using GoldenBread.Domain.Models;
 using System.Reactive;
 
 namespace GoldenBread.Desktop.Bases;
@@ -20,4 +22,14 @@ public partial class DrawerPageBase : UserControl
             }
         }
     }
+
+    private void OnCardTapped(object sender, TappedEventArgs e)
+    {
+        if (sender is Control { DataContext: Product product } &&
+            DataContext is ProductsPageViewModel vm)
+        {
+            vm.SelectedItem = product;
+        }
+    }
+
 }

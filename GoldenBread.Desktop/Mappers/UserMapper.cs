@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace GoldenBread.Desktop.Mappers
 {
-    internal class UserMapper : IMapper<User>
+    public class UserMapper : IMapper<User>
     {
         public void MapEntityToViewModel(User entity, object viewModel)
         {

@@ -2,13 +2,11 @@
 using DynamicData;
 using GoldenBread.Desktop.Bases;
 using GoldenBread.Desktop.Mappers;
-using GoldenBread.Desktop.Repositories;
 using GoldenBread.Desktop.Services;
 using GoldenBread.Domain.Models;
 using ReactiveUI.Fody.Helpers;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -56,13 +54,13 @@ public class UsersPageViewModel : PageViewModelBase<User>
 
     private void InitializeValidationRules()
     {
-        ValidateRequired(this, vm => vm.EditFirstname);
-        ValidateRequired(this, vm => vm.EditLastname);
-        ValidateRequired(this, vm => vm.EditBirthday);
-        ValidateRequired(this, vm => vm.EditEmail);
-        ValidateRequired(this, vm => vm.EditPassword);
-        ValidateAge(this, vm => vm.EditBirthday);
-        ValidateDateFormat(this, vm => vm.EditBirthday);
+        this.ValidateRequired(this, vm => vm.EditFirstname);
+        this.ValidateRequired(this, vm => vm.EditLastname);
+        this.ValidateRequired(this, vm => vm.EditBirthday);
+        this.ValidateRequired(this, vm => vm.EditEmail);
+        this.ValidateRequired(this, vm => vm.EditPassword);
+        this.ValidateAge(this, vm => vm.EditBirthday);
+        this.ValidateDateFormat(this, vm => vm.EditBirthday);
     }
 
     // ==== Overrides ====

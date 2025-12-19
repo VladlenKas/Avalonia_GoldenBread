@@ -58,6 +58,7 @@ namespace GoldenBread.Desktop.Bases
         public ReactiveCommand<Unit, Unit> CloseCommand { get; set; }
         public ReactiveCommand<Unit, Unit> DeleteCommand { get; set; }
         public ReactiveCommand<Unit, Unit> RefreshCommand { get; set; }
+        public ReactiveCommand<TEntity, Unit> SelectItemCommand { get; set; }
 
         // ==== Constructor ====
         protected PageViewModelBase(
@@ -112,6 +113,11 @@ namespace GoldenBread.Desktop.Bases
             RefreshCommand = ReactiveCommand.CreateFromTask(LoadDataAsync);
             CloseCommand = ReactiveCommand.Create(ExecuteClose);
             CancelCommand = ReactiveCommand.Create(ExecuteCancel);
+
+            SelectItemCommand = ReactiveCommand.Create<TEntity>(item =>
+            {
+                SelectedItem = item;
+            });
         }
 
 

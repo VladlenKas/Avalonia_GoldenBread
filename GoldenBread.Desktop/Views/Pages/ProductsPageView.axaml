@@ -1,0 +1,250 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+			 xmlns:components="using:GoldenBread.Desktop.Components"
+			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			 mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+			 xmlns:views="using:GoldenBread.Desktop.Views.Pages"
+			 xmlns:controls="using:GoldenBread.Desktop.Views.Controls"
+			 xmlns:vm="using:GoldenBread.Desktop.ViewModels.Pages"
+			 x:Class="GoldenBread.Desktop.Views.Pages.ProductsPageView"
+			 x:DataType="vm:ProductsPageViewModel">
+	<Grid>
+		<!-- Content -->
+		<DockPanel VerticalSpacing="24" Margin="24">
+
+			<!-- Панель инструментов -->
+			<DockPanel LastChildFill="False" DockPanel.Dock="Top">
+				<TextBox DockPanel.Dock="Left"
+						 Width="300"
+						 Watermark="Поиск товаров..."/>
+
+				<Button DockPanel.Dock="Right"
+						Command="{Binding AddCommand}"
+						Content="Добавить товар"/>
+			</DockPanel>
+
+			<!-- Сетка карточек -->
+			<ScrollViewer DockPanel.Dock="Bottom"
+						  HorizontalScrollBarVisibility="Disabled">
+				<ItemsControl ItemsSource="{Binding Items}"
+							  Margin="0 16 0 0">
+
+					<!-- WrapPanel для адаптивной сетки -->
+					<ItemsControl.ItemsPanel>
+						<ItemsPanelTemplate>
+							<WrapPanel Orientation="Horizontal"
+									   MaxWidth="1200"
+									   ItemWidth="280"/>
+						</ItemsPanelTemplate>
+					</ItemsControl.ItemsPanel>
+
+					<!-- Шаблон карточки -->
+					<ItemsControl.ItemTemplate>
+						<DataTemplate>
+							<Button Classes="card-button"
+									Command="{Binding $parent[ItemsControl].((vm:ProductsPageViewModel)DataContext).SelectItemCommand}"
+									CommandParameter="{Binding}"
+									Margin="8"
+									Padding="0"
+									Background="Transparent"
+									BorderThickness="0">
+								<components:ProductCard DataContext="{Binding}"/>
+							</Button>
+						</DataTemplate>
+					</ItemsControl.ItemTemplate>
+				</ItemsControl>
+			</ScrollViewer>
+		</DockPanel>
+
+		<!-- Shading -->
+		<Border Classes="overlay-backdrop"
+				Classes.show="{Binding IsDrawerVisible}"
+				x:Name="ShadingBorder"/>
+
+		<!-- Details Drawer -->
+		<Border Classes="animated-panel"
+				Classes.open="{Binding IsDrawerVisible}">
+
+			<ScrollViewer>
+				<StackPanel Spacing="12">
+
+					<!-- Заголовок и кнопки -->
+					<TextBlock Text="{Binding DrawerTitle}"
+							   FontSize="18"
+							   FontWeight="Bold"
+							   Margin="0,0,0,8"/>
+
+					<WrapPanel Orientation="Horizontal"
+							   ItemSpacing="8">
+
+						<!-- Режим просмотра -->
+						<Button Content="Редактировать"
+								Command="{Binding EditCommand}"
+								IsVisible="{Binding ShowViewButtons}"/>
+
+						<Button Content="Удалить"
+								Command="{Binding DeleteCommand}"
+								IsVisible="{Binding ShowViewButtons}"
+								Classes="danger"/>
+
+						<!-- Режим редактирования -->
+						<Button Content="Сохранить"
+								Command="{Binding SaveCommand}"
+								IsVisible="{Binding ShowEditButtons}"
+								Classes="accent"/>
+
+						<Button Content="Отменить"
+								Command="{Binding CancelCommand}"
+								IsVisible="{Binding ShowEditButtons}"/>
+
+						<!-- Закрытие -->
+						<Button Content="✕"
+								Command="{Binding CloseCommand}"
+								Width="40"
+								Height="40"/>
+					</WrapPanel>
+
+					<!-- Изображения товара -->
+					<StackPanel Spacing="8"
+								IsVisible="{Binding EditImages.Count}">
+						<TextBlock Text="Изображения"
+								   FontWeight="SemiBold"/>
+
+						<ScrollViewer HorizontalScrollBarVisibility="Auto"
+									  VerticalScrollBarVisibility="Disabled">
+							<ItemsControl ItemsSource="{Binding EditImages}">
+								<ItemsControl.ItemsPanel>
+									<ItemsPanelTemplate>
+										<StackPanel Orientation="Horizontal" Spacing="8"/>
+									</ItemsPanelTemplate>
+								</ItemsControl.ItemsPanel>
+
+								<ItemsControl.ItemTemplate>
+									<DataTemplate>
+										<Border Width="120"
+												Height="120"
+												CornerRadius="8"
+												ClipToBounds="True"
+												BorderBrush="#E0E0E0"
+												BorderThickness="1">
+											<Image Source="{Binding ImageData, Converter={StaticResource ByteToImageConverter}}"
+												   Stretch="UniformToFill"/>
+										</Border>
+									</DataTemplate>
+								</ItemsControl.ItemTemplate>
+							</ItemsControl>
+						</ScrollViewer>
+
+						<!-- Кнопка добавления изображения -->
+						<Button Content="+ Добавить изображение"
+								IsVisible="{Binding ShowEditButtons}"
+								HorizontalAlignment="Left"/>
+					</StackPanel>
+
+					<!-- Поля редактирования -->
+					<StackPanel Spacing="8">
+
+						<TextBlock Text="Название товара"/>
+						<TextBox Text="{Binding EditName}"
+								 IsReadOnly="{Binding ShowViewButtons}"
+								 Watermark="Введите название"/>
+
+						<TextBlock Text="Категория"/>
+						<ComboBox ItemsSource="{Binding AvailableCategories}"
+								  SelectedItem="{Binding EditCategory}"
+								  IsHitTestVisible="{Binding ShowEditButtons}"
+								  DisplayMemberBinding="{Binding DisplayName}"
+								  PlaceholderText="Выберите категорию"/>
+
+						<TextBlock Text="Описание"/>
+						<TextBox Text="{Binding EditDescription}"
+								 IsReadOnly="{Binding ShowViewButtons}"
+								 Height="100"
+								 AcceptsReturn="True"
+								 TextWrapping="Wrap"
+								 Watermark="Введите описание товара"/>
+
+						<Grid ColumnDefinitions="*,*" ColumnSpacing="12">
+							<StackPanel Grid.Column="0" Spacing="8">
+								<TextBlock Text="Себестоимость (₽)"/>
+								<NumericUpDown Value="{Binding EditCostPrice}"
+											   IsReadOnly="{Binding ShowViewButtons}"
+											   FormatString="F2"
+											   Minimum="0"
+											   Increment="10"/>
+							</StackPanel>
+
+							<StackPanel Grid.Column="1" Spacing="8">
+								<TextBlock Text="Цена продажи (₽)"/>
+								<NumericUpDown Value="{Binding EditSalePrice}"
+											   IsReadOnly="{Binding ShowViewButtons}"
+											   FormatString="F2"
+											   Minimum="0"
+											   Increment="10"/>
+							</StackPanel>
+						</Grid>
+
+						<TextBlock Text="Наценка (%)"/>
+						<NumericUpDown Value="{Binding EditMarkupPercent}"
+									   IsReadOnly="{Binding ShowViewButtons}"
+									   Minimum="0"
+									   Maximum="1000"
+									   Increment="5"/>
+
+						<Grid ColumnDefinitions="*,*" ColumnSpacing="12">
+							<StackPanel Grid.Column="0" Spacing="8">
+								<TextBlock Text="Вес (кг)"/>
+								<NumericUpDown Value="{Binding EditWeight}"
+											   IsReadOnly="{Binding ShowViewButtons}"
+											   FormatString="F3"
+											   Minimum="0"
+											   Increment="0.1"/>
+							</StackPanel>
+
+							<StackPanel Grid.Column="1" Spacing="8">
+								<TextBlock Text="Время приготовления (мин)"/>
+								<NumericUpDown Value="{Binding EditProductionTime}"
+											   IsReadOnly="{Binding ShowViewButtons}"
+											   Minimum="0"
+											   Increment="5"/>
+							</StackPanel>
+						</Grid>
+
+						<!-- Вычисляемые поля (только просмотр) -->
+						<Border Background="#F9FAFB"
+								Padding="12"
+								CornerRadius="8"
+								IsVisible="{Binding ShowViewButtons}">
+							<StackPanel Spacing="8">
+								<TextBlock Text="Статистика продаж"
+										   FontWeight="SemiBold"
+										   FontSize="14"/>
+
+								<Grid ColumnDefinitions="Auto,*">
+									<TextBlock Grid.Column="0"
+											   Text="Тренд продаж:"
+											   Foreground="#666"/>
+									<TextBlock Grid.Column="1"
+											   Text="{Binding SelectedItem.TrendFormatted}"
+											   FontWeight="Bold"
+											   Margin="8,0,0,0">
+										<TextBlock.Foreground>
+											<SolidColorBrush>
+												<SolidColorBrush.Color>
+													<MultiBinding Converter="{StaticResource TrendColorConverter}">
+														<Binding Path="SelectedItem.TrendPercent"/>
+													</MultiBinding>
+												</SolidColorBrush.Color>
+											</SolidColorBrush>
+										</TextBlock.Foreground>
+									</TextBlock>
+								</Grid>
+							</StackPanel>
+						</Border>
+					</StackPanel>
+				</StackPanel>
+			</ScrollViewer>
+		</Border>
+	</Grid>
+</UserControl>

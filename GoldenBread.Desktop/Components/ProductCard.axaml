@@ -1,0 +1,128 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			 xmlns:models="using:GoldenBread.Domain.Models"
+			 xmlns:converters="using:GoldenBread.Desktop.Converters"
+			 x:Class="GoldenBread.Desktop.Components.ProductCard"
+			 x:DataType="models:Product">
+
+	<Border CornerRadius="12"
+			Background="White"
+			BorderBrush="#E8E8E8"
+			BorderThickness="1"
+			Padding="0"
+			Cursor="Hand"
+			Width="280">
+
+		<Grid x:Name="CardGrid" RowDefinitions="200,*">
+
+			<!-- Изображение товара -->
+			<Border Grid.Row="0"
+					CornerRadius="12,12,0,0"
+					ClipToBounds="True">
+				<Image Stretch="UniformToFill"
+					   Source="{Binding FirstImage, Converter={StaticResource ByteArrayToImageConverter}}"/>
+			</Border>
+
+			<!-- Контент карточки -->
+			<StackPanel Grid.Row="1" Margin="16,12">
+
+				<!-- Название и категория -->
+				<TextBlock Text="{Binding Name}"
+						   FontSize="18"
+						   FontWeight="SemiBold"
+						   TextWrapping="Wrap"
+						   MaxLines="2"
+						   TextTrimming="CharacterEllipsis"
+						   Margin="0,0,0,4"/>
+
+				<Border Background="#F5F5F5"
+						CornerRadius="4"
+						Padding="8,4"
+						HorizontalAlignment="Left"
+						Margin="0,0,0,12">
+					<TextBlock Text="{Binding Category.Name}"
+							   FontSize="12"
+							   Foreground="#666"/>
+				</Border>
+
+				<!-- Цены -->
+				<Grid ColumnDefinitions="Auto,*" Margin="0,0,0,12">
+					<StackPanel Grid.Column="0">
+						<TextBlock Text="{Binding SalePrice, StringFormat='{}{0:F2} ₽'}"
+								   FontSize="24"
+								   FontWeight="Bold"
+								   Foreground="#333"/>
+
+						<TextBlock Text="{Binding CostPrice, StringFormat='Себ: {0:F2} ₽'}"
+								   FontSize="12"
+								   Foreground="#999"
+								   Margin="0,2,0,0"/>
+					</StackPanel>
+				</Grid>
+
+				<!-- Параметры -->
+				<Grid RowDefinitions="Auto,Auto,Auto" Margin="0,0,0,12">
+
+					<!-- Время приготовления -->
+					<StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,6">
+						<PathIcon Data="M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M12,4A8,8 0 0,1 20,12A8,8 0 0,1 12,20A8,8 0 0,1 4,12A8,8 0 0,1 12,4M12.5,7V12.25L17,14.92L16.25,16.15L11,13V7H12.5Z"
+								  Width="16" Height="16"
+								  Foreground="#999"
+								  Margin="0,0,8,0"/>
+						<TextBlock FontSize="14" Foreground="#666">
+							<Run Text="Готовится:"/>
+							<Run Text="{Binding ProductionTime}" FontWeight="SemiBold"/>
+							<Run Text="мин."/>
+						</TextBlock>
+					</StackPanel>
+
+					<!-- Вес -->
+					<StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,0,0,6">
+						<PathIcon Data="M12,3A4,4 0 0,1 16,7C16,7.73 15.81,8.41 15.46,9H18C18.95,9 19.75,9.67 19.95,10.56C21.96,18.57 22,18.78 22,19A2,2 0 0,1 20,21H4A2,2 0 0,1 2,19C2,18.78 2.04,18.57 4.05,10.56C4.25,9.67 5.05,9 6,9H8.54C8.19,8.41 8,7.73 8,7A4,4 0 0,1 12,3M12,5A2,2 0 0,0 10,7A2,2 0 0,0 12,9A2,2 0 0,0 14,7A2,2 0 0,0 12,5Z"
+								  Width="16" Height="16"
+								  Foreground="#999"
+								  Margin="0,0,8,0"/>
+						<TextBlock FontSize="14" Foreground="#666">
+							<Run Text="Вес:"/>
+							<Run Text="{Binding Weight, StringFormat='{}{0:F3}'}" FontWeight="SemiBold"/>
+							<Run Text="кг."/>
+						</TextBlock>
+					</StackPanel>
+
+					<!-- Тренд -->
+					<StackPanel Grid.Row="2" Orientation="Horizontal">
+						<PathIcon Data="M16,6L18.29,8.29L13.41,13.17L9.41,9.17L2,16.59L3.41,18L9.41,12L13.41,16L19.71,9.71L22,12V6H16Z"
+								  Width="16" Height="16"
+								  Margin="0,0,8,0">
+							<PathIcon.Foreground>
+								<SolidColorBrush>
+									<SolidColorBrush.Color>
+										<MultiBinding Converter="{StaticResource TrendColorConverter}">
+											<Binding Path="TrendPercent"/>
+										</MultiBinding>
+									</SolidColorBrush.Color>
+								</SolidColorBrush>
+							</PathIcon.Foreground>
+						</PathIcon>
+						<TextBlock Text="Тренд:" FontSize="14" Foreground="#666" Margin="0,0,4,0"/>
+						<TextBlock Text="{Binding TrendFormatted}"
+								   FontSize="14"
+								   FontWeight="SemiBold">
+							<TextBlock.Foreground>
+								<SolidColorBrush>
+									<SolidColorBrush.Color>
+										<MultiBinding Converter="{StaticResource TrendColorConverter}">
+											<Binding Path="TrendPercent"/>
+										</MultiBinding>
+									</SolidColorBrush.Color>
+								</SolidColorBrush>
+							</TextBlock.Foreground>
+						</TextBlock>
+					</StackPanel>
+				</Grid>
+			</StackPanel>
+		</Grid>
+	</Border>
+</UserControl>

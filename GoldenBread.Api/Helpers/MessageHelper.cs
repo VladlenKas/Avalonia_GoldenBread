@@ -5,12 +5,12 @@ namespace GoldenBread.Api.Helpers
 {
     public static class MessageHelper
     {
-        // == Base Massages ==
+        // Базовые сообщения
         public const string ErrorFromApi = "Произошла ошибка на стороне сервера";
-        public const string SuccesFromApi = "Запрос выполнен успешно";
+        public const string SuccessFromApi = "Запрос выполнен успешно";
 
 
-        // == For Login ==
+        // Для авторизации
         public static string CorrectData(User user)
         {
             return $"Вход выполнен успешно. Добро пожаловать в систему" +
@@ -26,10 +26,16 @@ namespace GoldenBread.Api.Helpers
         public const string UnknownStatus = "Роль пользователя не определена";
 
 
-        // == For Users ==
+        // Для пользователей
         public const string UserNotFound = "Пользователь не найден";
         public const string UserCreated = "Пользователь успешно создан";
         public const string UserUpdated = "Пользователь успешно обновлён";
         public const string UserDeleted = "Пользователь успешно удалён";
+
+        // Для товаров
+        public const string ProductNotFound = "Товар не найден";
+        public const string ProductDeleted = "Товар успешно удален";
+        public const string ProductCreated = "Товар успешно создан";
+        public const string ProductUpdated = "Товар успешно обновлен";
     }
 }
