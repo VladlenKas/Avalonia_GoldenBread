@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using DynamicData;
+﻿using DynamicData;
 using GoldenBread.Desktop.Helpers;
 using GoldenBread.Desktop.Interfaces;
 using GoldenBread.Desktop.Managers;
